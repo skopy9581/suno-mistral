@@ -59,9 +59,11 @@ For each track on the tracklist, help the user design a detailed track specifica
 ### Style
 ```
 Genre: [From album identity, or track-specific variation]
-Instruments: [Detailed list combining album core + track variations, separated by semicolons, max 990 chars]
+Vocal: [Vocal characteristics from album identity or track-specific]
 Tags: [From album identity + track-specific mood/tempo tags, separated by semicolons, max 990 chars]
 ```
+
+**Note:** Instruments field has been moved to Lyrics box as `[Instruments: ...]` tag placed above Session Drummer.
 
 **Negative Styles:**
 ```

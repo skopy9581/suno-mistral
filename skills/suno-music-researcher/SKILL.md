@@ -649,7 +649,7 @@ This allows the suno-songwriter skill to directly use your research without addi
 ```
 ## For Suno Songwriter
 
-### Session Drummer Tag (Place at TOP of lyrics box):
+### Session Drummer Tag (Place BELOW [Instruments: ...] tag in lyrics box):
 ```
 [Session Drummer: {kit_description} | Groove: {groove_style}, {techniques}]
 ```
@@ -663,6 +663,8 @@ This allows the suno-songwriter skill to directly use your research without addi
 - **Outro:** `{outro_drum_instructions}`
 
 ### Instruments Field Additions:
+For suno-songwriter skill: Use in Lyrics box as `[Instruments: {formatted_instrument_list}]` tag placed ABOVE Session Drummer tag.
+
 ```
 {formatted_drum_kit_description}
 ```
@@ -686,6 +688,8 @@ This allows the suno-songwriter skill to directly use your research without addi
 - **Outro:** `Tech: Drum fade with natural ring, cymbal sustain, ride cymbal bell`
 
 ### Instruments Field Additions:
+For suno-songwriter skill: Use in Lyrics box as `[Instruments: live acoustic drum kit with 24" kick, 14" snare, 12/13/16" toms, 20" ride cymbal, 18" crash, 14" hi-hats; ...other instruments...]` tag placed ABOVE Session Drummer tag.
+
 ```
 live acoustic drum kit with 24" kick, 14" snare, 12/13/16" toms, 20" ride cymbal, 18" crash, 14" hi-hats
 ```

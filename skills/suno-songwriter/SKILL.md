@@ -207,6 +207,7 @@ For Lyrics box use: `[Instruments: live acoustic drum kit with electronic trigge
 **Style Block:**
 ```
 Genre: "Alternative Rock, Art Rock, Experimental Electronic"
+Vocal: "processed vocals with delay and reverb"
 Tags: "90-110 BPM; 4/4 and 7/8 time signatures; melancholic and introspective mood; atmospheric and textural; dynamic contrast between sparse and dense"
 ```
 
@@ -723,6 +724,7 @@ Based on user's style input, populate:
 
 ```
 Genre: "{USER_GENRE_1}, {USER_GENRE_2}"
+Vocal: "{USER_VOCAL_PREFERENCE}"
 Tags: "{USER_BPM} BPM; {USER_MOOD}; {VOCAL_CHARACTER}; {ERA_STYLE}; {ATMOSPHERE}"
 ```
 
@@ -731,7 +733,7 @@ Tags: "{USER_BPM} BPM; {USER_MOOD}; {VOCAL_CHARACTER}; {ERA_STYLE}; {ATMOSPHERE}
 {CONFLICTING_GENRES}, drum machine, electronic drums, synthetic percussion, plastic drums
 ```
 
-**Note:** Instruments field has been moved to the Lyrics box as `[Instruments: ...]` tag placed above Session Drummer. Vocal information remains in the Style block.
+**Note:** Instruments field has been moved to the Lyrics box as `[Instruments: ...]` tag placed above Session Drummer. Vocal information (singer-related) is in the Style block as a separate field.
 
 ### When Processing Studio-Grade Input:
 Use the **instrumentation parsing rules** from the previous section to convert detailed descriptions into Suno-compatible format. Place the instruments in the Lyrics box as `[Instruments: ...]` tag above Session Drummer.
@@ -751,6 +753,7 @@ Tags: 120 BPM; building energy; epic; stadium rock feel
 Style Block Output:
 ```
 Genre: "Rock, Anthemic Rock"
+Vocal: "processed vocals with plate reverb"
 Tags: "120 BPM; anthemic; powerful; building energy; epic; stadium rock feel; dramatic"
 ```
 
@@ -1112,6 +1115,7 @@ Indie pop, emotional, female vocals, 95 BPM, melancholic but hopeful
 **Style Block:**
 ```
 Genre: "Indie Pop, Dream Pop"
+Vocal: "emotional female vocals"
 Tags: "95 BPM; melancholic; hopeful undertones; intimate; bedroom pop aesthetic"
 ```
 
@@ -1164,6 +1168,7 @@ Tags: 120 BPM; building energy; epic; stadium rock feel; dramatic
 **Style Block:**
 ```
 Genre: "Rock, Anthemic Rock"
+Vocal: "processed vocals with plate reverb"
 Tags: "120 BPM; anthemic; powerful; epic; stadium rock feel; dramatic"
 ```
 
