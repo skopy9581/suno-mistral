@@ -47,7 +47,7 @@ When a research file exists for the referenced artist:
 
 **2. Extract Instrument Details:**
 - Look for: `### Instruments Field Additions:`
-- Use these in the Style Block's Instruments field
+- Use these in the Lyrics box as `[Instruments: ...]` tag above Session Drummer
 - Combine with any user-provided instruments
 
 **3. Extract Tech Tags:**
@@ -199,9 +199,7 @@ Create a song, Radiohead style, about urban alienation
 - **Bridge:** Tech: Drum breakdown, glitch effects, time signature change
 
 ### Instruments Field Additions:
-```
-live acoustic drum kit with electronic triggers; electric guitar with unusual tunings and heavy effects; analog synths with complex modulation; processed vocals with delay and reverb
-```
+For Lyrics box use: `[Instruments: live acoustic drum kit with electronic triggers; electric guitar with unusual tunings and heavy effects; analog synths with complex modulation; processed vocals with delay and reverb]`
 ```
 
 **Your Output:**
@@ -209,7 +207,6 @@ live acoustic drum kit with electronic triggers; electric guitar with unusual tu
 **Style Block:**
 ```
 Genre: "Alternative Rock, Art Rock, Experimental Electronic"
-Instruments: "live acoustic drum kit with electronic triggers; electric guitar with unusual tunings and heavy effects; analog synths with complex modulation; processed vocals with delay and reverb"
 Tags: "90-110 BPM; 4/4 and 7/8 time signatures; melancholic and introspective mood; atmospheric and textural; dynamic contrast between sparse and dense"
 ```
 
@@ -220,6 +217,7 @@ Country, Trap, Reggaeton, drum machine, electronic drums, synthetic percussion, 
 
 **Enriched Lyrics:**
 ```
+[Instruments: live acoustic drum kit with electronic triggers; electric guitar with unusual tunings and heavy effects; analog synths with complex modulation; processed vocals with delay and reverb]
 [Session Drummer: Complex polyrhythms, odd time signatures (5/4, 7/8), ghost notes, brushed snare, electronic-acoustic hybrid kit | Groove: Unconventional, dynamic, with abrupt changes]
 
 [Intro | Tech: Atmospheric synth pads, reversed cymbals, sparse drum hits | Mood: Ethereal]
@@ -281,8 +279,8 @@ You will receive **user-provided lyrics and style preferences** as input. Your r
 
 ### What You Must Output:
 1. **Song Title** [inside code block]
-2. **Style** with proper formatting, max 990 characters [inside code block]
-3. **Enriched Lyrics** with user's lyrics + meta tags + structure labels [inside code block]
+2. **Style** with proper formatting [inside code block]
+3. **Enriched Lyrics** with user's lyrics + meta tags + structure labels + `[Instruments: ...]` tag above Session Drummer [inside code block]
 
 ## Core Principle: Preserve + Enhance
 
@@ -366,8 +364,9 @@ Curly braces are used ONLY in this instruction document as placeholders for vari
 **Examples (for AI agent use only):**
 ```
 Genre: "{USER_GENRE_1}, {USER_GENRE_2}"
-Instruments: "{USER_VOCAL_PREFERENCE}; {PRIMARY_INSTRUMENTS}"
 ```
+
+**Instruments tag (for Lyrics box):** `[Instruments: {USER_VOCAL_PREFERENCE}; {PRIMARY_INSTRUMENTS}]`
 
 ---
 
@@ -416,12 +415,13 @@ Transform detailed descriptions into Suno-compatible instrument strings:
 | Moog Sub 37 with octave pedal | bass synth with octave down |
 | Roland TR-8S with sampled acoustic hits | electronic drums with acoustic samples |
 
-#### Step 4: Build the Instruments Field
-Combine all parsed instruments into the **Instruments** field:
+#### Step 4: Build the Instruments Tag
+Combine all parsed instruments into the **[Instruments: ...]** tag for the Lyrics box:
 - Separate instruments with **semicolons**
 - Group similar instruments together
 - Keep under **990 characters**
 - Prioritize most characteristic instruments first
+- Place this tag **above** the Session Drummer tag in the Lyrics box
 
 **Example Conversion:**
 ```
@@ -432,8 +432,8 @@ Studio-Grade Input:
 - Synths: polyphonic analog with chorus and hall reverb
 - Vocals: large-diaphragm condenser, compressed, with plate reverb
 
-Suno AI Instruments Field:
-"electric guitar with distortion; analog bass synth with octave and distortion; acoustic drums with SSL compression; polyphonic analog synth with chorus and reverb; processed vocals with plate reverb"
+Suno AI Instruments Tag (for Lyrics box):
+[Instruments: electric guitar with distortion; analog bass synth with octave and distortion; acoustic drums with SSL compression; polyphonic analog synth with chorus and reverb; processed vocals with plate reverb]
 ```
 
 ### Handling Track-Specific Variations
@@ -723,7 +723,6 @@ Based on user's style input, populate:
 
 ```
 Genre: "{USER_GENRE_1}, {USER_GENRE_2}"
-Instruments: "{USER_VOCAL_PREFERENCE}; {PRIMARY_INSTRUMENTS}"
 Tags: "{USER_BPM} BPM; {USER_MOOD}; {VOCAL_CHARACTER}; {ERA_STYLE}; {ATMOSPHERE}"
 ```
 
@@ -732,8 +731,10 @@ Tags: "{USER_BPM} BPM; {USER_MOOD}; {VOCAL_CHARACTER}; {ERA_STYLE}; {ATMOSPHERE}
 {CONFLICTING_GENRES}, drum machine, electronic drums, synthetic percussion, plastic drums
 ```
 
+**Note:** Instruments field has been moved to the Lyrics box as `[Instruments: ...]` tag placed above Session Drummer. Vocal information remains in the Style block.
+
 ### When Processing Studio-Grade Input:
-Use the **instrumentation parsing rules** from the previous section to convert detailed descriptions into Suno-compatible format.
+Use the **instrumentation parsing rules** from the previous section to convert detailed descriptions into Suno-compatible format. Place the instruments in the Lyrics box as `[Instruments: ...]` tag above Session Drummer.
 
 **Example with Studio-Grade Input:**
 ```
@@ -750,7 +751,6 @@ Tags: 120 BPM; building energy; epic; stadium rock feel
 Style Block Output:
 ```
 Genre: "Rock, Anthemic Rock"
-Instruments: "electric guitar with distortion; analog bass synth with octave; acoustic drums with SSL compression; polyphonic analog synth with chorus and reverb; processed vocals with plate reverb"
 Tags: "120 BPM; anthemic; powerful; building energy; epic; stadium rock feel; dramatic"
 ```
 
@@ -835,10 +835,10 @@ For realistic, non-plastic sound:
 | **Blues** | `Blues kit with swung ride, cross-stick snare` | `Shuffled hi-hats, snare on 2 and 4` |
 | **Orchestral** | `Orchestral percussion: timpani, snare drum, cymbals` | `Rolls, crescendos, dramatic hits` |
 
-### Instruments Field for Full Kits
-Be explicit about your drum kit:
+### Instruments Tag for Full Kits
+Be explicit about your drum kit in the Lyrics box:
 ```
-Instruments: "live acoustic drum kit with 22-inch kick, 14-inch snare, 12/13/16-inch toms, 20-inch ride cymbal, 18-inch crash, 14-inch hi-hats, splash cymbal; electric guitar; bass"
+[Instruments: live acoustic drum kit with 22-inch kick, 14-inch snare, 12/13/16-inch toms, 20-inch ride cymbal, 18-inch crash, 14-inch hi-hats, splash cymbal; electric guitar; bass]
 ```
 
 ### AVOID (Creates Plastic Sound)
@@ -1079,6 +1079,8 @@ If user provides raw, unstructured lyrics:
 
 **Style Consistency**: Style block matches lyrical mood
 
+**Instruments in Lyrics**: [Instruments: ...] tag present above Session Drummer
+
 **No Conflicts**: No contradictory tags (e.g., "slow" + "high energy")
 
 **Format Correct**: [Square brackets] for meta/instructions (NOT sung), (parentheses) for ad-libs/vocalizations (WILL BE SUNG)
@@ -1087,7 +1089,7 @@ If user provides raw, unstructured lyrics:
 
 **Tag Economy**: 2-3 tags maximum per section for clarity
 
-**Studio-Grade Handling**: If input contains detailed instrumentation, properly parse and convert to Suno format
+**Studio-Grade Handling**: If input contains detailed instrumentation, properly parse and convert to Suno format, placing in [Instruments: ...] tag in Lyrics box
 
 ---
 
@@ -1110,7 +1112,6 @@ Indie pop, emotional, female vocals, 95 BPM, melancholic but hopeful
 **Style Block:**
 ```
 Genre: "Indie Pop, Dream Pop"
-Instruments: "emotional female vocals; soft acoustic guitar; ambient synth pads; gentle percussion; warm bass"
 Tags: "95 BPM; melancholic; hopeful undertones; intimate; bedroom pop aesthetic"
 ```
 
@@ -1121,6 +1122,7 @@ Heavy Metal, Trap, Country, drum machine, electronic drums, synthetic percussion
 
 **Enriched Lyrics:**
 ```
+[Instruments: emotional female vocals; soft acoustic guitar; ambient synth pads; gentle percussion; warm bass]
 [Session Drummer: Laid back trip-hop groove, swung 16ths, ghost notes on snare, sluggish hi-hats]
 
 [Intro | Vocal: Soft, Intimate | Tech: Guitar strumming]
@@ -1162,7 +1164,6 @@ Tags: 120 BPM; building energy; epic; stadium rock feel; dramatic
 **Style Block:**
 ```
 Genre: "Rock, Anthemic Rock"
-Instruments: "electric guitar with distortion and ribbon mic; analog bass synth with octave and distortion; acoustic drums with SSL compression; polyphonic analog synth with chorus and reverb; processed vocals with plate reverb"
 Tags: "120 BPM; anthemic; powerful; epic; stadium rock feel; dramatic"
 ```
 
@@ -1173,6 +1174,7 @@ Jazz, Acoustic Folk, Lo-fi, drum machine, electronic drums, synthetic percussion
 
 **Enriched Lyrics:**
 ```
+[Instruments: electric guitar with distortion and ribbon mic; analog bass synth with octave and distortion; acoustic drums with SSL compression; polyphonic analog synth with chorus and reverb; processed vocals with plate reverb]
 [Session Drummer: Punchy rock groove, driving kick, snappy snare, steady hi-hats with SSL compression]
 
 [Intro | Tech: Orchestral synth build | Mood: Intense]
