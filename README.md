@@ -1,6 +1,6 @@
 # Suno Songwriter & Album Concept Designer
 
-A suite of Gemini CLI skills specialized for AI music creation, heavily optimized for Suno AI prompts.
+A suite of Vibe Code skills specialized for AI music creation, heavily optimized for Suno AI prompts.
 
 ## Included Skills
 
@@ -12,57 +12,66 @@ Specialized in formatting and enriching lyrics with technical Suno AI tags (`[Ve
 A creative director for building complex conceptual albums. It handles world-building, storyline, character profiles, and narrative tracklists. It generates an "Album Bible" and track specifications.
 - **Location**: `skills/album-concept-designer/SKILL.md`
 
+### 3. Suno Music Researcher
+A studio-grade music research specialist. Provides deeply detailed technical breakdowns of musical styles, instrumentation, production techniques, and sonic characteristics.
+- **Location**: `skills/suno-music-researcher/SKILL.md`
+
 ## Installation
 
-### Method 1: Remote Installation (Standard)
-Install the skills directly from the GitHub repository.
+### For Vibe Code
 
-```bash
-# Install globally (available in all projects)
-gemini skills install https://github.com/dalvarezdc/suno-songwriter-gemini.git
+Simply reference the skills directory when setting up your Vibe Code environment:
 
-# OR install only for the current project workspace
-gemini skills install https://github.com/dalvarezdc/suno-songwriter-gemini.git --scope workspace
+```
+Skills Directory: /path/to/suno-mistral/skills
 ```
 
-### Method 2: Local Extension Installation
-If you have cloned the repository locally, you can install it as an extension to automatically discover all bundled skills.
+Or copy individual SKILL.md files to your Vibe Code skills folder.
 
-```bash
-# Clone the repository
-git clone https://github.com/dalvarezdc/suno-songwriter-gemini.git
-cd suno-songwriter-gemini
+## Usage
 
-# Install the extension
-gemini extension add .
+### Suno Music Researcher
+Use when you need comprehensive musical analysis to inform your album design or track creation.
+
+**Example Input:**
+```
+Analyze 90s alternative rock style
 ```
 
-### Method 3: Manual Skill Linking (For Development)
-If you want to link the skills individually or are developing them locally, you can use the `link` command:
+**Output:** Complete 12-section technical profile with studio-grade instrumentation details.
 
-```bash
-# Link individual skills
-gemini skills link ./skills/suno-songwriter
-gemini skills link ./skills/album-concept-designer
+### Album Concept Designer
+Use when you want to build a cohesive album story, define characters, set the musical style, create a tracklist, or generate an Album Bible.
+
+**Example Input:**
+```
+Let's create a concept album about urban alienation
 ```
 
-Alternatively, use the slash command within a Gemini CLI session:
-```text
-/skills link ./skills/suno-songwriter
-/skills link ./skills/album-concept-designer
+**Output:** Interactive workflow guiding you through concept, world-building, characters, narrative arc, and musical identity.
+
+### Suno Songwriter
+Use when you have raw lyrics or need to finalize a song prompt with proper Suno AI formatting.
+
+**Example Input:**
+```
+LYRICS:
+Staring at the ceiling at 3 AM
+Thoughts racing through my head again
+
+STYLE:
+Indie pop, emotional, female vocals, 95 BPM, melancholic but hopeful
 ```
 
-## Usage & Activation
+**Output:** Formatted Style Block + Enriched Lyrics with meta tags ready for Suno AI.
 
-Once installed, the skills are available in any Gemini CLI session. You can activate them using the `activate_skill` tool or by simply requesting them:
+## Workflow Integration
 
-- **Explicit Activation**:
-  - `activate_skill(name="suno-songwriter")`
-  - `activate_skill(name="album-concept-designer")`
+The three skills work together seamlessly:
 
-- **Natural Language**:
-  - "I need help with Suno prompts."
-  - "Let's design a concept album."
+1. **Suno Music Researcher** → Generates detailed musical profiles
+2. **Album Concept Designer** → Uses research to create Album Bible with track specifications
+3. **Suno Songwriter** → Formats final lyrics with proper Suno AI tags
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
