@@ -1106,6 +1106,70 @@ If user provides raw, unstructured lyrics:
 
 ---
 
+## Suno Sliders Integration
+
+### Context-Aware Slider Recommendations
+
+**CRITICAL:** Always append slider recommendations to your output based on the user's request context.
+
+### Slider Definitions
+
+| Slider | Range | Purpose | Key Insight |
+|--------|-------|---------|-------------|
+| **Weirdness** | 0% (Safe) to 100% (Chaos) | Controls deviation from conventional patterns | 50% = "normal"; 81%+ = "glitch-mode cliff" |
+| **Style Influence** | Loose to Strong | How tightly Suno follows your Style prompt | 80-90%+ = strict specification |
+| **Audio Influence** | Loose to Strong | How much uploaded audio anchors the result | Only appears with Audio Upload |
+
+### Detection Logic
+
+#### Pattern 1: Original Song Creation
+**Triggers:** User provides lyrics + style, no audio upload, no cover/persona keywords
+- **Weirdness:** 30-40% (creative but coherent)
+- **Style Influence:** 80-90% (strong adherence)
+- **Audio Influence:** N/A
+
+#### Pattern 2: Cover Song
+| Cover Type | Weirdness | Style Influence | Audio Influence |
+|------------|-----------|-----------------|-----------------|
+| Exact Clone | 1-3% | 2-3% | 96-97% |
+| Faithful Cover | 20% | 70-80% | 75% |
+| Creative Cover | 40-60% | 50-70% | 50% |
+| Lyric Changes | 70%+ | 50-70% | 15% |
+
+#### Pattern 3: Persona/Voice Usage
+**Triggers:** "using [persona name]", "persona: [name]", "voice: [name]"
+- **Weirdness:** 20-30% (respects persona identity)
+- **Style Influence:** 85-95% (maintains persona characteristics)
+- **Audio Influence:** N/A (unless also covering)
+
+#### Pattern 4: Research File Usage
+**Triggers:** Artist style with existing research file
+- Extract from Section 13 if present
+- Otherwise: Weirdness 30-40%, Style Influence 85-95%
+- Add warnings for complex characteristics
+
+### Warning System
+
+**ALWAYS include warnings** when detecting problematic combinations:
+
+1. **Weirdness + Style Influence > 150%**
+   - Warning: Risk of artifacts and incoherent output
+   - Recommendation: Reduce Weirdness or Style Influence
+
+2. **Audio Influence > 80% + Lyric Changes Requested**
+   - Warning: Suno will resist modifications
+   - Recommendation: Lower Audio Influence to 15-30%
+
+3. **Persona + Incompatible Vocal Style**
+   - Warning: Persona lacks requested vocal style
+   - Recommendation: Remove request or retrain persona
+
+4. **Complex Characteristics + High Weirdness**
+   - Warning: May break odd time signatures, polyrhythms
+   - Recommendation: Keep Weirdness at or below 40%
+
+---
+
 ## Example: Full Enrichment Process
 
 **User Provides:**
