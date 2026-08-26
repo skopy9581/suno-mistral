@@ -1,17 +1,20 @@
 ---
 name: songwriter-DEV
 version: 2.0
-description: DEVELOPMENT VERSION - Outputs hierarchical style boxes AND Suno-compatible lyrics boxes with experimental formatting. Does NOT output traditional Style Blocks (Genre/Vocal/Tags). Includes negative styles when applicable.
+description: DEVELOPMENT VERSION - Outputs hierarchical style boxes AND Suno-compatible lyrics boxes with experimental formatting. Does NOT output traditional Style Blocks (Genre/Vocal/Tags). Includes negative styles when applicable. Each section is clearly separated for easy copy-paste.
 ---
 
 # Songwriter-DEV: Hierarchical Style + Lyrics Box Generator
 
 ## Core Principle
 
-**THIS SKILL OUTPUTS:**
-1. **Hierarchical Style Box** (DEV format, under 1000 chars)
-2. **Lyrics Box** with Suno-compatible tags (`[Instruments: ...]`, `[Session Drummer: ...]`, etc.)
-3. **Negative Styles** (when applicable)
+**THIS SKILL OUTPUTS THREE SEPARATE SECTIONS:**
+
+1. **HIERARCHICAL STYLE BOX** (DEV format, under 1000 chars)
+2. **LYRICS BOX** (Suno-compatible with tags)
+3. **NEGATIVE STYLES** (comma-separated list)
+
+Each section is **clearly separated with blank lines** for easy copy-paste.
 
 **DOES NOT OUTPUT:**
 - Traditional Style Block (`Genre: "..."`, `Vocal: "..."`, `Tags: "..."`)
@@ -20,11 +23,12 @@ description: DEVELOPMENT VERSION - Outputs hierarchical style boxes AND Suno-com
 
 ## Output Structure
 
-Every response must contain these THREE sections in order:
+Every response must contain these THREE SECTIONS, **each separated by TWO blank lines**:
 
 ```
 === HIERARCHICAL STYLE BOX ===
 [Your hierarchical YAML-style box under 1000 chars]
+
 
 === LYRICS BOX ===
 [Instruments: ...]
@@ -38,9 +42,12 @@ lyric line 2
 lyric line 1
 lyric line 2
 
+
 === NEGATIVE STYLES ===
 [comma-separated list when applicable]
 ```
+
+**Note the TWO blank lines between each section** - this allows users to easily copy each section individually.
 
 ---
 
@@ -175,6 +182,7 @@ atmosphere:
   space: in-your-face,close
   dynamics: compressed,high-energy
 
+
 === LYRICS BOX ===
 [Instruments: downtuned distorted bass; high-gain electric guitars with harmonized leads; double bass drum kit with aggressive fills; no synthesizers]
 [Session Drummer: Full acoustic kit with 22" kick, 14" snare, 12/13/16" toms, 20" ride, 18" crash | Groove: Aggressive thrash, double bass patterns, complex fills, ghost notes on snare]
@@ -218,6 +226,7 @@ WE WILL WEATHER AND REFORM! (and reform!)
 [Outro | Tech: Fade out with feedback | Vocal: Fade]
 The bell tolls...
 
+
 === NEGATIVE STYLES ===
 Jazz, Country, Acoustic Folk, Smooth R&B, drum machine, electronic drums, synthetic percussion, plastic drums
 ```
@@ -260,6 +269,7 @@ atmosphere:
   space: vast,echoing
   dynamics: wide,dynamic
 
+
 === LYRICS BOX ===
 [Instruments: analog bass synth with octave down; clean electric guitar with unusual tunings; atmospheric modular synths; acoustic drum kit with complex polyrhythms; processed vocals with delay and reverb]
 [Session Drummer: Full acoustic kit with 22" kick, 14" snare, 12/13/16" toms | Groove: Complex polyrhythms, odd time signatures (5/4, 7/8), ghost notes, brushed snare, electronic-acoustic hybrid]
@@ -297,6 +307,7 @@ In perfect time (perfect time)
 
 [Outro | Tech: Synth pad sustain | Vocal: Fade]
 The city hums...
+
 
 === NEGATIVE STYLES ===
 Country, Trap, Reggaeton, drum machine, electronic drums, synthetic percussion, plastic drums
@@ -362,9 +373,9 @@ Country, Trap, Reggaeton, drum machine, electronic drums, synthetic percussion, 
 - Format as comma-separated list
 
 ### Step 5: Output All Three Sections
-- Hierarchical Style Box
-- Lyrics Box
-- Negative Styles
+- Separate each section with **TWO blank lines**
+- Each section starts with `=== SECTION NAME ===`
+- Verify hierarchical box is under 1000 characters
 
 ---
 
@@ -430,13 +441,14 @@ Specify:
 ## Important Notes
 
 1. **ALWAYS OUTPUT ALL THREE SECTIONS** in order: Hierarchical Style Box, Lyrics Box, Negative Styles
-2. **Hierarchical box MUST be under 1000 characters**
-3. **Lyrics Box MUST include** `[Instruments: ...]` and `[Session Drummer: ...]` tags
-4. **DO NOT OUTPUT** traditional Style Block (Genre/Vocal/Tags)
-5. **NO PROPER NOUNS** in generated content (except in research file references)
-6. **Use research files** when available for accurate instrument/drum details
-7. **Preserve user lyrics** exactly if provided
-8. **Negative Styles** should be included for most requests
+2. **SEPARATE SECTIONS WITH TWO BLANK LINES** for easy copy-paste
+3. **Hierarchical box MUST be under 1000 characters**
+4. **Lyrics Box MUST include** `[Instruments: ...]` and `[Session Drummer: ...]` tags
+5. **DO NOT OUTPUT** traditional Style Block (Genre/Vocal/Tags)
+6. **NO PROPER NOUNS** in generated content (except in research file references)
+7. **Use research files** when available for accurate instrument/drum details
+8. **Preserve user lyrics** exactly if provided
+9. **Negative Styles** should be included for most requests
 
 ---
 
@@ -451,3 +463,4 @@ Specify:
 - [ ] No traditional Style Block output
 - [ ] No proper nouns in generated content
 - [ ] Character count verified for hierarchical box
+- [ ] Sections are separated by TWO blank lines for easy copying
