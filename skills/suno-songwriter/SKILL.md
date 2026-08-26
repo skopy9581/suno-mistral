@@ -23,7 +23,7 @@ If version is missing or doesn't match CURRENT VERSION, warn the user.
 
 When the user requests a song "in the style of [Artist/Band]", you MUST:
 
-1. **Check for existing research file:** Look for `research/{artist_name}.md` in the workspace
+1. **Check for existing research file:** Look for `research/{artist_name}.md` in the suno-music-researcher skill directory
 2. **If file exists:** Use ALL data from the file (instruments, style, session drummer, mood, etc.)
 3. **If file doesn't exist:** Prompt user to first use `suno-music-researcher` skill
 

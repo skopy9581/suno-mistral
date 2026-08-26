@@ -24,7 +24,7 @@ Engage the user in a dialogue to define the following (one at a time):
    - **Minimum requirement:** For each instrument category (guitars, bass, drums, synths, keys), provide model-level detail, signal path, and recording technique
 
 ### Phase 2: Building the Album Bible
-Once the concept is approved, generate the following directory structure and files in the user's workspace:
+Once the concept is approved, generate the following directory structure and files in the album-concept-designer skill directory:
 
 `[Album_Name]/`
 - `concept_and_storyline.md`: A deep dive into the narrative, environment lore, and character profiles.
