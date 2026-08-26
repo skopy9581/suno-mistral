@@ -1,6 +1,6 @@
 ---
 name: songwriter-DEV
-version: 2.0
+version: 2.1
 description: DEVELOPMENT VERSION - Outputs hierarchical style boxes AND Suno-compatible lyrics boxes with experimental formatting. Does NOT output traditional Style Blocks (Genre/Vocal/Tags). Includes negative styles when applicable. Each section is in a markdown code block for easy copy-paste.
 ---
 
@@ -10,14 +10,16 @@ description: DEVELOPMENT VERSION - Outputs hierarchical style boxes AND Suno-com
 
 **THIS SKILL OUTPUTS THREE SEPARATE MARKDOWN CODE BLOCKS:**
 
-1. **Hierarchical Style Box** (DEV format, under 1000 chars)
-2. **Lyrics Box** (Suno-compatible with tags)
+1. **Hierarchical Style Box** (DEV format, under 1000 chars) - contains all instrument/drum details
+2. **Lyrics Box** (Suno-compatible with tags) - contains only session drummer tag and lyrics
 3. **Negative Styles** (comma-separated list)
 
 Each section is in its own **markdown code block** for easy copy-paste.
 
 **DOES NOT OUTPUT:**
 - Traditional Style Block (`Genre: "..."`, `Vocal: "..."`, `Tags: "..."`)
+- Box headers (=== HIERARCHICAL STYLE BOX ===, === LYRICS BOX ===, === NEGATIVE STYLES ===)
+- [Instruments: ...] tag (redundant with hierarchical style box)
 
 ---
 
@@ -27,26 +29,50 @@ Every response must contain these THREE MARKDOWN CODE BLOCKS:
 
 ````markdown
 ```
-=== HIERARCHICAL STYLE BOX ===
-[Your hierarchical YAML-style box under 1000 chars]
+foundation:
+  bass: [description]
+  guitars: [description]
+  synths: [description]
+  drums: [description with kit details and groove]
+  style: [genre descriptors]
+  processing: [production techniques]
+  contrast: [thematic tensions]
+  tempo: [BPM]
+  meter: [time signatures]
+
+lead_vocals:
+  register: [vocal range]
+  character: [vocal tone]
+  phrasing: [delivery style]
+  emotion: [emotional quality]
+  irony: [contrasts]
+  delivery: [performance style]
+  effects: [vocal processing]
+
+atmosphere:
+  mood: [emotional atmosphere]
+  texture: [sonic texture]
+  space: [spatial characteristics]
+  dynamics: [dynamic range]
 ```
 
 ```
-=== LYRICS BOX ===
-[Instruments: ...]
-[Session Drummer: ...]
+[Session Drummer: Full kit details | Groove: characteristics, techniques]
 
-[Verse 1 | ...]
+[Intro | Tech: ... | Mood: ...]
 lyric line 1
 lyric line 2
 
-[Chorus | ...]
+[Verse 1 | Vocal: ... | Mood: ...]
+lyric line 1
+lyric line 2
+
+[Chorus | Energy: ... | Vocal: ...]
 lyric line 1
 lyric line 2
 ```
 
 ```
-=== NEGATIVE STYLES ===
 [comma-separated list when applicable]
 ```
 ````
@@ -72,7 +98,7 @@ foundation:
   bass: [description]
   guitars: [description]
   synths: [description]
-  drums: [description]
+  drums: [description - include kit details and groove style here]
   style: [genre descriptors]
   processing: [production techniques]
   contrast: [thematic tensions]
@@ -100,8 +126,7 @@ atmosphere:
 ## Lyrics Box Rules
 
 ### Required Tags
-1. **`[Instruments: ...]`** - MUST be first tag in lyrics box
-2. **`[Session Drummer: ...]`** - MUST be second tag in lyrics box
+1. **`[Session Drummer: ...]`** - MUST be first tag in lyrics box (contains drum kit and groove details)
 
 ### Tag Formatting
 - Use square brackets for ALL meta tags: `[Verse 1 | Vocal: ... | Mood: ...]`
@@ -114,12 +139,15 @@ atmosphere:
 - Use consistent section naming: `[Intro]`, `[Verse 1]`, `[Chorus]`, `[Bridge]`, `[Outro]`
 - Add meta tags to sections: `[Verse 1 | Vocal: Gritty | Energy: High]`
 
-### Drum Tags
-- **Session Drummer** must include:
-  - Kit composition (kick, snare, toms, cymbals)
-  - Groove style (natural, mechanical, swung, etc.)
-  - Techniques (ghost notes, flams, etc.)
-- Example: `[Session Drummer: Full kit with 22" kick, 14" snare, 12/13/16" toms | Groove: Natural swing, ghost notes]`
+### Drum Tags (Session Drummer)
+The Session Drummer tag MUST include:
+- Kit composition (kick, snare, toms, cymbals)
+- Groove style (natural, mechanical, swung, complex polyrhythms, etc.)
+- Techniques (ghost notes, flams, brushed snare, etc.)
+
+Example: `[Session Drummer: Full acoustic kit with 22" kick, 14" snare, 12/13/16" toms | Groove: Complex polyrhythms, odd time signatures (5/4, 7/8), ghost notes, brushed snare]`
+
+**NOTE:** All instrument details (including drums) are also captured in the hierarchical style box under `foundation.drums`. The Session Drummer tag in the lyrics box provides Suno-specific formatting.
 
 ---
 
@@ -158,12 +186,11 @@ song in style of metallica, you write the lyrics
 **songwriter-DEV Output:**
 ````markdown
 ```
-=== HIERARCHICAL STYLE BOX ===
 foundation:
   bass: downtuned dist,palm-muted
   guitars: thrash riffing,harmonized leads
   synths: N/A
-  drums: double bass,aggressive fills
+  drums: double bass,aggressive fills,22" kick,14" snare,12/13/16" toms
   style: thrash metal,heavy,progressive
   processing: hi-gain,compressed,tape-sat
   contrast: melody/aggression
@@ -187,8 +214,6 @@ atmosphere:
 ```
 
 ```
-=== LYRICS BOX ===
-[Instruments: downtuned distorted bass; high-gain electric guitars with harmonized leads; double bass drum kit with aggressive fills; no synthesizers]
 [Session Drummer: Full acoustic kit with 22" kick, 14" snare, 12/13/16" toms, 20" ride, 18" crash | Groove: Aggressive thrash, double bass patterns, complex fills, ghost notes on snare]
 
 [Intro | Tech: Palm-muted power chords | Energy: Building]
@@ -232,7 +257,6 @@ The bell tolls...
 ```
 
 ```
-=== NEGATIVE STYLES ===
 Jazz, Country, Acoustic Folk, Smooth R&B, drum machine, electronic drums, synthetic percussion, plastic drums
 ```
 ````
@@ -249,12 +273,11 @@ Create a Radiohead-style song about urban alienation
 **songwriter-DEV Output:**
 ````markdown
 ```
-=== HIERARCHICAL STYLE BOX ===
 foundation:
   bass: analog synth,octave-down
   guitars: clean/art rock,unusual tunings
   synths: atmospheric,modular
-  drums: acoustic,complex polyrhythms
+  drums: acoustic,complex polyrhythms,22" kick,14" snare,12/13/16" toms
   style: alt rock,art rock,exp
   processing: tape sat,delay,verb
   contrast: organic/electronic
@@ -278,8 +301,6 @@ atmosphere:
 ```
 
 ```
-=== LYRICS BOX ===
-[Instruments: analog bass synth with octave down; clean electric guitar with unusual tunings; atmospheric modular synths; acoustic drum kit with complex polyrhythms; processed vocals with delay and reverb]
 [Session Drummer: Full acoustic kit with 22" kick, 14" snare, 12/13/16" toms | Groove: Complex polyrhythms, odd time signatures (5/4, 7/8), ghost notes, brushed snare, electronic-acoustic hybrid]
 
 [Intro | Tech: Atmospheric synth pads, reversed cymbals | Mood: Ethereal]
@@ -318,7 +339,6 @@ The city hums...
 ```
 
 ```
-=== NEGATIVE STYLES ===
 Country, Trap, Reggaeton, drum machine, electronic drums, synthetic percussion, plastic drums
 ```
 ````
@@ -336,11 +356,11 @@ Country, Trap, Reggaeton, drum machine, electronic drums, synthetic percussion, 
 
 | **Research Section** | **Hierarchical Box** | **Lyrics Box** |
 |----------------------|---------------------|----------------|
-| Section 3: Instrumentation | `foundation.*` fields | `[Instruments: ...]` tag |
+| Section 3: Instrumentation | `foundation.*` fields | N/A (instruments now only in style box) |
 | Section 6: Vocal Style | `lead_vocals.*` fields | Vocal tags in sections |
 | Section 2: Tempo/Rhythm | `foundation.tempo`, `foundation.meter` | Tech tags for rhythm |
 | Section 5: Mood | `atmosphere.mood` | Mood tags in sections |
-| Section 12: Suno Songwriter | N/A | Direct use of Session Drummer and Tech tags |
+| Section 12: Suno Songwriter | `foundation.drums` | Session Drummer tag |
 
 ---
 
@@ -353,16 +373,17 @@ Country, Trap, Reggaeton, drum machine, electronic drums, synthetic percussion, 
 
 ### Step 2: Generate Hierarchical Style Box
 - Create foundation, lead_vocals, and atmosphere sections
+- **Include drum kit details in foundation.drums** (e.g., "acoustic,complex polyrhythms,22\" kick,14\" snare")
 - Apply condensation rules to stay under 1000 characters
 - Count characters and verify limit
 
 ### Step 3: Generate Lyrics Box
-- Create `[Instruments: ...]` tag from foundation fields
 - Create `[Session Drummer: ...]` tag from foundation.drums and research data
 - Structure lyrics into sections (Intro, Verse, Chorus, etc.)
 - Add section-level meta tags (Vocal, Mood, Tech, Energy, etc.)
 - Include user's lyrics if provided, or generate new ones
 - Add ad-libs in parentheses where appropriate
+- **DO NOT include [Instruments: ...] tag** (redundant with hierarchical style box)
 
 ### Step 4: Generate Negative Styles
 - Identify conflicting genres based on style
@@ -371,7 +392,7 @@ Country, Trap, Reggaeton, drum machine, electronic drums, synthetic percussion, 
 
 ### Step 5: Output All Three Code Blocks
 - Each section in its own markdown code block
-- Section header: `=== SECTION NAME ===`
+- **NO box headers** (=== HIERARCHICAL STYLE BOX ===, etc.)
 - Verify hierarchical box is under 1000 characters
 
 ---
@@ -405,7 +426,7 @@ Country, Trap, Reggaeton, drum machine, electronic drums, synthetic percussion, 
 
 ## Drum Tag Guidelines
 
-### Kit Composition
+### Kit Composition (for both foundation.drums and Session Drummer tag)
 Always specify:
 - Kick drum size (e.g., 22", 24")
 - Snare drum size (e.g., 14")
@@ -418,20 +439,27 @@ Specify:
 - Dynamic range (soft, loud, dynamic)
 - Techniques (ghost notes, flams, rim shots, brushes)
 - Fill complexity (simple, complex, frequent)
+- Time signature details (for complex rhythms)
 
 ### Examples by Genre
-| **Genre** | **Session Drummer Tag** |
-|-----------|------------------------|
-| Rock | `[Session Drummer: Full kit with 22" kick, 14" snare, 12/13/16" toms | Groove: Natural swing, dynamic hits, ghost notes]` |
-| Metal | `[Session Drummer: Full kit with 24" kick, 14" snare, 12/13/16" toms | Groove: Aggressive, double bass, complex fills, ghost notes]` |
-| Jazz | `[Session Drummer: Jazz kit with brushed snare, ride cymbal focus | Groove: Soft brushes, swung, hi-hat with foot]` |
-| Electronic | `[Session Drummer: Electronic kit with sampled acoustic hits | Groove: Quantized, punchy, consistent]` |
+| **Genre** | **foundation.drums** | **Session Drummer Tag** |
+|-----------|----------------------|------------------------|
+| Rock | `acoustic,22" kick,14" snare,12/13/16" toms` | `[Session Drummer: Full kit with 22" kick, 14" snare, 12/13/16" toms | Groove: Natural swing, dynamic hits, ghost notes]` |
+| Metal | `double bass,aggressive fills,24" kick,14" snare` | `[Session Drummer: Full kit with 24" kick, 14" snare | Groove: Aggressive, double bass, complex fills, ghost notes]` |
+| Jazz | `brushed snare,ride cymbal focus` | `[Session Drummer: Jazz kit with brushed snare | Groove: Soft brushes, swung, hi-hat with foot]` |
+| Electronic | `electronic,quantized,punchy` | `[Session Drummer: Electronic kit with sampled acoustic hits | Groove: Quantized, punchy, consistent]` |
 
 ---
 
 ## Version System
 
-**CURRENT VERSION:** 2.0
+**CURRENT VERSION:** 2.1
+
+**CHANGES IN 2.1:**
+- Removed box headers from output (=== HIERARCHICAL STYLE BOX ===, etc.)
+- Removed [Instruments: ...] tag from lyrics box (redundant with hierarchical style box)
+- Moved drum kit details to foundation.drums in hierarchical style box
+- Session Drummer tag retained in lyrics box for Suno compatibility
 
 ---
 
@@ -440,24 +468,28 @@ Specify:
 1. **ALWAYS OUTPUT THREE MARKDOWN CODE BLOCKS** in order: Hierarchical Style Box, Lyrics Box, Negative Styles
 2. **Each section in its own ``` block** for easy copy-paste
 3. **Hierarchical box MUST be under 1000 characters**
-4. **Lyrics Box MUST include** `[Instruments: ...]` and `[Session Drummer: ...]` tags
-5. **DO NOT OUTPUT** traditional Style Block (Genre/Vocal/Tags)
-6. **NO PROPER NOUNS** in generated content (except in research file references)
-7. **Use research files** when available for accurate instrument/drum details
-8. **Preserve user lyrics** exactly if provided
-9. **Negative Styles** should be included for most requests
+4. **Lyrics Box MUST include** `[Session Drummer: ...]` tag
+5. **Lyrics Box MUST NOT include** `[Instruments: ...]` tag (redundant)
+6. **DO NOT OUTPUT** traditional Style Block (Genre/Vocal/Tags)
+7. **NO box headers** in output (=== HIERARCHICAL STYLE BOX ===, etc.)
+8. **NO PROPER NOUNS** in generated content (except in research file references)
+9. **Use research files** when available for accurate instrument/drum details
+10. **Preserve user lyrics** exactly if provided
+11. **Negative Styles** should be included for most requests
 
 ---
 
 ## Quality Checks Before Output
 
 - [ ] Hierarchical style box is complete and under 1000 chars
-- [ ] Lyrics box includes [Instruments: ...] tag
+- [ ] Hierarchical style box includes drum kit details in foundation.drums
 - [ ] Lyrics box includes [Session Drummer: ...] tag
+- [ ] Lyrics box does NOT include [Instruments: ...] tag
 - [ ] Lyrics have proper section structure
 - [ ] Section tags include appropriate meta categories
 - [ ] Negative styles are included when applicable
 - [ ] No traditional Style Block output
+- [ ] No box headers in output
 - [ ] No proper nouns in generated content
 - [ ] Character count verified for hierarchical box
 - [ ] Each section is in its own markdown code block
