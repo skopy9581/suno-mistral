@@ -75,3 +75,26 @@ The three skills work together seamlessly:
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Development Guidelines
+
+### Path Conventions
+**CRITICAL:** All file paths in skill instructions must use **relative paths** from the skill's own directory, NOT absolute paths.
+
+- ✅ **Correct:** `research/[artist_name].md` (relative to skill directory)
+- ❌ **Wrong:** `/home/user/skills/suno-music-researcher/research/[artist_name].md` (absolute)
+- ❌ **Wrong:** `/workspace/github__skopy9581__suno-mistral/skills/suno-music-researcher/research/[artist_name].md` (absolute)
+
+**Why:** Vibe Code runs skills from their installed directory. Users pull updates from GitHub to their local skills folder. Absolute paths will not work across different installations.
+
+**Cross-Skill References:**
+- suno-songwriter looks for research files in: `suno-music-researcher/research/[artist_name].md`
+- album-concept-designer creates files in its own directory
+- suno-music-researcher writes to: `research/[artist_name].md`
+
+### Testing Paths
+After updating any skill that references file paths:
+1. Verify the path is relative to the skill directory
+2. Test that the dependent skill can find the file
+3. Ensure no absolute paths remain in the code
+
