@@ -135,6 +135,11 @@ atmosphere:
 - Parentheses for ad-libs/vocalizations: `(oh yeah)`, `(woah)`
 
 ### Section Structure
+- **MANDATORY: Include at least one `[Instrumental: ...]` or `[Solo: ...]` tag for instrumental/solo sections**
+  - Use `[Instrumental: ...]` for pure instrumental sections (no vocals)
+  - Use `[Solo: Guitar/Keyboard/etc. | Style: ...]` for solo passages
+  - Example: `[Instrumental: Atmospheric synth pads, reversed cymbals]`
+  - Example: `[Solo: Guitar | Style: Shredding, harmonized, with whammy bar]`
 - Always include: Intro, Verse, Chorus, Bridge, Outro (as applicable)
 - Use consistent section naming: `[Intro]`, `[Verse 1]`, `[Chorus]`, `[Bridge]`, `[Outro]`
 - Add meta tags to sections: `[Verse 1 | Vocal: Gritty | Energy: High]`
