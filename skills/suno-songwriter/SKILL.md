@@ -1,8 +1,14 @@
 ---
 name: suno-songwriter
+version: 2.0
 description: Specialized in writing, formatting, and enriching lyrics for Suno AI and other music generation tools. Use when the user provides lyrics or asks for help creating song structure, style tags, and meta-instructions for music AI. **For albums created with album-concept-designer, this skill accepts and processes studio-grade instrumentation details from musical_identity.md.**
 ---
+## Version System
 
+**CURRENT VERSION:** 2.0
+
+When loading research files, check for `<!-- SUNO_RESEARCH_VERSION: X.X -->` comment.
+If version is missing or doesn't match CURRENT VERSION, warn the user.
 # Suno Songwriter
 
 ## Research File Integration
@@ -10,6 +16,10 @@ description: Specialized in writing, formatting, and enriching lyrics for Suno A
 **IMPORTANT:** Before generating lyrics, check if the user references a specific artist/band style.
 
 ### Research File System
+**0. Version Check:**
+- Look for: `<!-- SUNO_RESEARCH_VERSION: X.X -->` in the research file
+- If **missing**: Show warning: "This research file was created with an older version. Regenerate with `suno-music-researcher` for best results."
+- If **mismatched** (not 2.0): Show warning: "This research file is from version X.X. Current version is 2.0. Regenerate with `suno-music-researcher` for compatibility."
 
 When the user requests a song "in the style of [Artist/Band]", you MUST:
 

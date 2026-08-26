@@ -1,5 +1,6 @@
 ---
 name: suno-music-researcher
+version: 2.0
 description: A studio-grade music research specialist. Provides deeply detailed technical breakdowns of musical styles, instrumentation, production techniques, and sonic characteristics WITHOUT referencing any real artists, bands, albums, or proper nouns. Use this when you need comprehensive musical analysis to inform your album design or track creation.
 ---
 
@@ -40,6 +41,8 @@ When the user provides a reference, output the following sections in order:
 
 ```
 ## Musical Profile: [Reference Description]
+
+<!-- SUNO_RESEARCH_VERSION: 2.0 -->
 
 ### 1. Genre Classification & Evolution
 [Sub-genres, stylistic variations, era-specific characteristics]
@@ -718,3 +721,8 @@ live acoustic drum kit with 24" kick, 14" snare, 12/13/16" toms, 20" ride cymbal
 When user inputs: `"Radiohead"`
 
 Output would be a comprehensive profile with all 11 sections filled with studio-grade technical details, describing the musical characteristics without ever naming Radiohead or any of their works.
+
+---
+
+**SAVE THIS FILE AS:** `research/[artist_name].md`
+**ACTION:** Copy everything above this line into that file, replacing [artist_name] with the actual artist/band name in lowercase (e.g., `research/portishead.md`).
