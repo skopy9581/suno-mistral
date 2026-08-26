@@ -1,20 +1,20 @@
 ---
 name: songwriter-DEV
 version: 2.0
-description: DEVELOPMENT VERSION - Outputs hierarchical style boxes AND Suno-compatible lyrics boxes with experimental formatting. Does NOT output traditional Style Blocks (Genre/Vocal/Tags). Includes negative styles when applicable. Each section is clearly separated for easy copy-paste.
+description: DEVELOPMENT VERSION - Outputs hierarchical style boxes AND Suno-compatible lyrics boxes with experimental formatting. Does NOT output traditional Style Blocks (Genre/Vocal/Tags). Includes negative styles when applicable. Each section is in a markdown code block for easy copy-paste.
 ---
 
 # Songwriter-DEV: Hierarchical Style + Lyrics Box Generator
 
 ## Core Principle
 
-**THIS SKILL OUTPUTS THREE SEPARATE SECTIONS:**
+**THIS SKILL OUTPUTS THREE SEPARATE MARKDOWN CODE BLOCKS:**
 
-1. **HIERARCHICAL STYLE BOX** (DEV format, under 1000 chars)
-2. **LYRICS BOX** (Suno-compatible with tags)
-3. **NEGATIVE STYLES** (comma-separated list)
+1. **Hierarchical Style Box** (DEV format, under 1000 chars)
+2. **Lyrics Box** (Suno-compatible with tags)
+3. **Negative Styles** (comma-separated list)
 
-Each section is **clearly separated with blank lines** for easy copy-paste.
+Each section is in its own **markdown code block** for easy copy-paste.
 
 **DOES NOT OUTPUT:**
 - Traditional Style Block (`Genre: "..."`, `Vocal: "..."`, `Tags: "..."`)
@@ -23,13 +23,15 @@ Each section is **clearly separated with blank lines** for easy copy-paste.
 
 ## Output Structure
 
-Every response must contain these THREE SECTIONS, **each separated by TWO blank lines**:
+Every response must contain these THREE MARKDOWN CODE BLOCKS:
 
+````markdown
 ```
 === HIERARCHICAL STYLE BOX ===
 [Your hierarchical YAML-style box under 1000 chars]
+```
 
-
+```
 === LYRICS BOX ===
 [Instruments: ...]
 [Session Drummer: ...]
@@ -41,13 +43,13 @@ lyric line 2
 [Chorus | ...]
 lyric line 1
 lyric line 2
+```
 
-
+```
 === NEGATIVE STYLES ===
 [comma-separated list when applicable]
 ```
-
-**Note the TWO blank lines between each section** - this allows users to easily copy each section individually.
+````
 
 ---
 
@@ -154,6 +156,7 @@ song in style of metallica, you write the lyrics
 ```
 
 **songwriter-DEV Output:**
+````markdown
 ```
 === HIERARCHICAL STYLE BOX ===
 foundation:
@@ -181,8 +184,9 @@ atmosphere:
   texture: raw,heavy,abrasive
   space: in-your-face,close
   dynamics: compressed,high-energy
+```
 
-
+```
 === LYRICS BOX ===
 [Instruments: downtuned distorted bass; high-gain electric guitars with harmonized leads; double bass drum kit with aggressive fills; no synthesizers]
 [Session Drummer: Full acoustic kit with 22" kick, 14" snare, 12/13/16" toms, 20" ride, 18" crash | Groove: Aggressive thrash, double bass patterns, complex fills, ghost notes on snare]
@@ -225,11 +229,13 @@ WE WILL WEATHER AND REFORM! (and reform!)
 
 [Outro | Tech: Fade out with feedback | Vocal: Fade]
 The bell tolls...
+```
 
-
+```
 === NEGATIVE STYLES ===
 Jazz, Country, Acoustic Folk, Smooth R&B, drum machine, electronic drums, synthetic percussion, plastic drums
 ```
+````
 
 ---
 
@@ -241,6 +247,7 @@ Create a Radiohead-style song about urban alienation
 ```
 
 **songwriter-DEV Output:**
+````markdown
 ```
 === HIERARCHICAL STYLE BOX ===
 foundation:
@@ -268,8 +275,9 @@ atmosphere:
   texture: layered,textural
   space: vast,echoing
   dynamics: wide,dynamic
+```
 
-
+```
 === LYRICS BOX ===
 [Instruments: analog bass synth with octave down; clean electric guitar with unusual tunings; atmospheric modular synths; acoustic drum kit with complex polyrhythms; processed vocals with delay and reverb]
 [Session Drummer: Full acoustic kit with 22" kick, 14" snare, 12/13/16" toms | Groove: Complex polyrhythms, odd time signatures (5/4, 7/8), ghost notes, brushed snare, electronic-acoustic hybrid]
@@ -307,11 +315,13 @@ In perfect time (perfect time)
 
 [Outro | Tech: Synth pad sustain | Vocal: Fade]
 The city hums...
+```
 
-
+```
 === NEGATIVE STYLES ===
 Country, Trap, Reggaeton, drum machine, electronic drums, synthetic percussion, plastic drums
 ```
+````
 
 ---
 
@@ -331,19 +341,6 @@ Country, Trap, Reggaeton, drum machine, electronic drums, synthetic percussion, 
 | Section 2: Tempo/Rhythm | `foundation.tempo`, `foundation.meter` | Tech tags for rhythm |
 | Section 5: Mood | `atmosphere.mood` | Mood tags in sections |
 | Section 12: Suno Songwriter | N/A | Direct use of Session Drummer and Tech tags |
-
-### Example: Using Research File
-
-**If `research/radiohead.md` contains:**
-```
-### Session Drummer Tag:
-[Session Drummer: Complex polyrhythms, odd time signatures (5/4, 7/8), ghost notes, brushed snare, electronic-acoustic hybrid kit | Groove: Unconventional, dynamic, with abrupt changes]
-
-### Instruments Field Additions:
-[Instruments: live acoustic drum kit with electronic triggers; electric guitar with unusual tunings and heavy effects; analog synths with complex modulation; processed vocals with delay and reverb]
-```
-
-**Then Lyrics Box should include these EXACT tags** (from research file Section 12).
 
 ---
 
@@ -372,9 +369,9 @@ Country, Trap, Reggaeton, drum machine, electronic drums, synthetic percussion, 
 - Add common exclusions (drum machine, etc.)
 - Format as comma-separated list
 
-### Step 5: Output All Three Sections
-- Separate each section with **TWO blank lines**
-- Each section starts with `=== SECTION NAME ===`
+### Step 5: Output All Three Code Blocks
+- Each section in its own markdown code block
+- Section header: `=== SECTION NAME ===`
 - Verify hierarchical box is under 1000 characters
 
 ---
@@ -440,8 +437,8 @@ Specify:
 
 ## Important Notes
 
-1. **ALWAYS OUTPUT ALL THREE SECTIONS** in order: Hierarchical Style Box, Lyrics Box, Negative Styles
-2. **SEPARATE SECTIONS WITH TWO BLANK LINES** for easy copy-paste
+1. **ALWAYS OUTPUT THREE MARKDOWN CODE BLOCKS** in order: Hierarchical Style Box, Lyrics Box, Negative Styles
+2. **Each section in its own ``` block** for easy copy-paste
 3. **Hierarchical box MUST be under 1000 characters**
 4. **Lyrics Box MUST include** `[Instruments: ...]` and `[Session Drummer: ...]` tags
 5. **DO NOT OUTPUT** traditional Style Block (Genre/Vocal/Tags)
@@ -463,4 +460,4 @@ Specify:
 - [ ] No traditional Style Block output
 - [ ] No proper nouns in generated content
 - [ ] Character count verified for hierarchical box
-- [ ] Sections are separated by TWO blank lines for easy copying
+- [ ] Each section is in its own markdown code block
