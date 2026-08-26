@@ -481,6 +481,85 @@ Specify:
 9. **Use research files** when available for accurate instrument/drum details
 10. **Preserve user lyrics** exactly if provided
 11. **Negative Styles** should be included for most requests
+12. **Slider recommendations** should be included based on context detection
+
+---
+
+## Suno Sliders Integration
+
+### Context-Aware Slider Recommendations
+
+**CRITICAL:** Always append slider recommendations as a FOURTH markdown code block after Negative Styles.
+
+### Slider Definitions
+
+| Slider | Range | Purpose | Key Insight |
+|--------|-------|---------|-------------|
+| **Weirdness** | 0% (Safe) to 100% (Chaos) | Controls deviation from conventional patterns | 50% = "normal"; 81%+ = "glitch-mode cliff" |
+| **Style Influence** | Loose to Strong | How tightly Suno follows your Style prompt | 80-90%+ = strict specification |
+| **Audio Influence** | Loose to Strong | How much uploaded audio anchors the result | Only appears with Audio Upload |
+
+### Detection Logic for songwriter-DEV
+
+#### Pattern 1: Original Song Creation
+**Triggers:** User provides lyrics + style, no audio upload, no cover/persona keywords
+- **Weirdness:** 30-40% (creative but coherent)
+- **Style Influence:** 80-90% (strong adherence)
+
+#### Pattern 2: Cover Song
+| Cover Type | Weirdness | Style Influence | Audio Influence |
+|------------|-----------|-----------------|-----------------|
+| Exact Clone | 1-3% | 2-3% | 96-97% |
+| Faithful Cover | 20% | 70-80% | 75% |
+| Creative Cover | 40-60% | 50-70% | 50% |
+| Lyric Changes | 70%+ | 50-70% | 15% |
+
+#### Pattern 3: Persona/Voice Usage
+**Triggers:** "using [persona name]", "persona: [name]", "voice: [name]"
+- **Weirdness:** 20-30%
+- **Style Influence:** 85-95%
+
+#### Pattern 4: Research File Usage
+**Triggers:** Artist style with existing research file
+- Extract from Section 13 if present
+- Otherwise: Weirdness 30-40%, Style Influence 85-95%
+
+### Output Format for Slider Recommendations
+
+**ALWAYS append this as FOURTH code block** after Negative Styles:
+
+\`\`\`
+**Recommended Suno Sliders:**
+
+| Scenario | Weirdness | Style Influence | Audio Influence |
+|----------|-----------|-----------------|-----------------|
+| **Your Request** | {value}% | {value}% | {value or N/A} |
+
+**Rationale:** {Explanation}
+
+**Warnings:**
+{List applicable warnings}
+
+**Pro Tips:**
+- {Tip 1}
+- {Tip 2}
+\`\`\`
+
+### Updated Quality Checks
+
+- [ ] Hierarchical style box is complete and under 1000 chars
+- [ ] Hierarchical style box includes drum kit details in foundation.drums
+- [ ] Lyrics box includes [Session Drummer: ...] tag
+- [ ] Lyrics box does NOT include [Instruments: ...] tag
+- [ ] Lyrics have proper section structure
+- [ ] Section tags include appropriate meta categories
+- [ ] Negative styles are included when applicable
+- [ ] No traditional Style Block output
+- [ ] No box headers in output
+- [ ] No proper nouns in generated content
+- [ ] Character count verified for hierarchical box
+- [ ] Each section is in its own markdown code block
+- [ ] **Slider recommendations included as fourth code block**
 
 ---
 
