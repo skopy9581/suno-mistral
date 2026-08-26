@@ -724,5 +724,12 @@ Output would be a comprehensive profile with all 11 sections filled with studio-
 
 ---
 
-**SAVE THIS FILE AS:** `research/[artist_name].md`
-**ACTION:** Copy everything above this line into that file, replacing [artist_name] with the actual artist/band name in lowercase (e.g., `research/portishead.md`).
+## Auto-Save Instructions
+
+When you complete a research profile, **automatically write the full output** to `research/[artist_name].md` (relative path in the suno-music-researcher skill directory).
+
+**CRITICAL:** The suno-songwriter skill checks for files at `research/[artist_name].md` relative to the suno-music-researcher skill directory. Always write the file, never just display it in chat.
+
+**Example:** If user requests metallica, write to: `research/metallica.md`
+
+**Verification:** After writing, confirm: Research saved to research/[artist_name].md - ready for suno-songwriter skill
