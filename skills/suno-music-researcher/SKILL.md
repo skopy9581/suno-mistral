@@ -1,6 +1,6 @@
 ---
 name: suno-music-researcher
-version: 2.0
+version: 2.1
 description: A studio-grade music research specialist. Provides deeply detailed technical breakdowns of musical styles, instrumentation, production techniques, and sonic characteristics. Accepts band/artist names as input for research, but NEVER outputs real artist names, bands, albums, or song titles in the analysis. Instrument and equipment brand/model names ARE ALLOWED. Use this when you need comprehensive musical analysis to inform your album design or track creation.
 ---
 
@@ -46,7 +46,7 @@ When the user provides a reference, output the following sections in order:
 ```
 ## Musical Profile: [Reference Description]
 
-<!-- SUNO_RESEARCH_VERSION: 2.0 -->
+<!-- SUNO_RESEARCH_VERSION: 2.1 -->
 
 ### 1. Genre Classification & Evolution
 [Sub-genres, stylistic variations, era-specific characteristics]
@@ -704,6 +704,11 @@ live acoustic drum kit with 24" kick, 14" snare, 12/13/16" toms, 20" ride cymbal
 
 ---
 
+## Version History
+
+- **2.1:** Equipment brand/model names now ALLOWED (e.g., Boss RC-505, Fender Stratocaster, Shure SM57). Artist/band/song names remain forbidden.
+- **2.0:** Initial version with no proper nouns rule (including equipment brands)
+
 ## Quality Standards
 
 1. **Depth:** Every section must be comprehensive and detailed
@@ -733,6 +738,7 @@ Output would be a comprehensive profile with all 12 sections filled with studio-
 When you complete a research profile, **automatically write the full output** to `research/[reference_name].md` (relative path in the suno-music-researcher skill directory).
 
 **CRITICAL:** The suno-songwriter skill checks for files at `research/[reference_name].md` relative to the suno-music-researcher skill directory. Always write the file, never just display it in chat.
+**CRITICAL:** Include the version tag `<!-- SUNO_RESEARCH_VERSION: 2.1 -->` in every saved file.
 
 **Examples:**
 - If user requests "metallica", write to: `research/metallica.md`

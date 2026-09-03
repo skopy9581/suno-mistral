@@ -1,14 +1,19 @@
 ---
 name: suno-songwriter
-version: 2.0
+version: 2.1
 description: Specialized in writing, formatting, and enriching lyrics for Suno AI and other music generation tools. Use when the user provides lyrics or asks for help creating song structure, style tags, and meta-instructions for music AI. **For albums created with album-concept-designer, this skill accepts and processes studio-grade instrumentation details from musical_identity.md.**
 ---
 ## Version System
 
-**CURRENT VERSION:** 2.0
+**CURRENT VERSION:** 2.1
 
 When loading research files, check for `<!-- SUNO_RESEARCH_VERSION: X.X -->` comment.
 If version is missing or doesn't match CURRENT VERSION, warn the user.
+## Version History
+
+- **2.1:** Equipment brand/model names now ALLOWED (e.g., Boss RC-505, Fender Stratocaster). Research files from 2.0 will have generic descriptions only.
+- **2.0:** Initial version with no proper nouns rule
+
 # Suno Songwriter
 
 ## Research File Integration
@@ -18,8 +23,8 @@ If version is missing or doesn't match CURRENT VERSION, warn the user.
 ### Research File System
 **0. Version Check:**
 - Look for: `<!-- SUNO_RESEARCH_VERSION: X.X -->` in the research file
-- If **missing**: Show warning: "This research file was created with an older version. Regenerate with `suno-music-researcher` for best results."
-- If **mismatched** (not 2.0): Show warning: "This research file is from version X.X. Current version is 2.0. Regenerate with `suno-music-researcher` for compatibility."
+- If **missing**: Show warning: "This research file was created with an older version. Regenerate with `suno-music-researcher` for best results. Note: Old files may lack equipment brand/model names (e.g., Boss RC-505)."
+- If **mismatched** (not 2.1): Show warning: "This research file is from version X.X. Current version is 2.1. Regenerate with `suno-music-researcher` for compatibility. Note: Version 2.0 files lack equipment brand/model names."
 
 When the user requests a song "in the style of [Artist/Band]", you MUST:
 
