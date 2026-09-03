@@ -465,8 +465,14 @@ Specify:
 - Removed [Instruments: ...] tag from lyrics box (redundant with hierarchical style box)
 - Moved drum kit details to foundation.drums in hierarchical style box
 - Session Drummer tag retained in lyrics box for Suno compatibility
+- **Equipment brand/model names now ALLOWED** (e.g., Boss RC-505, Fender Stratocaster). Artist/band/song names remain forbidden.
 
 ---
+
+## Version History
+
+- **2.1:** Equipment brand/model names now ALLOWED. Removed box headers, removed [Instruments: ...] tag, moved drum details to foundation.drums.
+- **2.0:** Initial version
 
 ## Important Notes
 
