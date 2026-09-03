@@ -422,9 +422,9 @@ Transform detailed descriptions into Suno-compatible instrument strings:
 | acoustic kit (24" kick, 14" snare, 12/13/16" toms) with ribbon and dynamic mics, SSL bus compression | acoustic drums with SSL compression |
 | polyphonic analog with chorus and hall reverb | polyphonic analog synth with chorus and reverb |
 | large-diaphragm condenser, compressed, with plate reverb | processed vocals with plate reverb |
-| Fender Jaguar through Boss DS-1 into Fender Twin Reverb | electric guitar with distortion and spring reverb |
+| Fender Jaguar through Boss DS-1 into Fender Twin Reverb | Fender Jaguar through distortion and spring reverb |
 | Moog Sub 37 with octave pedal | bass synth with octave down |
-| Roland TR-8S with sampled acoustic hits | electronic drums with acoustic samples |
+| Roland TR-8S with sampled acoustic hits | Roland TR-8S with acoustic samples |
 
 #### Step 4: Build the Instruments Tag
 Combine all parsed instruments into the **[Instruments: ...]** tag for the Lyrics box:

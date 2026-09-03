@@ -477,7 +477,7 @@ Specify:
 5. **Lyrics Box MUST NOT include** `[Instruments: ...]` tag (redundant)
 6. **DO NOT OUTPUT** traditional Style Block (Genre/Vocal/Tags)
 7. **NO box headers** in output (=== HIERARCHICAL STYLE BOX ===, etc.)
-8. **NO PROPER NOUNS** in generated content (except in research file references)
+8. **NO PROPER NOUNS** in generated content (except instrument/equipment brand/model names and research file references)
 9. **Use research files** when available for accurate instrument/drum details
 10. **Preserve user lyrics** exactly if provided
 11. **Negative Styles** should be included for most requests
@@ -556,7 +556,7 @@ Specify:
 - [ ] Negative styles are included when applicable
 - [ ] No traditional Style Block output
 - [ ] No box headers in output
-- [ ] No proper nouns in generated content
+- [ ] No artist/band/song names in generated content (instrument brands ARE allowed)
 - [ ] Character count verified for hierarchical box
 - [ ] Each section is in its own markdown code block
 - [ ] **Slider recommendations included as fourth code block**
@@ -574,6 +574,6 @@ Specify:
 - [ ] Negative styles are included when applicable
 - [ ] No traditional Style Block output
 - [ ] No box headers in output
-- [ ] No proper nouns in generated content
+- [ ] No artist/band/song names in generated content (instrument brands ARE allowed)
 - [ ] Character count verified for hierarchical box
 - [ ] Each section is in its own markdown code block

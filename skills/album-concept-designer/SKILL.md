@@ -243,7 +243,7 @@ When building the **Instruments** field for Suno AI prompts:
 3. **Format** as: `[instrument] with [effect/technique]; [instrument] with [effect];`
 4. **Prioritize** the most characteristic instruments first
 5. **Keep under 990 characters** - use semicolons to separate, not newlines
-6. **Be specific but concise** - "Fender Jaguar with tube screamer and spring reverb" -> "electric guitar with distortion and spring reverb"
+6. **Be specific** - Include instrument brand/model names (e.g., Fender Jaguar with tube screamer and spring reverb)
 
 ### Example: Album Identity to Track Adaptation
 
