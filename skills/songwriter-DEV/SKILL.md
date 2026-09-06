@@ -30,10 +30,10 @@ Every response must contain these THREE MARKDOWN CODE BLOCKS:
 ````markdown
 ```
 foundation:
-  bass: [description]
-  guitars: [description]
-  synths: [description]
-  drums: [description with kit details and groove]
+  bass: [exact brand/model names with characteristics]
+  guitars: [exact brand/model names with characteristics]
+  synths: [exact brand/model names with characteristics]
+  drums: [exact brand/model names, MAX 150 chars for Session Drummer]
   style: [genre descriptors]
   processing: [production techniques]
   contrast: [thematic tensions]
@@ -57,7 +57,7 @@ atmosphere:
 ```
 
 ```
-[Session Drummer: Full kit details | Groove: characteristics, techniques]
+[Session Drummer: {condensed_kit} | Groove: {essence}]
 
 [Intro | Tech: ... | Mood: ...]
 lyric line 1
@@ -71,6 +71,10 @@ lyric line 2
 lyric line 1
 lyric line 2
 ```
+
+**CRITICAL:** Session Drummer tag MUST be **under 150 characters**. Use condensed format: `[Session Drummer: Ludwig 22k/14s/12-13-16t | Groove: Swing, ghost notes]`
+
+**CRITICAL:** Always prefer REAL ANALOG DRUMS unless genre explicitly requires electronic (EDM, Trap, Hip-Hop).
 
 ```
 [comma-separated list when applicable]
@@ -145,14 +149,26 @@ atmosphere:
 - Add meta tags to sections: `[Verse 1 | Vocal: Gritty | Energy: High]`
 
 ### Drum Tags (Session Drummer)
+**CRITICAL:** Session Drummer tag MUST be **under 150 characters** total.
+
 The Session Drummer tag MUST include:
-- Kit composition (kick, snare, toms, cymbals)
-- Groove style (natural, mechanical, swung, complex polyrhythms, etc.)
-- Techniques (ghost notes, flams, brushed snare, etc.)
+- Kit composition (use **condensed format**: Ludwig 22k/14s/12-13-16t)
+- Groove style (1-3 words max: Swing, Driving, Complex)
+- Techniques (1-2 most characteristic: ghost notes, flams)
 
-Example: `[Session Drummer: Full acoustic kit with 22" kick, 14" snare, 12/13/16" toms | Groove: Complex polyrhythms, odd time signatures (5/4, 7/8), ghost notes, brushed snare]`
+**Example (MAX 150 chars):**
+```
+[Session Drummer: Ludwig 22k/14s/12-13-16t | Groove: Swing, ghost notes]
+```
 
-**NOTE:** All instrument details (including drums) are also captured in the hierarchical style box under `foundation.drums`. The Session Drummer tag in the lyrics box provides Suno-specific formatting.
+**WRONG (too long):**
+```
+[Session Drummer: Full acoustic kit with 22" kick, 14" snare, 12/13/16" toms | Groove: Complex polyrhythms, odd time signatures (5/4, 7/8), ghost notes, brushed snare]
+```
+
+**CRITICAL:** Always prefer REAL ANALOG DRUMS unless genre explicitly requires electronic (EDM, Trap, Hip-Hop).
+
+**NOTE:** All instrument details (including exact brand/model names) are captured in the hierarchical style box under `foundation.drums`. The Session Drummer tag in the lyrics box provides Suno-specific formatting with condensed notation.
 
 ---
 
@@ -219,7 +235,7 @@ atmosphere:
 ```
 
 ```
-[Session Drummer: Full acoustic kit with 22" kick, 14" snare, 12/13/16" toms, 20" ride, 18" crash | Groove: Aggressive thrash, double bass patterns, complex fills, ghost notes on snare]
+[Session Drummer: Sonor 22k/14s/12-13-16t | Groove: Aggressive, double bass]
 
 [Intro | Tech: Palm-muted power chords | Energy: Building]
 E|-----------------|
@@ -249,7 +265,7 @@ But the tide will turn when the battle's begun
 We'll take back our stolen lands
 
 [Bridge | Tech: Drum fill cascade | Mood: Intense]
-[Guitar Solo: Shredding, harmonized, with whammy bar]
+[Guitar Solo: Jackson RR24 | Style: Shredding, harmonized, with whammy bar]
 
 [Final Chorus | Energy: Maximum | Vocal: Layered]
 SO THE BELL TOLLS FOR YOU! (tolls for you!)
@@ -279,10 +295,10 @@ Create a Radiohead-style song about urban alienation
 ````markdown
 ```
 foundation:
-  bass: analog synth,octave-down
-  guitars: clean/art rock,unusual tunings
-  synths: atmospheric,modular
-  drums: acoustic,complex polyrhythms,22" kick,14" snare,12/13/16" toms
+  bass: Fender Jazz Bass,analog synth,octave-down
+  guitars: Fender Stratocaster,clean/art rock,unusual tunings,whammy
+  synths: Moog Sub Phatty,atmospheric,modular
+  drums: Ludwig 22k/14s/12-13-16t,complex polyrhythms
   style: alt rock,art rock,exp
   processing: tape sat,delay,verb
   contrast: organic/electronic
@@ -306,7 +322,7 @@ atmosphere:
 ```
 
 ```
-[Session Drummer: Full acoustic kit with 22" kick, 14" snare, 12/13/16" toms | Groove: Complex polyrhythms, odd time signatures (5/4, 7/8), ghost notes, brushed snare, electronic-acoustic hybrid]
+[Session Drummer: Ludwig 22k/14s/12-13-16t | Groove: Complex, polyrhythms]
 
 [Intro | Tech: Atmospheric synth pads, reversed cymbals | Mood: Ethereal]
 The city hums in 5/4 time

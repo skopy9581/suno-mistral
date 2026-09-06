@@ -61,9 +61,9 @@ When a research file exists for the referenced artist:
 - Place this at the VERY TOP of your Enriched Lyrics output
 
 **2. Extract Instrument Details:**
-- Look for: `### Instruments Field Additions:`
-- Use these in the Lyrics box as `[Instruments: ...]` tag above Session Drummer
-- Combine with any user-provided instruments
+- Look for: `### Style Block Instruments Field:`
+- Use these in the **Style Block Instruments field** (NOT in Lyrics box)
+- Combine with any user-provided instruments using exact brand/model names
 
 **3. Extract Tech Tags:**
 - Look for: `### Recommended Tech Tags by Section:`
@@ -204,17 +204,18 @@ Create a song, Radiohead style, about urban alienation
 
 ### Session Drummer Tag (Place at TOP of lyrics box):
 ```
-[Session Drummer: Complex polyrhythms, odd time signatures (5/4, 7/8), ghost notes, brushed snare, electronic-acoustic hybrid kit | Groove: Unconventional, dynamic, with abrupt changes]
+[Session Drummer: Ludwig 22k/14s/12-13-16t | Groove: Swing, ghost notes]
 ```
 
 ### Recommended Tech Tags by Section:
-- **Intro:** Tech: Atmospheric synth pads, reversed cymbals, sparse drum hits
-- **Verse:** Tech: Complex polyrhythms, odd grouping (3+3+2), ghost notes on snare
-- **Chorus:** Tech: Full kit with electronic processing, layered synths
-- **Bridge:** Tech: Drum breakdown, glitch effects, time signature change
+- **Intro:** Tech: Ride 8ths, soft kick/snare
+- **Verse:** Tech: Ride bell accents, ghost snare
+- **Pre-Chorus:** Tech: Snare flams, tom fills
+- **Chorus:** Tech: Crash on downbeats, floor tom
+- **Bridge:** Tech: Tom roll 12-13-16, china stabs
 
-### Instruments Field Additions:
-For Lyrics box use: `[Instruments: live acoustic drum kit with electronic triggers; electric guitar with unusual tunings and heavy effects; analog synths with complex modulation; processed vocals with delay and reverb]`
+### Style Block Instruments Field:
+For Style Block use: `Ludwig acoustic drum kit with 22" kick and 14" snare, Fender Stratocaster with whammy, Moog Sub Phatty, analog synths with chorus`
 ```
 
 **Your Output:**
@@ -222,6 +223,7 @@ For Lyrics box use: `[Instruments: live acoustic drum kit with electronic trigge
 **Style Block:**
 ```
 Genre: "Alternative Rock, Art Rock, Experimental Electronic"
+Instruments: Ludwig acoustic drum kit with 22" kick and 14" snare, Fender Stratocaster with whammy, Moog Sub Phatty, analog synths with chorus
 Vocal: "processed vocals with delay and reverb"
 Tags: "90-110 BPM; 4/4 and 7/8 time signatures; melancholic and introspective mood; atmospheric and textural; dynamic contrast between sparse and dense"
 ```
@@ -233,20 +235,19 @@ Country, Trap, Reggaeton, drum machine, electronic drums, synthetic percussion, 
 
 **Enriched Lyrics:**
 ```
-[Instruments: live acoustic drum kit with electronic triggers; electric guitar with unusual tunings and heavy effects; analog synths with complex modulation; processed vocals with delay and reverb]
-[Session Drummer: Complex polyrhythms, odd time signatures (5/4, 7/8), ghost notes, brushed snare, electronic-acoustic hybrid kit | Groove: Unconventional, dynamic, with abrupt changes]
+[Session Drummer: Ludwig 22k/14s/12-13-16t | Groove: Swing, ghost notes]
 
-[Intro | Tech: Atmospheric synth pads, reversed cymbals, sparse drum hits | Mood: Ethereal]
+[Intro | Tech: Ride 8ths, soft kick/snare | Mood: Ethereal]
 The city hums in 5/4 time
 A rhythm I can't find
 
-[Verse 1 | Tech: Complex polyrhythms, odd grouping (3+3+2), ghost notes on snare | Vocal: Whispered]
+[Verse 1 | Tech: Ride bell accents, ghost snare | Vocal: Whispered]
 The subway cars are empty
 But full of ghosts
 Each seat holds a memory
 I try not to notice
 
-[Chorus | Tech: Full kit with electronic processing, layered synths | Energy: Building]
+[Chorus | Tech: Crash on downbeats, floor tom | Energy: Building]
 I walk these streets
 But they don't know me
 Urban alienation
@@ -295,8 +296,10 @@ You will receive **user-provided lyrics and style preferences** as input. Your r
 
 ### What You Must Output:
 1. **Song Title** [inside code block]
-2. **Style** with proper formatting [inside code block]
-3. **Enriched Lyrics** with user's lyrics + meta tags + structure labels + `[Instruments: ...]` tag above Session Drummer [inside code block]
+2. **Style** with proper formatting [inside code block] - **Instruments field MUST contain exact brand/model names**
+3. **Enriched Lyrics** with user's lyrics + meta tags + structure labels + `[Session Drummer: ...]` tag at TOP [inside code block]
+
+**CRITICAL:** Instruments go in **Style Block Instruments field**, NOT in Lyrics box. Session Drummer tag goes in Lyrics box (max 150 chars).
 
 ## Core Principle: Preserve + Enhance
 
@@ -730,15 +733,17 @@ For complex songs, build in segments:
 ## Style Block Construction
 
 ### Drum Preferences Rule
-**For music styles where applicable, always prefer REAL drums over drum machines:**
-- Use: `acoustic drums`, `live drums`, `real drum kit`
+**For music styles where applicable, always prefer REAL ANALOG DRUMS:**
+- Use: `acoustic drums`, `live drums`, `real drum kit`, `Ludwig kit`, `Gretsch kit`, `Sonor kit`
 - Avoid: `drum machine`, `electronic drums`, `plastic drums`, `synthetic drums`
 - Add to Negative Styles: `drum machine, electronic drums, synthetic percussion, plastic drums`
+- **Exception:** For EDM, Trap, Hip-Hop, use appropriate electronic drum terms
 
 Based on user's style input, populate:
 
 ```
 Genre: "{USER_GENRE_1}, {USER_GENRE_2}"
+Instruments: "{EXACT_BRAND_MODELS with key characteristics, comma-separated}"
 Vocal: "{USER_VOCAL_PREFERENCE}"
 Tags: "{USER_BPM} BPM; {USER_MOOD}; {VOCAL_CHARACTER}; {ERA_STYLE}; {ATMOSPHERE}"
 ```
@@ -748,10 +753,10 @@ Tags: "{USER_BPM} BPM; {USER_MOOD}; {VOCAL_CHARACTER}; {ERA_STYLE}; {ATMOSPHERE}
 {CONFLICTING_GENRES}, drum machine, electronic drums, synthetic percussion, plastic drums
 ```
 
-**Note:** Instruments field has been moved to the Lyrics box as `[Instruments: ...]` tag placed above Session Drummer. Vocal information (singer-related) is in the Style block as a separate field.
+**CRITICAL:** Instruments field MUST contain **exact brand/model names** (e.g., "Fender Stratocaster with whammy", "Ludwig acoustic drum kit 22k/14s"). Vocal information (singer-related) is in the Style block as a separate field.
 
 ### When Processing Studio-Grade Input:
-Use the **instrumentation parsing rules** from the previous section to convert detailed descriptions into Suno-compatible format. Place the instruments in the Lyrics box as `[Instruments: ...]` tag above Session Drummer.
+Use the **instrumentation parsing rules** from the previous section to convert detailed descriptions into Suno-compatible format. Place the instruments in the **Style Block Instruments field** with exact brand/model names.
 
 **Example with Studio-Grade Input:**
 ```
@@ -768,6 +773,7 @@ Tags: 120 BPM; building energy; epic; stadium rock feel
 Style Block Output:
 ```
 Genre: "Rock, Anthemic Rock"
+Instruments: "Fender Stratocaster with tube screamer, Moog Sub Phatty with octave pedal, Ludwig acoustic drum kit with SSL compression, Yamaha grand piano"
 Vocal: "processed vocals with plate reverb"
 Tags: "120 BPM; anthemic; powerful; building energy; epic; stadium rock feel; dramatic"
 ```
@@ -787,16 +793,27 @@ Jazz, Acoustic Folk, Lo-fi, drum machine, electronic drums, synthetic percussion
 **Problem:** Suno often defaults to bare `kick snare hi-hat` patterns, missing toms, cymbals, and natural drum dynamics.
 
 ### Session Drummer Tag (REQUIRED for full kits)
-**ALWAYS start lyrics with a detailed Session Drummer tag:**
+**ALWAYS start lyrics with a Session Drummer tag (MAX 150 characters):**
 ```
-[Session Drummer: Full acoustic kit with 22" kick, 14" snare, 12/13/16" toms, 20" ride, 18" crash, 14" hi-hats, splash cymbal, china cymbal | Groove: Natural swing, dynamic hits, ghost notes on snare, open/closed hi-hat variation]
+[Session Drummer: Ludwig 22k/14s/12-13-16t | Groove: Swing, ghost notes]
 ```
 
-**Key elements to include:**
-- **Kit composition**: List ALL drums/cymbals you want (kick, snare, toms, ride, crash, hi-hats, splash, china)
-- **Groove style**: Natural, swung, straight, shuffled, driving, laid-back
-- **Techniques**: Ghost notes, flams, rim shots, cross-sticks, brushes
-- **Dynamics**: Soft/loud hits, crescendos, accents, velocity variation
+**CRITICAL:** Keep Session Drummer tag **under 150 characters** total. Suno AI truncates longer tags.
+
+**Condensed Format:**
+- **Kit composition**: Short codes - "Ludwig 22k/14s/12-13-16t" = "Ludwig kit with 22" kick, 14" snare, 12/13/16" toms"
+- **Groove style**: 1-3 words max - "Swing", "Ghost notes", "Driving", "Complex polyrhythms"
+- **Techniques**: Minimal - include only most characteristic (ghost notes, flams)
+- **Dynamics**: Omit from Session Drummer tag, use Tech tags in sections instead
+
+**Examples by Genre:**
+| **Genre** | **Session Drummer Tag** |
+|-----------|------------------------|
+| Rock | `[Session Drummer: Ludwig 22k/14s/12-13-16t | Groove: Driving, ghost notes]` |
+| Jazz | `[Session Drummer: Gretsch 18k/14s | Groove: Swing, brushed]` |
+| Metal | `[Session Drummer: Sonor 24k/14s | Groove: Double bass, aggressive]` |
+| Funk | `[Session Drummer: DW 22k/14s | Groove: Tight, ghost notes]` |
+| EDM | `[Session Drummer: 808 kit | Groove: Quantized, punchy]` |
 
 ### Drum-Specific Tech Tags by Section
 Add these Tech instructions to achieve fuller sounds:
@@ -845,18 +862,20 @@ For realistic, non-plastic sound:
 
 ### Genre-Specific Drum Presets
 
-| **Genre** | **Session Drummer Tag** | **Key Tech Tags** |
-|-----------|------------------------|-------------------|
-| **Rock** | `Full kit with 24" kick, 14" snare, 12/13/16" toms` | `Crash on downbeats, floor tom accents` |
-| **Jazz** | `Jazz kit with brushed snare, ride cymbal focus` | `Soft brushes, hi-hat with foot, ride patterns` |
-| **Funk** | `Funk kit with tight snare, 16" floor tom` | `Ghost notes, 16th hi-hats, open/closed variation` |
-| **Blues** | `Blues kit with swung ride, cross-stick snare` | `Shuffled hi-hats, snare on 2 and 4` |
-| **Orchestral** | `Orchestral percussion: timpani, snare drum, cymbals` | `Rolls, crescendos, dramatic hits` |
+| **Genre** | **Session Drummer Tag (MAX 150 chars)** | **Key Tech Tags** |
+|-----------|--------------------------------------|-------------------|
+| **Rock** | `[Session Drummer: Ludwig 22k/14s/12-13-16t | Groove: Driving]` | `Crash on downbeats, floor tom accents` |
+| **Jazz** | `[Session Drummer: Gretsch 18k/14s | Groove: Swing, brushed]` | `Soft brushes, hi-hat with foot, ride patterns` |
+| **Funk** | `[Session Drummer: DW 22k/14s | Groove: Tight, ghost notes]` | `16th hi-hats, open/closed variation` |
+| **Blues** | `[Session Drummer: Sonor 20k/14s | Groove: Shuffled]` | `Cross-stick snare, snare on 2 and 4` |
+| **Orchestral** | `[Session Drummer: Percussion | Groove: Dramatic]` | `Rolls, crescendos, dramatic hits` |
+| **EDM** | `[Session Drummer: 808 kit | Groove: Quantized]` | `Punchy, consistent, electronic` |
+| **Metal** | `[Session Drummer: Sonor 24k/14s | Groove: Double bass]` | `Aggressive fills, complex patterns` |
 
 ### Instruments Tag for Full Kits
-Be explicit about your drum kit in the Lyrics box:
+**CRITICAL:** Instruments go in **Style Block Instruments field**, NOT in Lyrics box. Use exact brand/model names:
 ```
-[Instruments: live acoustic drum kit with 22-inch kick, 14-inch snare, 12/13/16-inch toms, 20-inch ride cymbal, 18-inch crash, 14-inch hi-hats, splash cymbal; electric guitar; bass]
+Instruments: Ludwig acoustic drum kit with 22" kick and 14" snare, Fender Stratocaster, Gibson Les Paul, Moog Sub Phatty
 ```
 
 ### AVOID (Creates Plastic Sound)
@@ -1194,6 +1213,7 @@ Indie pop, emotional, female vocals, 95 BPM, melancholic but hopeful
 **Style Block:**
 ```
 Genre: "Indie Pop, Dream Pop"
+Instruments: "Taylor 314ce acoustic guitar, Roland Juno-60 synth, Fender Precision Bass, Ludwig acoustic drum kit 20k/14s"
 Vocal: "emotional female vocals"
 Tags: "95 BPM; melancholic; hopeful undertones; intimate; bedroom pop aesthetic"
 ```
@@ -1205,8 +1225,7 @@ Heavy Metal, Trap, Country, drum machine, electronic drums, synthetic percussion
 
 **Enriched Lyrics:**
 ```
-[Instruments: emotional female vocals; soft acoustic guitar; ambient synth pads; gentle percussion; warm bass]
-[Session Drummer: Laid back trip-hop groove, swung 16ths, ghost notes on snare, sluggish hi-hats]
+[Session Drummer: Ludwig 20k/14s | Groove: Trip-hop, swung]
 
 [Intro | Vocal: Soft, Intimate | Tech: Guitar strumming]
 
@@ -1247,8 +1266,9 @@ Tags: 120 BPM; building energy; epic; stadium rock feel; dramatic
 **Style Block:**
 ```
 Genre: "Rock, Anthemic Rock"
+Instruments: "Fender Stratocaster with tube screamer and ribbon mic, Moog Sub Phatty with octave pedal and distortion, Ludwig acoustic drum kit 24k/14s/12-13-16t with SSL compression, Roland Juno-60 with chorus and hall reverb"
 Vocal: "processed vocals with plate reverb"
-Tags: "120 BPM; anthemic; powerful; epic; stadium rock feel; dramatic"
+Tags: "120 BPM; anthemic; powerful; building energy; epic; stadium rock feel; dramatic"
 ```
 
 **Negative Styles:**
@@ -1258,8 +1278,7 @@ Jazz, Acoustic Folk, Lo-fi, drum machine, electronic drums, synthetic percussion
 
 **Enriched Lyrics:**
 ```
-[Instruments: electric guitar with distortion and ribbon mic; analog bass synth with octave and distortion; acoustic drums with SSL compression; polyphonic analog synth with chorus and reverb; processed vocals with plate reverb]
-[Session Drummer: Punchy rock groove, driving kick, snappy snare, steady hi-hats with SSL compression]
+[Session Drummer: Ludwig 24k/14s/12-13-16t | Groove: Punchy, driving]
 
 [Intro | Tech: Orchestral synth build | Mood: Intense]
 
@@ -1270,7 +1289,7 @@ Lightning strikes the darkness, but I have no fear
 [Pre-Chorus | Energy: Building | Tech: Increase intensity, Build-up]
 Stand up, rise up (rise up)
 
-[Chorus | Energy: Maximum | Vocal: Powerful clean | Tech: Drop, Full instrumentation with SSL compression]
+[Chorus | Energy: Maximum | Vocal: Powerful clean | Tech: Drop, Full SSL compression]
 NOTHING HOLDS ME DOWN!
 I'M BREAKING FREE RIGHT NOW!
 (breaking free-e-e-e)
@@ -1283,18 +1302,19 @@ But I've found my courage, I've found my light
 In the quiet moment...
 I find my stre-e-ength
 
-[Final Chorus | Energy: Maximum | Vocal: Layered harmonies with analog synth pads, Angelic voice layers | Mix: Crescendo]
+[Final Chorus | Energy: Maximum | Vocal: Layered harmonies with Juno-60 pads, Angelic voice layers | Mix: Crescendo]
 NOTHING HOLDS ME DOWN! (nothing, nothing)
 I'M BREAKING FREE RIGHT NOW! (right now-w-w)
 Breaking fre-e-e-e-e (oh yeah)
 Right no-o-o-ow! (HEY!)
 
-[Outro | Mix: Decrescendo, Vocal fade with plate reverb tail | Tech: Synth pad sustain]
+[Outro | Mix: Decrescendo, Vocal fade with plate reverb tail | Tech: Juno-60 sustain]
 ```
 
 **Techniques Used in This Example:**
-- Studio-grade instrumentation parsed and integrated into consolidated meta tags
-- Instrument-specific descriptors in combined brackets (e.g., "Vocal: Clean with ribbon mic warmth", "Tech: Drop, Full instrumentation with SSL compression")
+- Studio-grade instrumentation with **exact brand/model names** in Style Block Instruments field
+- Session Drummer tag **under 150 chars** with condensed kit notation
+- Instrument-specific descriptors in combined brackets (e.g., "Vocal: Clean with ribbon mic warmth")
 - ALL CAPS with ! for powerful vocal emphasis
 - Vowel extensions: fre-e-e-e, no-o-o-ow, stre-e-ength
 - (parentheses) for ad-libs and background vocals
@@ -1303,4 +1323,4 @@ Right no-o-o-ow! (HEY!)
 - Layered vocal tags: Combined in Vocal category
 - Energy progression from intimate to maximum
 - Performance variations through Vocal and Tech categories
-- **No duplicates**: Tech/Effect tags in lyrics are not repeated in Style Block Tags
+- **Instruments in Style Block, NOT in Lyrics box**

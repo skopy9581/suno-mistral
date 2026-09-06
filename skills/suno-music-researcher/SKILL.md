@@ -630,8 +630,9 @@ Provide a pre-formatted Style block that can be copied directly into Suno AI pro
 
 ```
 Genre: [comma-separated list, max 3-4]
-Instruments: [detailed list, separated by semicolons, max 990 chars total]
-Tags: [descriptive tags, separated by semicolons, max 990 chars total]
+Instruments: [exact brand/model names with key characteristics, comma-separated, max 990 chars total]
+Vocal: [vocal characteristics from Section 6]
+Tags: [descriptive tags including BPM, separated by semicolons, max 990 chars total]
 ```
 
 **Negative Styles:**
@@ -642,7 +643,8 @@ Tags: [descriptive tags, separated by semicolons, max 990 chars total]
 **Example:**
 ```
 Genre: alternative rock, art rock, experimental electronic
-Instruments: electric guitar with distortion and delay; live acoustic drum kit with 22" kick, 14" snare, 12/13/16" toms, 20" ride, 18" crash, 14" hi-hats; bass guitar with octave pedal; polyphonic analog synthesizer with chorus and reverb; ondes Martenot; prepared piano; string section with dissonant harmonies
+Instruments: Fender Stratocaster with whammy bar and tube screamer, Fender Jazz Bass with octave pedal, Ludwig acoustic drum kit with 22" kick and 14" snare, Moog Sub Phatty analog synth with chorus, Yamaha grand piano
+Vocal: processed vocals with plate reverb and delay
 Tags: 90-110 BPM; 4/4 and 7/8 time signatures; melancholic and introspective mood; atmospheric and textural; dynamic contrast between sparse and dense; layered vocals with harmonies; heavy use of reverb and delay; tape saturation; existential themes
 ```
 
@@ -656,10 +658,14 @@ This allows the suno-songwriter skill to directly use your research without addi
 ```
 ## For Suno Songwriter
 
-### Session Drummer Tag (Place BELOW [Instruments: ...] tag in lyrics box):
+### Session Drummer Tag (Place at TOP of lyrics box - MAX 150 chars):
 ```
-[Session Drummer: {kit_description} | Groove: {groove_style}, {techniques}]
+[Session Drummer: {condensed_kit} | Groove: {essence}]
 ```
+
+**Condensed Kit Format:** Use short codes - e.g., "Ludwig 22k/14s/12-13-16t" for "Ludwig acoustic kit with 22" kick, 14" snare, 12/13/16" toms"
+**Groove Essence:** 1-3 words max - e.g., "Swing", "Ghost notes", "Driving"
+**IMPORTANT:** Always prefer REAL ANALOG DRUMS unless genre explicitly requires electronic (EDM, Trap, Hip-Hop).
 
 ### Recommended Tech Tags by Section:
 - **Intro:** `{intro_drum_instructions}`
@@ -669,12 +675,12 @@ This allows the suno-songwriter skill to directly use your research without addi
 - **Bridge:** `{bridge_drum_instructions}`
 - **Outro:** `{outro_drum_instructions}`
 
-### Instruments Field Additions:
-For suno-songwriter skill: Use in Lyrics box as `[Instruments: {formatted_instrument_list}]` tag placed ABOVE Session Drummer tag.
+### Style Block Instruments Field:
+For suno-songwriter skill: Use exact brand/model names in Style Block **Instruments** field (NOT in Lyrics box).
 
+**Example:**
 ```
-{formatted_drum_kit_description}
-```
+Instruments: Fender Stratocaster with whammy, Ludwig acoustic drum kit 22k/14s/12-13-16t, Moog Sub Phatty
 ```
 
 **Example (Continuing from above):**
@@ -683,22 +689,20 @@ For suno-songwriter skill: Use in Lyrics box as `[Instruments: {formatted_instru
 
 ### Session Drummer Tag (Place at TOP of lyrics box):
 ```
-[Session Drummer: Full acoustic kit with 24" kick, 14" snare, 12/13/16" toms, 20" ride, 18" crash, 14" hi-hats | Groove: Natural swing, dynamic hits, ghost notes on snare, open/closed hi-hat variation]
+[Session Drummer: Ludwig 22k/14s/12-13-16t | Groove: Swing, ghost notes]
 ```
 
 ### Recommended Tech Tags by Section:
-- **Intro:** `Tech: Ride cymbal 8th-note pattern, soft kick and snare, hi-hat foot splashes`
-- **Verse:** `Tech: Full drum kit, ride cymbal bell hits on accents, ghost notes on snare`
-- **Pre-Chorus:** `Tech: Snare flams, ghost notes, hi-hat splashes, tom fills building`
-- **Chorus:** `Tech: Crash cymbal on every downbeat, floor tom accents, open hi-hats, cymbal wash`
-- **Bridge:** `Tech: Half-bar tom roll (12-13-16"), china cymbal stabs, drum breakdown`
-- **Outro:** `Tech: Drum fade with natural ring, cymbal sustain, ride cymbal bell`
+- **Intro:** `Tech: Ride 8ths, soft kick/snare`
+- **Verse:** `Tech: Ride bell accents, ghost snare`
+- **Pre-Chorus:** `Tech: Snare flams, tom fills`
+- **Chorus:** `Tech: Crash on downbeats, floor tom`
+- **Bridge:** `Tech: Tom roll 12-13-16, china stabs`
+- **Outro:** `Tech: Fade with cymbal ring`
 
-### Instruments Field Additions:
-For suno-songwriter skill: Use in Lyrics box as `[Instruments: live acoustic drum kit with 24" kick, 14" snare, 12/13/16" toms, 20" ride cymbal, 18" crash, 14" hi-hats; ...other instruments...]` tag placed ABOVE Session Drummer tag.
-
+### Style Block Instruments Field:
 ```
-live acoustic drum kit with 24" kick, 14" snare, 12/13/16" toms, 20" ride cymbal, 18" crash, 14" hi-hats
+Instruments: Ludwig acoustic drum kit with 22" kick and 14" snare, Fender Stratocaster with whammy, Moog Sub Phatty
 ```
 ```
 
