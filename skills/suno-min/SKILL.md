@@ -14,7 +14,7 @@ If version is missing or doesn't match CURRENT VERSION, warn the user.
 - **2.1:** Equipment brand/model names now ALLOWED (e.g., Boss RC-505, Fender Stratocaster). Research files from 2.0 will have generic descriptions only.
 - **2.0:** Initial version with no proper nouns rule
 
-# Suno Songwriter
+# Suno-Min
 
 ## Research File Integration
 
@@ -221,6 +221,11 @@ For Style Block use: `Ludwig acoustic drum kit with 22" kick and 14" snare, Fend
 
 **Your Output:**
 ```
+**Song Title:**
+```
+Urban Alienation
+```
+
 **Style Block:**
 ```
 Alternative rock with art-rock architecture and experimental-electronic textures, 90-110 BPM mixing 4/4 and 7/8 time signatures, melancholic introspective mood with dynamic contrast from sparse atmospheric passages to dense textural swells, delay-and-reverb processed vocals, Ludwig acoustic drum kit with 22" kick and 14" snare, whammy-equipped Fender Stratocaster, Moog Sub Phatty bass synth, chorus-drenched analog synths, atmospheric textural production
@@ -228,7 +233,7 @@ Alternative rock with art-rock architecture and experimental-electronic textures
 
 **Negative Styles:**
 ```
-Country, Trap, Reggaeton, drum machine, electronic drums, synthetic percussion, plastic drums
+Country, Trap, Reggaeton, polished pop, plastic drums
 ```
 
 **Enriched Lyrics:**
@@ -737,11 +742,11 @@ For complex songs, build in segments:
 ## Style Block Construction
 
 ### Drum Preferences Rule
-**For music styles where applicable, always prefer REAL ANALOG DRUMS:**
-- Use: `acoustic drums`, `live drums`, `real drum kit`, `Ludwig kit`, `Gretsch kit`, `Sonor kit`
-- Avoid: `drum machine`, `electronic drums`, `plastic drums`, `synthetic drums`
-- Add to Negative Styles: `drum machine, electronic drums, synthetic percussion, plastic drums`
-- **Exception:** For EDM, Trap, Hip-Hop, use appropriate electronic drum terms
+Match the drum character to the genre — do NOT blanket-ban electronic drums. They are a valid, positive instrument for many styles:
+- **Acoustic-leaning genres** (Rock, Indie, Jazz, Blues, Funk, Folk): prefer real analog drum terms — `acoustic drums`, `live drums`, `Ludwig kit`, `Gretsch kit`, `Sonor kit`
+- **Electronic-leaning genres** (EDM, Trap, Hip-Hop, Synth-pop, Hyperpop, electronic-infused indie): use electronic drum terms as positive instruments — `electronic drums`, `808 kit`, `drum machine`, `punchy quantized drums`
+- **Hybrid genres**: mix both (`electronic-infused indie groove`, `acoustic kit with electronic layers`)
+- **Negative Styles**: only add drum-related negatives that actually conflict with the requested genre (e.g., `plastic drums` for an organic-acoustic request). Do NOT add `electronic drums`/`drum machine` to Negative Styles when the Style prose requests electronic drums — that is a direct contradiction and breaks generation.
 
 Based on user's style input, write the Style block as a **single freeform prose prompt** — one flowing, comma-separated descriptive sentence. There are no `Genre:`/`Instruments:`/`Vocal:`/`Tags:` field labels. Fold genre, vocal character, instrumentation, mood/dynamics, atmosphere, and production into one continuous string:
 
@@ -792,7 +797,7 @@ Anthemic rock, powerful plate-reverb vocals, 120 BPM building energy from tense 
 
 **Negative Styles:**
 ```
-Jazz, Acoustic Folk, Lo-fi, drum machine, electronic drums, synthetic percussion, plastic drums
+Jazz, Acoustic Folk, Lo-fi, plastic drums
 ```
 ```
 
@@ -890,13 +895,12 @@ For realistic, non-plastic sound:
 ... Ludwig acoustic drum kit with 22" kick and 14" snare, Fender Stratocaster, Gibson Les Paul, Moog Sub Phatty ...
 ```
 
-### AVOID (Creates Plastic Sound)
-- ❌ `drum machine`
-- ❌ `electronic drums`
-- ❌ `808 kick` (unless specifically desired)
-- ❌ `synthetic percussion`
-- ❌ `plastic drums`
-- ❌ `quantized` (creates robotic timing)
+### AVOID (generic "plastic" drum defaults)
+These read as a low-effort default. Avoid them as **bare, unqualified** descriptors; qualify them with character instead (`punchy quantized 808 drums`, `warm acoustic Ludwig kit`):
+- ❌ `plastic drums` (as a generic negative)
+- ❌ bare `drums` with no tone/character
+
+**Do NOT avoid** `drum machine`, `electronic drums`, `808`, `synthetic percussion`, or `quantized` when the genre/Style prose calls for them — those are valid, desired instruments for EDM, Trap, Hip-Hop, synth-pop, and electronic-infused styles.
 
 ---
 
@@ -1224,6 +1228,11 @@ Indie pop, emotional, female vocals, 95 BPM, melancholic but hopeful
 
 **Your Output:**
 
+**Song Title:**
+```
+3 AM Thoughts
+```
+
 **Style Block:**
 ```
 Indie pop with dream-pop architecture, 95 BPM melancholic-but-hopeful intimate bedroom-pop aesthetic, emotional breathy female vocals, warm Taylor 314ce acoustic guitar, lush Roland Juno-60 synth pads, Fender Precision Bass, swung trip-hop Ludwig acoustic drum kit, reverb-drenched intimate production with soft layered imaging
@@ -1231,7 +1240,7 @@ Indie pop with dream-pop architecture, 95 BPM melancholic-but-hopeful intimate b
 
 **Negative Styles:**
 ```
-Heavy Metal, Trap, Country, drum machine, electronic drums, synthetic percussion, plastic drums
+Heavy Metal, Trap, Country, harsh distortion, plastic drums
 ```
 
 **Enriched Lyrics:**
@@ -1274,6 +1283,11 @@ Tags: 120 BPM; building energy; epic; stadium rock feel; dramatic
 
 **Your Output:**
 
+**Song Title:**
+```
+Breaking Free
+```
+
 **Style Block:**
 ```
 Anthemic rock with stadium-feel architecture, 120 BPM building energy from sparse tense verses to crushing epic choruses, powerful plate-reverb processed vocals, distorted single-coil Fender Stratocaster through tube screamer with ribbon-mic warmth, octave-down distorted Moog Sub Phatty bass synth, punchy driving Ludwig acoustic drum kit 24k/14s/12-13-16t with SSL compression, chorus-and-hall-reverb Roland Juno-60 analog synths, dramatic clean high-fidelity production with precise layered imaging
@@ -1281,7 +1295,7 @@ Anthemic rock with stadium-feel architecture, 120 BPM building energy from spars
 
 **Negative Styles:**
 ```
-Jazz, Acoustic Folk, Lo-fi, drum machine, electronic drums, synthetic percussion, plastic drums
+Jazz, Acoustic Folk, Lo-fi, plastic drums
 ```
 
 **Enriched Lyrics:**
