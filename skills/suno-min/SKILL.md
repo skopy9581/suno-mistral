@@ -62,9 +62,9 @@ When a research file exists for the referenced artist:
 
 **2. Extract Instrument Details:**
 - Look for: `### Style Block Instruments Field:`
-- Use these in the **Lyrics box `[Instruments: ...]` tag** (NOT in the Style block)
+- Fold these into the **Style prose prompt** as descriptive tone/character phrases (no `[Instruments: ...]` tag)
 - Combine with any user-provided instruments using exact brand/model names
-- Extract vocal/singer information into a separate **Lyrics box `[Vocal Profile: ...]` tag**
+- Fold vocal/singer information into the same **Style prose prompt** (no `[Vocal Profile: ...]` tag)
 
 **3. Extract Tech Tags:**
 - Look for: `### Recommended Tech Tags by Section:`
@@ -73,7 +73,7 @@ When a research file exists for the referenced artist:
 
 **4. Extract Style Information:**
 - Look for: Genre, BPM, mood, atmospheric characteristics
-- Use in Style Block's Genre and Tags fields
+- Fold into the Style prose prompt alongside instruments and vocal character
 
 **5. Extract Negative Styles:**
 - Look for: conflicting genres in the profile
@@ -223,8 +223,7 @@ For Style Block use: `Ludwig acoustic drum kit with 22" kick and 14" snare, Fend
 ```
 **Style Block:**
 ```
-Genre: "Alternative Rock, Art Rock, Experimental Electronic"
-Tags: "90-110 BPM; 4/4 and 7/8 time signatures; melancholic and introspective mood; atmospheric and textural; dynamic contrast between sparse and dense"
+Alternative rock with art-rock architecture and experimental-electronic textures, 90-110 BPM mixing 4/4 and 7/8 time signatures, melancholic introspective mood with dynamic contrast from sparse atmospheric passages to dense textural swells, delay-and-reverb processed vocals, Ludwig acoustic drum kit with 22" kick and 14" snare, whammy-equipped Fender Stratocaster, Moog Sub Phatty bass synth, chorus-drenched analog synths, atmospheric textural production
 ```
 
 **Negative Styles:**
@@ -234,8 +233,6 @@ Country, Trap, Reggaeton, drum machine, electronic drums, synthetic percussion, 
 
 **Enriched Lyrics:**
 ```
-[Instruments: Ludwig acoustic drum kit with 22" kick and 14" snare; Fender Stratocaster with whammy; Moog Sub Phatty; analog synths with chorus]
-[Vocal Profile: processed vocals with delay and reverb]
 [Session Drummer: Ludwig 22k/14s/12-13-16t | Groove: Swing, ghost notes]
 
 [Intro | Tech: Ride 8ths, soft kick/snare | Mood: Ethereal]
@@ -297,10 +294,10 @@ You will receive **user-provided lyrics and style preferences** as input. Your r
 
 ### What You Must Output:
 1. **Song Title** [inside code block]
-2. **Style** with proper formatting [inside code block] - **Style block contains ONLY Genre and Tags**
-3. **Enriched Lyrics** with user's lyrics + meta tags + structure labels + `[Instruments: ...]` tag + `[Vocal Profile: ...]` tag + `[Session Drummer: ...]` tag at TOP [inside code block]
+2. **Style** — a single freeform prose prompt [inside code block]. No `Genre:`/`Instruments:`/`Vocal:`/`Tags:` field labels; genre, vocal character, instrumentation, mood/dynamics, and production are folded into one flowing comma-separated descriptive sentence (see Style Block Construction).
+3. **Enriched Lyrics** with user's lyrics + meta tags + structure labels + `[Session Drummer: ...]` tag at TOP [inside code block]
 
-**CRITICAL:** Instruments go in the **Lyrics box** as an `[Instruments: ...]` tag (NOT in the Style block), and vocal/singer information goes in the **Lyrics box** as a `[Vocal Profile: ...]` tag. These two tags sit at the very TOP of the Lyrics box, in this order: `[Instruments: ...]` first, then `[Vocal Profile: ...]`, then `[Session Drummer: ...]`. Session Drummer tag max 150 chars.
+**CRITICAL:** Instruments and vocal character are part of the Style prose prompt — there are no separate `[Instruments: ...]` or `[Vocal Profile: ...]` tags in the Lyrics box. Only the `[Session Drummer: ...]` tag sits at the top of the Lyrics box (max 150 chars).
 
 ## Core Principle: Preserve + Enhance
 
@@ -383,14 +380,12 @@ Curly braces are used ONLY in this instruction document as placeholders for vari
 
 **Examples (for AI agent use only):**
 ```
-Genre: "{USER_GENRE_1}, {USER_GENRE_2}"
+{GENRE and sub-genres}, {VOCAL character and delivery}, {MOOD and dynamic arc}, {KEY INSTRUMENTS with tone/character}, {PRODUCTION and atmosphere}
 ```
 
-**Instruments tag (for Lyrics box):** `[Instruments: {PRIMARY_INSTRUMENTS}]`
+**Style prompt:** one freeform prose string (no field labels). Instruments and vocal character are folded into this prose — there are no `[Instruments: ...]` or `[Vocal Profile: ...]` tags.
 
-**Vocal Profile tag (for Lyrics box):** `[Vocal Profile: {USER_VOCAL_PREFERENCE}; {VOCAL_CHARACTER}]`
-
-**Order at TOP of Lyrics box:** `[Instruments: ...]` → `[Vocal Profile: ...]` → `[Session Drummer: ...]`
+**Only Lyrics-box tag:** `[Session Drummer: ...]` at the very top of the Lyrics box.
 
 ---
 
@@ -439,14 +434,12 @@ Transform detailed descriptions into Suno-compatible instrument strings:
 | Moog Sub 37 with octave pedal | bass synth with octave down |
 | Roland TR-8S with sampled acoustic hits | Roland TR-8S with acoustic samples |
 
-#### Step 4: Build the Instruments Tag
-Combine all parsed instruments into the **[Instruments: ...]** tag for the Lyrics box:
-- Separate instruments with **semicolons**
-- Group similar instruments together
-- Keep under **990 characters**
-- Prioritize most characteristic instruments first
-- **Exclude vocal/singer information** — vocals go in a separate `[Vocal Profile: ...]` tag, not in `[Instruments: ...]`
-- Place the `[Instruments: ...]` tag at the TOP of the Lyrics box, **above** the `[Vocal Profile: ...]` tag, which sits above the `[Session Drummer: ...]` tag
+#### Step 4: Fold Instruments into the Style Prose Prompt
+Combine all parsed instruments and vocal descriptors and **fold them into the freeform Style prose prompt** (see Style Block Construction). There are no `[Instruments: ...]` or `[Vocal Profile: ...]` tags.
+- Convert each instrument/vocal into a descriptive phrase with tone/character (`distorted single-coil electric guitar through tube screamer`, `plate-reverb vocals`)
+- Weave them into the single flowing Style sentence alongside genre, mood/dynamic arc, and production
+- Keep the whole Style prompt on one line
+- Prioritize most characteristic instruments first within the prose
 
 **Example Conversion:**
 ```
@@ -457,11 +450,8 @@ Studio-Grade Input:
 - Synths: polyphonic analog with chorus and hall reverb
 - Vocals: large-diaphragm condenser, compressed, with plate reverb
 
-Suno AI Instruments Tag (for Lyrics box):
-[Instruments: electric guitar with distortion; analog bass synth with octave and distortion; acoustic drums with SSL compression; polyphonic analog synth with chorus and reverb]
-
-Suno AI Vocal Profile Tag (for Lyrics box):
-[Vocal Profile: large-diaphragm condenser, compressed, with plate reverb]
+Style Prose Prompt (single line):
+Anthemic rock, plate-reverb processed vocals, 120 BPM building energy from tense verses to epic stadium-feel choruses, distorted single-coil electric guitar through tube screamer, octave-down distorted analog bass synth, SSL-compressed acoustic drum kit, chorus-and-hall-reverb polyphonic analog synths, clean high-fidelity production
 ```
 
 ### Handling Track-Specific Variations
@@ -748,14 +738,26 @@ For complex songs, build in segments:
 - Add to Negative Styles: `drum machine, electronic drums, synthetic percussion, plastic drums`
 - **Exception:** For EDM, Trap, Hip-Hop, use appropriate electronic drum terms
 
-Based on user's style input, populate:
+Based on user's style input, write the Style block as a **single freeform prose prompt** — one flowing, comma-separated descriptive sentence. There are no `Genre:`/`Instruments:`/`Vocal:`/`Tags:` field labels. Fold genre, vocal character, instrumentation, mood/dynamics, atmosphere, and production into one continuous string:
 
 ```
-Genre: "{USER_GENRE_1}, {USER_GENRE_2}"
-Tags: "{USER_BPM} BPM; {USER_MOOD}; {VOCAL_CHARACTER}; {ERA_STYLE}; {ATMOSPHERE}"
+{GENRE and sub-genres}, {VOCAL character and delivery}, {MOOD and dynamic arc}, {KEY INSTRUMENTS with tone/character}, {PRODUCTION and atmosphere}
 ```
 
-**CRITICAL:** The Style block contains ONLY Genre and Tags. Instruments and Vocal information do NOT go in the Style block — they go in the Lyrics box as `[Instruments: ...]` and `[Vocal Profile: ...]` tags (see Output Structure).
+**Reference example (this shape works well with the Suno model):**
+```
+Alternative rock with post-rock architecture, driving electronic-infused indie groove, expressive breathy-to-raw close-mic male tenor, dynamic escalation from sparse tension to crushing choruses, deep electric bass, chorus-rich electric guitar, bass synth, electronic drums, ambient stereo-panned pads, delay-soaked guitar lead, clean high-fidelity production with precise layered imaging and controlled mastering
+```
+
+**Guidelines for the prose prompt:**
+- Lead with genre/sub-genres, then vocal character, then mood/dynamic arc, then instruments, then production — but keep it one continuous flowing sentence, not a list
+- Use descriptive adjective-rich phrasing (`breathy-to-raw close-mic male tenor`, `delay-soaked guitar lead`, `crushing choruses`)
+- Specify instruments with their tone/character (`deep electric bass`, `chorus-rich electric guitar`), not bare names
+- Include the dynamic/mood arc explicitly (`dynamic escalation from sparse tension to crushing choruses`)
+- End with production/quality descriptors when relevant (`clean high-fidelity production`, `precise layered imaging`)
+- Keep the whole prompt on one line
+
+**CRITICAL:** The Style block is ONE prose prompt string. Do NOT use `Genre:`, `Instruments:`, `Vocal:`, or `Tags:` field labels. Do NOT split into separate fields. Instruments and vocal character are part of the prose, NOT separate Lyrics-box tags.
 
 **Negative Styles** (separate input box in Suno):
 ```
@@ -763,7 +765,7 @@ Tags: "{USER_BPM} BPM; {USER_MOOD}; {VOCAL_CHARACTER}; {ERA_STYLE}; {ATMOSPHERE}
 ```
 
 ### When Processing Studio-Grade Input:
-Use the **instrumentation parsing rules** from the previous section to convert detailed descriptions into Suno-compatible format. Place the instruments in the **Lyrics box `[Instruments: ...]` tag** (NOT the Style block) with exact brand/model names. Place vocal/singer information in the **Lyrics box `[Vocal Profile: ...]` tag**.
+Use the **instrumentation parsing rules** from the previous section to convert detailed descriptions into Suno-compatible descriptors, then **fold them into the prose Style prompt** alongside genre, vocal, mood, and production. Do NOT emit separate `[Instruments: ...]` or `[Vocal Profile: ...]` tags.
 
 **Example with Studio-Grade Input:**
 ```
@@ -779,8 +781,7 @@ Tags: 120 BPM; building energy; epic; stadium rock feel
 
 Style Block Output:
 ```
-Genre: "Rock, Anthemic Rock"
-Tags: "120 BPM; anthemic; powerful; building energy; epic; stadium rock feel; dramatic"
+Anthemic rock, powerful plate-reverb vocals, 120 BPM building energy from tense verses to epic stadium-feel choruses, distorted single-coil electric guitar through tube screamer, octave-down analog bass synth, SSL-compressed acoustic drum kit, chorus-and-hall-reverb polyphonic analog synths, dramatic clean high-fidelity production
 ```
 
 **Negative Styles:**
@@ -877,10 +878,10 @@ For realistic, non-plastic sound:
 | **EDM** | `[Session Drummer: 808 kit | Groove: Quantized]` | `Punchy, consistent, electronic` |
 | **Metal** | `[Session Drummer: Sonor 24k/14s | Groove: Double bass]` | `Aggressive fills, complex patterns` |
 
-### Instruments Tag for Full Kits
-**CRITICAL:** Instruments go in the **Lyrics box `[Instruments: ...]` tag**, NOT in the Style block. Use exact brand/model names:
+### Instruments for Full Kits in the Style Prose
+**CRITICAL:** Instruments are folded into the **Style prose prompt** (no `[Instruments: ...]` tag). Use descriptive phrases with brand/model names woven into the flowing sentence:
 ```
-[Instruments: Ludwig acoustic drum kit with 22" kick and 14" snare; Fender Stratocaster; Gibson Les Paul; Moog Sub Phatty]
+... Ludwig acoustic drum kit with 22" kick and 14" snare, Fender Stratocaster, Gibson Les Paul, Moog Sub Phatty ...
 ```
 
 ### AVOID (Creates Plastic Sound)
@@ -1073,7 +1074,7 @@ If user provides raw, unstructured lyrics:
 - User specifies exact vocal type - Use exactly as stated
 - User provides BPM - Match precisely
 - User indicates specific structure - Follow their section order
-- User mentions specific instruments - Include in the Lyrics box `[Instruments: ...]` tag with maximum 990 characters
+- User mentions specific instruments - Fold into the Style prose prompt with descriptive tone/character phrases
 
 ---
 
@@ -1121,7 +1122,7 @@ If user provides raw, unstructured lyrics:
 
 **Style Consistency**: Style block matches lyrical mood
 
-**Instruments in Lyrics**: [Instruments: ...] tag present above [Vocal Profile: ...] tag, both above Session Drummer
+**Style as Prose**: Style block is a single freeform prose prompt (no field labels); genre, vocal, instruments, mood, and production all folded in
 
 **No Conflicts**: No contradictory tags (e.g., "slow" + "high energy")
 
@@ -1131,7 +1132,7 @@ If user provides raw, unstructured lyrics:
 
 **Tag Economy**: 2-3 tags maximum per section for clarity
 
-**Studio-Grade Handling**: If input contains detailed instrumentation, properly parse and convert to Suno format, placing in [Instruments: ...] tag in Lyrics box and vocal/singer info in [Vocal Profile: ...] tag
+**Studio-Grade Handling**: If input contains detailed instrumentation, properly parse and convert to Suno format, folding it into the Style prose prompt (no separate tags)
 
 ---
 
@@ -1217,8 +1218,7 @@ Indie pop, emotional, female vocals, 95 BPM, melancholic but hopeful
 
 **Style Block:**
 ```
-Genre: "Indie Pop, Dream Pop"
-Tags: "95 BPM; melancholic; hopeful undertones; intimate; bedroom pop aesthetic"
+Indie pop with dream-pop architecture, 95 BPM melancholic-but-hopeful intimate bedroom-pop aesthetic, emotional breathy female vocals, warm Taylor 314ce acoustic guitar, lush Roland Juno-60 synth pads, Fender Precision Bass, swung trip-hop Ludwig acoustic drum kit, reverb-drenched intimate production with soft layered imaging
 ```
 
 **Negative Styles:**
@@ -1228,8 +1228,6 @@ Heavy Metal, Trap, Country, drum machine, electronic drums, synthetic percussion
 
 **Enriched Lyrics:**
 ```
-[Instruments: Taylor 314ce acoustic guitar; Roland Juno-60 synth; Fender Precision Bass; Ludwig acoustic drum kit 20k/14s]
-[Vocal Profile: emotional female vocals]
 [Session Drummer: Ludwig 20k/14s | Groove: Trip-hop, swung]
 
 [Intro | Vocal: Soft, Intimate | Tech: Guitar strumming]
@@ -1270,8 +1268,7 @@ Tags: 120 BPM; building energy; epic; stadium rock feel; dramatic
 
 **Style Block:**
 ```
-Genre: "Rock, Anthemic Rock"
-Tags: "120 BPM; anthemic; powerful; building energy; epic; stadium rock feel; dramatic"
+Anthemic rock with stadium-feel architecture, 120 BPM building energy from sparse tense verses to crushing epic choruses, powerful plate-reverb processed vocals, distorted single-coil Fender Stratocaster through tube screamer with ribbon-mic warmth, octave-down distorted Moog Sub Phatty bass synth, punchy driving Ludwig acoustic drum kit 24k/14s/12-13-16t with SSL compression, chorus-and-hall-reverb Roland Juno-60 analog synths, dramatic clean high-fidelity production with precise layered imaging
 ```
 
 **Negative Styles:**
@@ -1281,8 +1278,6 @@ Jazz, Acoustic Folk, Lo-fi, drum machine, electronic drums, synthetic percussion
 
 **Enriched Lyrics:**
 ```
-[Instruments: Fender Stratocaster with tube screamer and ribbon mic; Moog Sub Phatty with octave pedal and distortion; Ludwig acoustic drum kit 24k/14s/12-13-16t with SSL compression; Roland Juno-60 with chorus and hall reverb]
-[Vocal Profile: processed vocals with plate reverb]
 [Session Drummer: Ludwig 24k/14s/12-13-16t | Groove: Punchy, driving]
 
 [Intro | Tech: Orchestral synth build | Mood: Intense]
@@ -1317,7 +1312,7 @@ Right no-o-o-ow! (HEY!)
 ```
 
 **Techniques Used in This Example:**
-- Studio-grade instrumentation with **exact brand/model names** in the Lyrics box `[Instruments: ...]` tag
+- Studio-grade instrumentation with **exact brand/model names** folded into the Style prose prompt
 - Session Drummer tag **under 150 chars** with condensed kit notation
 - Instrument-specific descriptors in combined brackets (e.g., "Vocal: Clean with ribbon mic warmth")
 - ALL CAPS with ! for powerful vocal emphasis
@@ -1328,4 +1323,4 @@ Right no-o-o-ow! (HEY!)
 - Layered vocal tags: Combined in Vocal category
 - Energy progression from intimate to maximum
 - Performance variations through Vocal and Tech categories
-- **Instruments and Vocal Profile in Lyrics box as `[Instruments: ...]` and `[Vocal Profile: ...]` tags, NOT in Style block**
+- **Instruments and vocal character folded into the Style prose prompt, NOT as separate tags**
