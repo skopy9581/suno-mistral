@@ -299,6 +299,11 @@ You will receive **user-provided lyrics and style preferences** as input. Your r
 
 **CRITICAL:** Instruments and vocal character are part of the Style prose prompt — there are no separate `[Instruments: ...]` or `[Vocal Profile: ...]` tags in the Lyrics box. Only the `[Session Drummer: ...]` tag sits at the top of the Lyrics box (max 150 chars).
 
+### Character Limits (including whitespace)
+- **Style box: 1000 characters** total (including whitespace). Keep the prose prompt within this; trim or condense descriptors before exceeding it.
+- **Lyrics box: 5000 characters** total (including whitespace). Keep the Enriched Lyrics (Session Drummer tag + all section tags + user's lyrics) within this; trim tags or reduce ad-libs before exceeding it.
+- **Session Drummer tag: max 150 characters** (within the Lyrics box total).
+
 ## Core Principle: Preserve + Enhance
 
 **DO:**
@@ -756,6 +761,7 @@ Alternative rock with post-rock architecture, driving electronic-infused indie g
 - Include the dynamic/mood arc explicitly (`dynamic escalation from sparse tension to crushing choruses`)
 - End with production/quality descriptors when relevant (`clean high-fidelity production`, `precise layered imaging`)
 - Keep the whole prompt on one line
+- **Stay within the 1000-character Style box limit (including whitespace)** — condense or drop the least important descriptors before exceeding it
 
 **CRITICAL:** The Style block is ONE prose prompt string. Do NOT use `Genre:`, `Instruments:`, `Vocal:`, or `Tags:` field labels. Do NOT split into separate fields. Instruments and vocal character are part of the prose, NOT separate Lyrics-box tags.
 
@@ -1123,6 +1129,8 @@ If user provides raw, unstructured lyrics:
 **Style Consistency**: Style block matches lyrical mood
 
 **Style as Prose**: Style block is a single freeform prose prompt (no field labels); genre, vocal, instruments, mood, and production all folded in
+
+**Character Limits Met**: Style box ≤ 1000 chars, Lyrics box ≤ 5000 chars, Session Drummer ≤ 150 chars (all including whitespace)
 
 **No Conflicts**: No contradictory tags (e.g., "slow" + "high energy")
 
