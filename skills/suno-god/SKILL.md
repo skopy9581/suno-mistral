@@ -86,7 +86,7 @@ When a research file exists for the referenced artist:
 
 **2. Extract Instrument Details:**
 - Look for: `### Style Block Instruments Field:`
-- Fold these into the **STYLE PROMPT prose** as descriptive timbral/arrangement phrases (no rigid field split required). Combine with any user-provided instruments using exact brand/model names.
+- Place these in the **`[Instruments: ...]` tag at the TOP of the LYRICS box** (above the Session Drummer tag), using exact brand/model names. Keep the STYLE PROMPT free of detailed instrument lists so it stays under the 1000-character Style box limit.
 
 **3. Extract Tech Tags:**
 - Look for: `### Recommended Tech Tags by Section:`
@@ -95,7 +95,7 @@ When a research file exists for the referenced artist:
 
 **4. Extract Style Information:**
 - Look for: Genre, BPM, mood, atmospheric characteristics
-- Use in the STYLE PROMPT prose alongside instruments and vocal character
+- Use in the STYLE PROMPT prose (identity, groove, vocal character, production). Detailed instruments go in the `[Instruments: ...]` tag in LYRICS, not the Style box.
 
 **5. Extract Negative Styles:**
 - Look for: conflicting genres in the profile
@@ -204,7 +204,28 @@ You will receive **user-provided lyrics and style preferences** as input. Your r
 4. `---LYRICS---` — section tags + optional local performance/arrangement cues + lyric text + Session Drummer tag at TOP
 5. `---SETTINGS---` — Weirdness, Style Influence, Variety, Duration, Exclude Styles, My Taste, Max Mode
 
-**CRITICAL:** Instruments go in the **STYLE PROMPT prose**, NOT as a separate tag dumped into the Lyrics box unless it adds local section value. Session Drummer tag goes at the TOP of the LYRICS block (max 150 characters).
+**CRITICAL — STYLE BOX TARGET: ~850–950 CHARACTERS (NOT SHORT).** The Suno Style box is capped at 1000 characters. **Do NOT write a thin Style prompt.** Empirically, the *less* you describe in the Style box, the more Suno hallucinates its own unrelated nonsense. Target a **consistently dense ~850–950 characters** of musical detail so the model has a strong, specific target.
+
+**What fills the Style-box budget (keep ALL of these, dense and specific):**
+- genre/fusion/subgenres, era/lineage
+- emotional arc and how it moves across the song
+- vocal identity, register, delivery, attitude, technique
+- groove/tempo, rhythmic feel, swing/straight/half-time
+- arrangement movement verbs (enters, drops out, swells, strips back, builds, explodes)
+- harmony/key/mode language and melodic vocabulary
+- production character: room, stereo field, saturation, dynamics, brightness, depth
+- atmosphere/SFX when part of the scene
+- reference-era aesthetics and specific sonic signatures
+
+**What does NOT go in the Style box:** the heavy **brand/model instrument list**. Put that in an `[Instruments: ...]` tag at the TOP of the LYRICS box (above the Session Drummer tag), under 990 characters. Moving the instrument list out is what makes *room* to fill the Style box with the dense musical detail above — it is not a reason to shorten the Style box.
+
+**If your draft Style prompt is under ~850 chars, add more specific arrangement/production/vocal detail until it lands in the 850–950 band. Never pad with filler — add detail that resolves a musical decision.**
+
+LYRICS box top ordering:
+```
+[Instruments: Fender Jaguar with overdrive; Moog Sub Phatty with octave; Ludwig acoustic drum kit 24k/14s with SSL compression; Roland Juno-60 with chorus and reverb]
+[Session Drummer: Ludwig 24k/14s/12-13-16t | Groove: Punchy, driving]
+```
 
 ## Core Principle: Preserve + Enhance
 
@@ -461,7 +482,7 @@ New direction: turn it into a cinematic midtempo synth-pop track with a hopeful 
 
 ## HANDLING STUDIO-GRADE INSTRUMENTATION FROM ALBUM-CONCEPT-DESIGNER
 
-When the user provides input that includes **detailed instrumentation** from the `album-concept-designer` skill (typically from a `musical_identity.md` file), process it into the STYLE PROMPT prose. This keeps suno-god interoperable with `album-concept-designer`.
+When the user provides input that includes **detailed instrumentation** from the `album-concept-designer` skill (typically from a `musical_identity.md` file), process it into the **`[Instruments: ...]` tag in the LYRICS box** (NOT the STYLE PROMPT). This keeps suno-god interoperable with `album-concept-designer` and keeps the Style box under its 1000-character limit.
 
 ### Detection
 Look for these patterns in the user's input:
@@ -473,9 +494,9 @@ Look for these patterns in the user's input:
 
 ### Parsing & Conversion
 
-Group the detailed instrumentation into categories (Guitars, Synths & Keys, Drums & Percussion, Vocals, Strings & Orchestral, Effects, Other). For each, extract the instrument type, key characteristics, effects, and playing style, then fold the result into the STYLE PROMPT as descriptive timbral phrases using exact brand/model names.
+Group the detailed instrumentation into categories (Guitars, Synths & Keys, Drums & Percussion, Vocals, Strings & Orchestral, Effects, Other). For each, extract the instrument type, key characteristics, effects, and playing style, then convert to a Suno-compatible `[Instruments: ...]` entry using exact brand/model names. Place the combined `[Instruments: ...]` tag at the TOP of the LYRICS box (above the Session Drummer tag), semicolon-separated, under 990 characters. The STYLE PROMPT keeps only the identity/groove/production character (no detailed instrument list).
 
-| **Studio-Grade Input** | **STYLE PROMPT phrasing** |
+| **Studio-Grade Input** | **[Instruments: ...] entry** |
 |------------------------|--------------------------|
 | offset-waist solidbody with single-coil pickups through tube screamer into 40-watt tube combo | Fender Jaguar with overdrive into a tube combo |
 | analog synth with sawtooth wave through octave pedal and distortion | Moog Sub Phatty with octave and distortion |
@@ -818,29 +839,42 @@ Follow these rules every time you prepare Suno v6 content:
 
 ## Required Output Format
 
-Every suno-god output uses this structure:
+Every suno-god output splits the Suno inputs into **separate copy-paste boxes** so each field can be pasted into Suno directly (Style box, Lyrics box, Exclude Styles box). Always emit a Style-box character-count comment so you can verify it sits in the dense 850–950 band.
 
+**Song Title:** `[title]`
+
+**Model:** `v6 | v6-wild | v6-mini`
+
+**Style Box** (copy-ready, target ~850–950 chars):
 ```
----MODEL---
-v6 | v6-wild | v6-mini
+[dense natural-language style brief: genre/fusion + era + emotional arc + vocal character + groove/tempo + arrangement movement + harmony/key + production character + atmosphere + sonic signatures — NOT thin. Detailed instrumentation goes in the [Instruments: ...] tag in LYRICS, not here]
+<!-- Style: XXX/1000 -->
+```
 
----STYLE PROMPT---
-[copy-ready natural-language style brief: genre/fusion + era + emotional arc + vocal character + instrumentation/timbral palette + groove/tempo + production character; exact brand/model names where relevant]
-
----LYRICS---
-[Session Drummer: ...]            (max 150 chars, at TOP)
+**Lyrics Box** (copy-ready):
+```
+[Instruments: ...]               (exact brand/model names, semicolon-separated, under 990 chars, at TOP)
+[Session Drummer: ...]            (max 150 chars, directly below Instruments)
 [section tags + optional local performance/arrangement cues]
 [lyric text]
+```
 
----SETTINGS---
+**Exclude Styles Box** (copy-ready, negatives — one line, comma-separated):
+```
+[negative styles/sounds, sparingly; e.g. Jazz, Acoustic Folk, Lo-fi, drum machine, electronic drums, synthetic percussion, plastic drums]
+```
+
+**Other Settings:**
+```
 Weirdness: [choice]
 Style Influence: [choice]
 Variety: [choice]
 Duration: [choice]
-Exclude Styles: [choice, if needed]
 My Taste: ON/OFF
 Max Mode: ON/OFF, when available
 ```
+
+**RULE:** Each Suno field must be in its **own fenced code block** so the user can copy one box at a time. Never merge Style, Lyrics, and Exclude Styles into a single block. Always append `<!-- Style: XXX/1000 -->` at the end of the Style box with the actual character count of the Style text above it (excluding the comment).
 
 ### Template Selection Logic
 
@@ -863,8 +897,6 @@ Use whenever maximum expressive range is useful. Replace, add, or remove fields 
 [Era / cultural or production lineage]
 [Overall mood + emotional trajectory]
 [Vocal identity + performance character]
-[Primary instrumentation]
-[Secondary layers / textures]
 [Harmony / melodic vocabulary / scale feel]
 [Rhythmic language / groove / swing / meter]
 [BPM / tempo behavior]
@@ -873,6 +905,7 @@ Use whenever maximum expressive range is useful. Replace, add, or remove fields 
 [Specific sonic signatures]
 [Explicit exclusions]
 ```
+(Detailed instrumentation goes in the `[Instruments: ...]` tag in the LYRICS block, NOT here — keeps the Style box under 1000 chars.)
 
 **LYRICS / DIRECTION:**
 ```
@@ -1018,8 +1051,12 @@ Use this when the user wants sparse, poetic, minimal lyrics that avoid AI-genera
 - [ ] **Tag Economy:** 2-3 tags maximum per section for clarity
 - [ ] **Session Drummer:** Present at TOP of LYRICS, under 150 chars
 - [ ] **No artificial caps:** No genre/instrument/modifier count limits enforced
-- [ ] **Studio-Grade Handling:** If input contains detailed instrumentation, properly parsed and folded into STYLE PROMPT prose with exact brand/model names
+- [ ] **Style box ~850–950 chars:** STYLE PROMPT is dense and specific (genre, era, arc, vocal, groove, arrangement, harmony, production, atmosphere). NOT thin — under-filled prompts trigger Suno hallucination
+- [ ] **Instruments tag:** Detailed instrumentation in `[Instruments: ...]` tag at TOP of LYRICS (above Session Drummer), under 990 chars, exact brand/model names
+- [ ] **Studio-Grade Handling:** If input contains detailed instrumentation, properly parsed and placed in `[Instruments: ...]` tag with exact brand/model names
 - [ ] **Output Format:** MODEL / STYLE PROMPT / LYRICS / SETTINGS present
+- [ ] **Separate copy boxes:** Style box, Lyrics box, and Exclude Styles box each in their **own** fenced code block (never merged)
+- [ ] **Style char-count:** `<!-- Style: XXX/1000 -->` appended at the end of the Style box with the real character count of the Style text
 
 ## Suno Sliders / Controls Integration
 
@@ -1093,14 +1130,17 @@ Indie pop, emotional, female vocals, 95 BPM, melancholic but hopeful
 
 **Song Title:** `3 AM Ceiling`
 
+**Model:** `v6`
+
+**Style Box** (999 chars):
 ```
----MODEL---
-v6
+Indie dream-pop with late-1990s bedroom and lo-fi lineage, melancholic but gradually hopeful across the song, intimate emotional female lead in a breathy low register with restrained conversational delivery that opens into a more resonant, quietly soaring chorus, 95 BPM with a trip-hop swung groove and laid-back shuffle feel, acoustic guitar fingerpicking enters in the verse, synth pads swell and widen through the pre-chorus, bass doubles the root movement under the chorus, drums stay brushed and sparse until the final chorus where they open up, arrangement strips back in the bridge to vocal and pad only then rebuilds with layered harmonies, Dorian-like minor color with warm major-sixth tones and suspended chords, intimate dry close vocal with small-room reverb, warm lo-fi polish with tape-saturated edges, controlled low end, narrow stereo in the verses opening to wide in the chorus, gentle spatial depth, dusty analog texture, soft dynamics with a slow crescendo into the final chorus.
+<!-- Style: 999/1000 -->
+```
 
----STYLE PROMPT---
-Indie dream-pop, late-night bedroom aesthetic, melancholic but gradually hopeful, intimate emotional female lead with breathy delivery, Taylor 314ce acoustic guitar, Roland Juno-60 synth pads, Fender Precision Bass, Ludwig acoustic drum kit 20k/14s with a trip-hop swung groove, 95 BPM, intimate dry close vocal, warm lo-fi polish, gentle spatial depth.
-
----LYRICS---
+**Lyrics Box**:
+```
+[Instruments: Taylor 314ce acoustic guitar; Roland Juno-60 synth pads; Fender Precision Bass; Ludwig acoustic drum kit 20k/14s]
 [Session Drummer: Ludwig 20k/14s | Groove: Trip-hop, swung]
 
 [Intro | Vocal: Soft, Intimate | Tech: Guitar strumming]
@@ -1116,13 +1156,19 @@ Why can't I just let it go
 Why can't I just let you go
 
 [Outro | Vocal: Fade | Tech: Synth pad sustain]
+```
 
----SETTINGS---
+**Exclude Styles Box**:
+```
+Heavy Metal, Trap, Country
+```
+
+**Other Settings**:
+```
 Weirdness: 35%
 Style Influence: Strong
 Variety: Low
 Duration: ~2:30
-Exclude Styles: Heavy Metal, Trap, Country
 My Taste: ON
 Max Mode: OFF
 ```
@@ -1148,14 +1194,17 @@ Tags: 120 BPM; building energy; epic; stadium rock feel; dramatic
 
 **Song Title:** `Breaking Free`
 
+**Model:** `v6`
+
+**Style Box** (959 chars):
 ```
----MODEL---
-v6
+Anthemic modern rock with late-2000s stadium and post-grunge lineage, gritty powerful male lead with a belted chorus that stacks into layered harmonies on the final hook, 120 BPM punchy driving four-on-the-floor groove and straight eighths, palm-muted guitars in the verse open to wide crashing power chords in the chorus, bass doubles the root and adds octave movement under the pre-chorus, synth pads widen the stereo field through the build, drums ride-cymbal in the verse then crash on every downbeat in the chorus with floor-tom accents and a half-time breakdown in the bridge, arrangement strips back to vocal and clean guitar in the bridge then explodes into the final chorus, E-minor heroic color, wide aggressive stadium mix with punchy compressed drums, hard transients, controlled low end, plate reverb on the vocal, tape-saturated guitar edges, bright arpeggiated synth under the chorus, dramatic arc from tense verse to euphoric full-band climax.
+<!-- Style: 959/1000 -->
+```
 
----STYLE PROMPT---
-Anthemic modern rock, stadium scale, building from tense restraint to euphoric release, gritty powerful lead vocal with plate reverb on a large-diaphragm condenser, Fender Jaguar with overdrive through a tube combo, Moog Sub Phatty bass synth with octave and distortion driving the low end, Ludwig acoustic drum kit 24k/14s/12-13-16t with SSL bus compression and punchy driving groove, Roland Juno-60 polyphonic analog with chorus and hall reverb widening the choruses, 120 BPM, wide aggressive stadium mix, dramatic dynamic arc from intimate verse to full-band final chorus.
-
----LYRICS---
+**Lyrics Box**:
+```
+[Instruments: Fender Jaguar with overdrive through a tube combo; Moog Sub Phatty with octave and distortion; Ludwig acoustic drum kit 24k/14s/12-13-16t with SSL compression; Roland Juno-60 with chorus and hall reverb; processed vocals with plate reverb]
 [Session Drummer: Ludwig 24k/14s/12-13-16t | Groove: Punchy, driving]
 
 [Intro | Tech: Orchestral synth build | Mood: Intense]
@@ -1187,18 +1236,24 @@ Breaking fre-e-e-e-e (oh yeah)
 Right no-o-o-ow! (HEY!)
 
 [Outro | Mix: Decrescendo, Vocal fade with plate reverb tail | Tech: Juno-60 sustain]
+```
 
----SETTINGS---
+**Exclude Styles Box**:
+```
+Jazz, Acoustic Folk, Lo-fi, drum machine, electronic drums, synthetic percussion, plastic drums
+```
+
+**Other Settings**:
+```
 Weirdness: 30%
 Style Influence: Strong
 Variety: Low
 Duration: ~3:30
-Exclude Styles: Jazz, Acoustic Folk, Lo-fi, drum machine, electronic drums, synthetic percussion, plastic drums
 My Taste: ON
 Max Mode: ON
 ```
 
-**Techniques Used:** Studio-grade instrumentation with exact brand/model names folded into STYLE PROMPT prose; Session Drummer tag under 150 chars; ALL CAPS with `!` for powerful emphasis; vowel extensions (fre-e-e-e, no-o-o-ow, stre-e-ength); parentheses for ad-libs and background vocals; consolidated square brackets with pipe separators; dynamic control (Energy levels, Tech instructions, Crescendo/Decrescendo); energy progression from intimate to maximum; Max Mode ON for continuity across the longer, demanding arrangement.
+**Techniques Used:** Studio-grade instrumentation with exact brand/model names placed in the `[Instruments: ...]` tag at the TOP of the LYRICS box (Style box kept under 1000 chars); Session Drummer tag under 150 chars; ALL CAPS with `!` for powerful emphasis; vowel extensions (fre-e-e-e, no-o-o-ow, stre-e-ength); parentheses for ad-libs and background vocals; consolidated square brackets with pipe separators; dynamic control (Energy levels, Tech instructions, Crescendo/Decrescendo); energy progression from intimate to maximum; Max Mode ON for continuity across the longer, demanding arrangement.
 
 ## Final Operating Principle
 
