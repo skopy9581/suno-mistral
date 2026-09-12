@@ -8,6 +8,10 @@ A suite of Vibe Code skills specialized for AI music creation, heavily optimized
 Specialized in formatting and enriching lyrics with technical Suno AI tags (`[Verse]`, `(ad-libs)`, etc.). It preserves your lyrics while adding proper meta tags and structural elements for high-quality music generation.
 - **Location**: `skills/suno-songwriter/SKILL.md`
 
+### 1b. Suno-God (v6 God Mode)
+A Premier power-user Suno v6 prompt engineer (v6 / v6-wild / v6-mini) optimized for Premier + Studio 2.0. It designs high-detail, producer-grade Style prompts, lyric structures, section cues, vocal direction, and arrangement targets with **no artificial prompt ceilings**. It emits a `MODEL / STYLE PROMPT / LYRICS / SETTINGS` brief and includes a Studio 2.0 prompting layer. It interoperates with `suno-music-researcher` (research files) and `album-concept-designer` (`musical_identity.md` instrumentation) just like Suno Songwriter.
+- **Location**: `skills/suno-god/SKILL.md`
+
 ### 2. Album Concept Designer
 A creative director for building complex conceptual albums. It handles world-building, storyline, character profiles, and narrative tracklists. It generates an "Album Bible" and track specifications.
 - **Location**: `skills/album-concept-designer/SKILL.md`
@@ -88,7 +92,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **Why:** Vibe Code runs skills from their installed directory. Users pull updates from GitHub to their local skills folder. Absolute paths will not work across different installations.
 
 **Cross-Skill References:**
-- suno-songwriter looks for research files in: `suno-music-researcher/research/[artist_name].md`
+- suno-songwriter and suno-god both look for research files in: `suno-music-researcher/research/[artist_name].md`
 - album-concept-designer creates files in its own directory
 - suno-music-researcher writes to: `research/[artist_name].md`
 
