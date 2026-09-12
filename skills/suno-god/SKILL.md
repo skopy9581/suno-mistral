@@ -839,30 +839,42 @@ Follow these rules every time you prepare Suno v6 content:
 
 ## Required Output Format
 
-Every suno-god output uses this structure:
+Every suno-god output splits the Suno inputs into **separate copy-paste boxes** so each field can be pasted into Suno directly (Style box, Lyrics box, Exclude Styles box). Always emit a Style-box character-count comment so you can verify it sits in the dense 850–950 band.
 
+**Song Title:** `[title]`
+
+**Model:** `v6 | v6-wild | v6-mini`
+
+**Style Box** (copy-ready, target ~850–950 chars):
 ```
----MODEL---
-v6 | v6-wild | v6-mini
+[dense natural-language style brief: genre/fusion + era + emotional arc + vocal character + groove/tempo + arrangement movement + harmony/key + production character + atmosphere + sonic signatures — NOT thin. Detailed instrumentation goes in the [Instruments: ...] tag in LYRICS, not here]
+<!-- Style: XXX/1000 -->
+```
 
----STYLE PROMPT---
-[copy-ready natural-language style brief: genre/fusion + era + emotional arc + vocal character + groove/tempo + arrangement movement + harmony/key + production character + atmosphere + sonic signatures — TARGET ~850–950 CHARS of dense, specific detail (never thin). Detailed instrumentation goes in the [Instruments: ...] tag in LYRICS, not here]
-
----LYRICS---
+**Lyrics Box** (copy-ready):
+```
 [Instruments: ...]               (exact brand/model names, semicolon-separated, under 990 chars, at TOP)
 [Session Drummer: ...]            (max 150 chars, directly below Instruments)
 [section tags + optional local performance/arrangement cues]
 [lyric text]
+```
 
----SETTINGS---
+**Exclude Styles Box** (copy-ready, negatives — one line, comma-separated):
+```
+[negative styles/sounds, sparingly; e.g. Jazz, Acoustic Folk, Lo-fi, drum machine, electronic drums, synthetic percussion, plastic drums]
+```
+
+**Other Settings:**
+```
 Weirdness: [choice]
 Style Influence: [choice]
 Variety: [choice]
 Duration: [choice]
-Exclude Styles: [choice, if needed]
 My Taste: ON/OFF
 Max Mode: ON/OFF, when available
 ```
+
+**RULE:** Each Suno field must be in its **own fenced code block** so the user can copy one box at a time. Never merge Style, Lyrics, and Exclude Styles into a single block. Always append `<!-- Style: XXX/1000 -->` at the end of the Style box with the actual character count of the Style text above it (excluding the comment).
 
 ### Template Selection Logic
 
@@ -1043,6 +1055,8 @@ Use this when the user wants sparse, poetic, minimal lyrics that avoid AI-genera
 - [ ] **Instruments tag:** Detailed instrumentation in `[Instruments: ...]` tag at TOP of LYRICS (above Session Drummer), under 990 chars, exact brand/model names
 - [ ] **Studio-Grade Handling:** If input contains detailed instrumentation, properly parsed and placed in `[Instruments: ...]` tag with exact brand/model names
 - [ ] **Output Format:** MODEL / STYLE PROMPT / LYRICS / SETTINGS present
+- [ ] **Separate copy boxes:** Style box, Lyrics box, and Exclude Styles box each in their **own** fenced code block (never merged)
+- [ ] **Style char-count:** `<!-- Style: XXX/1000 -->` appended at the end of the Style box with the real character count of the Style text
 
 ## Suno Sliders / Controls Integration
 
@@ -1116,14 +1130,16 @@ Indie pop, emotional, female vocals, 95 BPM, melancholic but hopeful
 
 **Song Title:** `3 AM Ceiling`
 
+**Model:** `v6`
+
+**Style Box** (999 chars):
 ```
----MODEL---
-v6
-
----STYLE PROMPT---
 Indie dream-pop with late-1990s bedroom and lo-fi lineage, melancholic but gradually hopeful across the song, intimate emotional female lead in a breathy low register with restrained conversational delivery that opens into a more resonant, quietly soaring chorus, 95 BPM with a trip-hop swung groove and laid-back shuffle feel, acoustic guitar fingerpicking enters in the verse, synth pads swell and widen through the pre-chorus, bass doubles the root movement under the chorus, drums stay brushed and sparse until the final chorus where they open up, arrangement strips back in the bridge to vocal and pad only then rebuilds with layered harmonies, Dorian-like minor color with warm major-sixth tones and suspended chords, intimate dry close vocal with small-room reverb, warm lo-fi polish with tape-saturated edges, controlled low end, narrow stereo in the verses opening to wide in the chorus, gentle spatial depth, dusty analog texture, soft dynamics with a slow crescendo into the final chorus.
+<!-- Style: 999/1000 -->
+```
 
----LYRICS---
+**Lyrics Box**:
+```
 [Instruments: Taylor 314ce acoustic guitar; Roland Juno-60 synth pads; Fender Precision Bass; Ludwig acoustic drum kit 20k/14s]
 [Session Drummer: Ludwig 20k/14s | Groove: Trip-hop, swung]
 
@@ -1140,13 +1156,19 @@ Why can't I just let it go
 Why can't I just let you go
 
 [Outro | Vocal: Fade | Tech: Synth pad sustain]
+```
 
----SETTINGS---
+**Exclude Styles Box**:
+```
+Heavy Metal, Trap, Country
+```
+
+**Other Settings**:
+```
 Weirdness: 35%
 Style Influence: Strong
 Variety: Low
 Duration: ~2:30
-Exclude Styles: Heavy Metal, Trap, Country
 My Taste: ON
 Max Mode: OFF
 ```
@@ -1172,14 +1194,16 @@ Tags: 120 BPM; building energy; epic; stadium rock feel; dramatic
 
 **Song Title:** `Breaking Free`
 
+**Model:** `v6`
+
+**Style Box** (959 chars):
 ```
----MODEL---
-v6
-
----STYLE PROMPT---
 Anthemic modern rock with late-2000s stadium and post-grunge lineage, gritty powerful male lead with a belted chorus that stacks into layered harmonies on the final hook, 120 BPM punchy driving four-on-the-floor groove and straight eighths, palm-muted guitars in the verse open to wide crashing power chords in the chorus, bass doubles the root and adds octave movement under the pre-chorus, synth pads widen the stereo field through the build, drums ride-cymbal in the verse then crash on every downbeat in the chorus with floor-tom accents and a half-time breakdown in the bridge, arrangement strips back to vocal and clean guitar in the bridge then explodes into the final chorus, E-minor heroic color, wide aggressive stadium mix with punchy compressed drums, hard transients, controlled low end, plate reverb on the vocal, tape-saturated guitar edges, bright arpeggiated synth under the chorus, dramatic arc from tense verse to euphoric full-band climax.
+<!-- Style: 959/1000 -->
+```
 
----LYRICS---
+**Lyrics Box**:
+```
 [Instruments: Fender Jaguar with overdrive through a tube combo; Moog Sub Phatty with octave and distortion; Ludwig acoustic drum kit 24k/14s/12-13-16t with SSL compression; Roland Juno-60 with chorus and hall reverb; processed vocals with plate reverb]
 [Session Drummer: Ludwig 24k/14s/12-13-16t | Groove: Punchy, driving]
 
@@ -1212,13 +1236,19 @@ Breaking fre-e-e-e-e (oh yeah)
 Right no-o-o-ow! (HEY!)
 
 [Outro | Mix: Decrescendo, Vocal fade with plate reverb tail | Tech: Juno-60 sustain]
+```
 
----SETTINGS---
+**Exclude Styles Box**:
+```
+Jazz, Acoustic Folk, Lo-fi, drum machine, electronic drums, synthetic percussion, plastic drums
+```
+
+**Other Settings**:
+```
 Weirdness: 30%
 Style Influence: Strong
 Variety: Low
 Duration: ~3:30
-Exclude Styles: Jazz, Acoustic Folk, Lo-fi, drum machine, electronic drums, synthetic percussion, plastic drums
 My Taste: ON
 Max Mode: ON
 ```
