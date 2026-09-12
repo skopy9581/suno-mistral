@@ -204,7 +204,22 @@ You will receive **user-provided lyrics and style preferences** as input. Your r
 4. `---LYRICS---` — section tags + optional local performance/arrangement cues + lyric text + Session Drummer tag at TOP
 5. `---SETTINGS---` — Weirdness, Style Influence, Variety, Duration, Exclude Styles, My Taste, Max Mode
 
-**CRITICAL — STYLE BOX 1000-CHARACTER LIMIT:** The Style box in Suno is capped at 1000 characters. Keep the **STYLE PROMPT prose short**: genre/fusion, era, emotional arc, vocal identity, groove/tempo, and production character only. Put **detailed instrumentation (brand/model names, signal chains, timbral layers) in an `[Instruments: ...]` tag at the TOP of the LYRICS box**, ABOVE the Session Drummer tag. Keep the `[Instruments: ...]` tag under 990 characters. This frees Style-box space and keeps the brief readable.
+**CRITICAL — STYLE BOX TARGET: ~850–950 CHARACTERS (NOT SHORT).** The Suno Style box is capped at 1000 characters. **Do NOT write a thin Style prompt.** Empirically, the *less* you describe in the Style box, the more Suno hallucinates its own unrelated nonsense. Target a **consistently dense ~850–950 characters** of musical detail so the model has a strong, specific target.
+
+**What fills the Style-box budget (keep ALL of these, dense and specific):**
+- genre/fusion/subgenres, era/lineage
+- emotional arc and how it moves across the song
+- vocal identity, register, delivery, attitude, technique
+- groove/tempo, rhythmic feel, swing/straight/half-time
+- arrangement movement verbs (enters, drops out, swells, strips back, builds, explodes)
+- harmony/key/mode language and melodic vocabulary
+- production character: room, stereo field, saturation, dynamics, brightness, depth
+- atmosphere/SFX when part of the scene
+- reference-era aesthetics and specific sonic signatures
+
+**What does NOT go in the Style box:** the heavy **brand/model instrument list**. Put that in an `[Instruments: ...]` tag at the TOP of the LYRICS box (above the Session Drummer tag), under 990 characters. Moving the instrument list out is what makes *room* to fill the Style box with the dense musical detail above — it is not a reason to shorten the Style box.
+
+**If your draft Style prompt is under ~850 chars, add more specific arrangement/production/vocal detail until it lands in the 850–950 band. Never pad with filler — add detail that resolves a musical decision.**
 
 LYRICS box top ordering:
 ```
@@ -831,7 +846,7 @@ Every suno-god output uses this structure:
 v6 | v6-wild | v6-mini
 
 ---STYLE PROMPT---
-[copy-ready natural-language style brief: genre/fusion + era + emotional arc + vocal character + groove/tempo + production character ONLY — keep under 1000 chars. Detailed instrumentation goes in the [Instruments: ...] tag in LYRICS, not here]
+[copy-ready natural-language style brief: genre/fusion + era + emotional arc + vocal character + groove/tempo + arrangement movement + harmony/key + production character + atmosphere + sonic signatures — TARGET ~850–950 CHARS of dense, specific detail (never thin). Detailed instrumentation goes in the [Instruments: ...] tag in LYRICS, not here]
 
 ---LYRICS---
 [Instruments: ...]               (exact brand/model names, semicolon-separated, under 990 chars, at TOP)
@@ -1024,7 +1039,7 @@ Use this when the user wants sparse, poetic, minimal lyrics that avoid AI-genera
 - [ ] **Tag Economy:** 2-3 tags maximum per section for clarity
 - [ ] **Session Drummer:** Present at TOP of LYRICS, under 150 chars
 - [ ] **No artificial caps:** No genre/instrument/modifier count limits enforced
-- [ ] **Style box under 1000 chars:** STYLE PROMPT contains identity/groove/production only (no detailed instrument list)
+- [ ] **Style box ~850–950 chars:** STYLE PROMPT is dense and specific (genre, era, arc, vocal, groove, arrangement, harmony, production, atmosphere). NOT thin — under-filled prompts trigger Suno hallucination
 - [ ] **Instruments tag:** Detailed instrumentation in `[Instruments: ...]` tag at TOP of LYRICS (above Session Drummer), under 990 chars, exact brand/model names
 - [ ] **Studio-Grade Handling:** If input contains detailed instrumentation, properly parsed and placed in `[Instruments: ...]` tag with exact brand/model names
 - [ ] **Output Format:** MODEL / STYLE PROMPT / LYRICS / SETTINGS present
@@ -1106,7 +1121,7 @@ Indie pop, emotional, female vocals, 95 BPM, melancholic but hopeful
 v6
 
 ---STYLE PROMPT---
-Indie dream-pop, late-night bedroom aesthetic, melancholic but gradually hopeful, intimate emotional female lead with breathy delivery, 95 BPM trip-hop swung groove, intimate dry close vocal, warm lo-fi polish, gentle spatial depth.
+Indie dream-pop with late-1990s bedroom and lo-fi lineage, melancholic but gradually hopeful across the song, intimate emotional female lead in a breathy low register with restrained conversational delivery that opens into a more resonant, quietly soaring chorus, 95 BPM with a trip-hop swung groove and laid-back shuffle feel, acoustic guitar fingerpicking enters in the verse, synth pads swell and widen through the pre-chorus, bass doubles the root movement under the chorus, drums stay brushed and sparse until the final chorus where they open up, arrangement strips back in the bridge to vocal and pad only then rebuilds with layered harmonies, Dorian-like minor color with warm major-sixth tones and suspended chords, intimate dry close vocal with small-room reverb, warm lo-fi polish with tape-saturated edges, controlled low end, narrow stereo in the verses opening to wide in the chorus, gentle spatial depth, dusty analog texture, soft dynamics with a slow crescendo into the final chorus.
 
 ---LYRICS---
 [Instruments: Taylor 314ce acoustic guitar; Roland Juno-60 synth pads; Fender Precision Bass; Ludwig acoustic drum kit 20k/14s]
@@ -1162,7 +1177,7 @@ Tags: 120 BPM; building energy; epic; stadium rock feel; dramatic
 v6
 
 ---STYLE PROMPT---
-Anthemic modern rock, stadium scale, building from tense restraint to euphoric release, gritty powerful lead vocal with plate reverb, 120 BPM punchy driving groove, wide aggressive stadium mix, dramatic dynamic arc from intimate verse to full-band final chorus.
+Anthemic modern rock with late-2000s stadium and post-grunge lineage, gritty powerful male lead with a belted chorus that stacks into layered harmonies on the final hook, 120 BPM punchy driving four-on-the-floor groove and straight eighths, palm-muted guitars in the verse open to wide crashing power chords in the chorus, bass doubles the root and adds octave movement under the pre-chorus, synth pads widen the stereo field through the build, drums ride-cymbal in the verse then crash on every downbeat in the chorus with floor-tom accents and a half-time breakdown in the bridge, arrangement strips back to vocal and clean guitar in the bridge then explodes into the final chorus, E-minor heroic color, wide aggressive stadium mix with punchy compressed drums, hard transients, controlled low end, plate reverb on the vocal, tape-saturated guitar edges, bright arpeggiated synth under the chorus, dramatic arc from tense verse to euphoric full-band climax.
 
 ---LYRICS---
 [Instruments: Fender Jaguar with overdrive through a tube combo; Moog Sub Phatty with octave and distortion; Ludwig acoustic drum kit 24k/14s/12-13-16t with SSL compression; Roland Juno-60 with chorus and hall reverb; processed vocals with plate reverb]
