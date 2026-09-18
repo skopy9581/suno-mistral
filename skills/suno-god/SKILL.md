@@ -1,7 +1,7 @@
 ---
 name: suno-god
 version: 6.0
-description: Premier power-user Suno v6 prompt engineer. Designs Style prompts, lyric structures, section cues, vocal direction, arrangement targets, and v6 workflows without treating meta tags as a rigid command language. Optimized for Premier + Studio 2.0 with no artificial prompt ceilings. Use when the user wants a high-detail, producer-grade Suno v6 brief instead of a minimal one. **For albums created with album-concept-designer, this skill accepts and processes studio-grade instrumentation details from musical_identity.md.**
+description: Premier power-user Suno v6 prompt engineer. Designs Style prompts, lyric structures, section cues, vocal direction, arrangement targets, and v6 workflows without treating meta tags as a rigid command language. Optimized for Premier + Studio 2.0 with no artificial prompt ceilings. Use when the user wants a high-detail, producer-grade Suno v6 brief instead of a minimal one. **For albums created with album-concept-designer, this skill accepts and processes studio-grade instrumentation details from musical_identity.md and album-specific taste preferences from my_taste.md.**
 ---
 
 ## Version System
@@ -195,14 +195,16 @@ You will receive **user-provided lyrics and style preferences** as input. Your r
 2. **Style preferences** (genre, mood, vocal type, tempo, etc.)
 3. **Optional structural guidance** (verse/chorus indication, energy flow)
 4. **Optional studio-grade instrumentation** (from album-concept-designer's musical_identity.md)
+5. **Optional album taste profile** (from album-concept-designer's my_taste.md)
 5. **Optional reference input** (audio, image, video, voice)
 
 ### What You Must Output (v6 Format):
 1. **Song Title**
-2. `---MODEL---` (v6 | v6-wild | v6-mini)
-3. `---STYLE PROMPT---` — copy-ready natural-language style brief
-4. `---LYRICS---` — section tags + optional local performance/arrangement cues + lyric text + Session Drummer tag at TOP
-5. `---SETTINGS---` — Weirdness, Style Influence, Variety, Duration, Exclude Styles, My Taste, Max Mode
+2. **Model:** (v6 | v6-wild | v6-mini)
+3. **Style Box** — copy-ready natural-language style brief
+4. **Lyrics Box** — section tags + optional local performance/arrangement cues + lyric text + Session Drummer tag at TOP
+5. **Exclude Styles Box** — negative styles, comma-separated
+6. **Other Settings** — Weirdness, Style Influence, Variety, Duration, My Taste, Max Mode
 
 **CRITICAL — STYLE BOX TARGET: ~850–950 CHARACTERS (NOT SHORT).** The Suno Style box is capped at 1000 characters. **Do NOT write a thin Style prompt.** Empirically, the *less* you describe in the Style box, the more Suno hallucinates its own unrelated nonsense. Target a **consistently dense ~850–950 characters** of musical detail so the model has a strong, specific target.
 
@@ -483,6 +485,114 @@ New direction: turn it into a cinematic midtempo synth-pop track with a hopeful 
 ## HANDLING STUDIO-GRADE INSTRUMENTATION FROM ALBUM-CONCEPT-DESIGNER
 
 When the user provides input that includes **detailed instrumentation** from the `album-concept-designer` skill (typically from a `musical_identity.md` file), process it into the **`[Instruments: ...]` tag in the LYRICS box** (NOT the STYLE PROMPT). This keeps suno-god interoperable with `album-concept-designer` and keeps the Style box under its 1000-character limit.
+
+## HANDLING ALBUM TASTE PROFILE FROM my_taste.md
+
+**CRITICAL:** When processing tracks from an album created with `album-concept-designer`, check for and load the album's `my_taste.md` file to extract the user's album-specific taste preferences. This ensures consistency across all album tracks.
+
+### Detection
+Look for these patterns in the user's input:
+- References to `my_taste.md` or `[Album_Name]/my_taste.md`
+- Album track requests (e.g., "Track 01 from my album", "Generate the next song for my album")
+- Context indicating this is part of an album workflow
+
+### my_taste.md File Location
+When the user references an album track, check for `my_taste.md` in:
+1. `[Album_Name]/my_taste.md` (relative to album-concept-designer skill directory)
+2. `album-concept-designer/[Album_Name]/my_taste.md` (if album files are stored in subdirectory)
+
+### Parsing my_taste.md
+Extract the following sections from `my_taste.md` and apply them to your output:
+
+**1. Core Sound**
+- Use as the **base genre/era identity** in the Style Box
+- Example: "Glitchy electronic with melancholic undercurrent" → Incorporate into Style Box identity
+
+**2. Lyrics & Mood**
+- **Themes:** Incorporate into lyrical content and Style Box emotional description
+- **Emotional Arc:** Use to shape the song's emotional trajectory in Style Box
+
+**3. Production**
+- **Preferred:** Extract key production elements (e.g., "Glitch drums, modular synths, tape effects") → Add to Style Box production character
+- **Avoid:** Add to Exclude Styles in SETTINGS block
+
+**4. Vocal Style**
+- Incorporate into Style Box vocal identity description
+- Use as default vocal characteristics for the track
+
+**5. Tempo & Feel**
+- Extract BPM range and feel → Incorporate into Style Box tempo/groove description
+- Use for default SETTINGS if not overridden by track-specific requirements
+
+**6. Suno Settings**
+- **My Taste:** Always ON (this is the whole point of the file)
+- **Weirdness:** Use the specified percentage or default to 60%
+- **Style Influence:** Use the specified value or default to Strong
+- **Variety:** Use the specified value or default to Medium
+- **Duration:** Use the specified value or default to ~2:30
+
+### Integration with musical_identity.md
+When BOTH `my_taste.md` and `musical_identity.md` are available:
+1. **Style Box:** Combine Core Sound from my_taste.md + instrumentation character from musical_identity.md
+2. **Instruments Tag:** Use detailed instrumentation from musical_identity.md
+3. **Production:** Combine Production from my_taste.md + studio-grade details from musical_identity.md
+4. **SETTINGS:** Use Suno Settings from my_taste.md as defaults, override with track-specific needs
+
+### Example: Combined Integration
+
+**my_taste.md contains:**
+```
+## Core Sound
+Glitchy electronic with melancholic undercurrent
+
+## Production
+Preferred: Glitch drums, modular synths, tape effects
+Avoid: Polished pop, four-on-the-floor EDM
+
+## Vocal Style
+Breathy female vocals, intimate delivery
+
+## Suno Settings
+My Taste: ON
+Weirdness: 65%
+Style Influence: Strong
+```
+
+**musical_identity.md contains:**
+```
+Electric guitar: Fender Jaguar through tube screamer into 40-watt tube combo
+Bass: Moog Sub Phatty with octave pedal
+Drums: Glitch-processed acoustic kit with electronic triggers
+```
+
+**Your Output Style Box:**
+```
+Glitchy electronic with melancholic undercurrent and late-2000s IDM lineage, breathy intimate female lead vocal with occasional processed effects, 70-90 BPM uneasy swing with frequent half-time switches, glitch-processed drums with electronic triggers alongside modular synth textures and tape-saturated guitar, production character favors vinyl grain and reversed shards with dub delays, arrangement moves from sparse textures to dense layered climax with sudden dynamic drops
+```
+
+**Your Output SETTINGS:**
+```
+Weirdness: 65%
+Style Influence: Strong
+Variety: Medium
+Duration: ~2:30
+My Taste: ON
+Max Mode: OFF
+Exclude Styles: Polished pop, four-on-the-floor EDM, mainstream EDM
+```
+
+### Priority Rules
+1. **Track-specific overrides** take precedence over my_taste.md
+2. **my_taste.md** takes precedence over default assumptions
+3. **musical_identity.md** provides instrumentation detail, my_taste.md provides stylistic direction
+4. If my_taste.md and musical_identity.md conflict, note the conflict and ask the user for clarification
+
+### Fallback Behavior
+If `my_taste.md` is not found but `musical_identity.md` exists:
+- Generate using only musical_identity.md
+- Warn the user: "For maximum album consistency, consider creating a my_taste.md file using album-concept-designer"
+
+If neither file exists, proceed with standard suno-god workflow.
 
 ### Detection
 Look for these patterns in the user's input:
@@ -839,7 +949,7 @@ Follow these rules every time you prepare Suno v6 content:
 
 ## Required Output Format
 
-Every suno-god output splits the Suno inputs into **separate copy-paste boxes** so each field can be pasted into Suno directly (Style box, Lyrics box, Exclude Styles box). Always emit a Style-box character-count comment so you can verify it sits in the dense 850–950 band.
+Every suno-god output splits the Suno inputs into **separate copy-paste boxes** so each field can be pasted into Suno directly. Always emit a Style-box character-count comment so you can verify it sits in the dense 850–950 band.
 
 **Song Title:** `[title]`
 
@@ -848,20 +958,20 @@ Every suno-god output splits the Suno inputs into **separate copy-paste boxes** 
 **Style Box** (copy-ready, target ~850–950 chars):
 ```
 [dense natural-language style brief: genre/fusion + era + emotional arc + vocal character + groove/tempo + arrangement movement + harmony/key + production character + atmosphere + sonic signatures — NOT thin. Detailed instrumentation goes in the [Instruments: ...] tag in LYRICS, not here]
-<!-- Style: XXX/1000 -->
 ```
+<!-- Style: XXX/1000 -->
 
 **Lyrics Box** (copy-ready):
 ```
-[Instruments: ...]               (exact brand/model names, semicolon-separated, under 990 chars, at TOP)
-[Session Drummer: ...]            (max 150 chars, directly below Instruments)
+[Instruments: ...]
+[Session Drummer: ...]
 [section tags + optional local performance/arrangement cues]
 [lyric text]
 ```
 
 **Exclude Styles Box** (copy-ready, negatives — one line, comma-separated):
 ```
-[negative styles/sounds, sparingly; e.g. Jazz, Acoustic Folk, Lo-fi, drum machine, electronic drums, synthetic percussion, plastic drums]
+[negative styles/sounds, sparingly]
 ```
 
 **Other Settings:**
@@ -874,7 +984,7 @@ My Taste: ON/OFF
 Max Mode: ON/OFF, when available
 ```
 
-**RULE:** Each Suno field must be in its **own fenced code block** so the user can copy one box at a time. Never merge Style, Lyrics, and Exclude Styles into a single block. Always append `<!-- Style: XXX/1000 -->` at the end of the Style box with the actual character count of the Style text above it (excluding the comment).
+**RULE:** Each Suno field must be in its **own fenced code block** so the user can copy one box at a time. Never merge Style, Lyrics, and Exclude Styles into a single block. Always append `<!-- Style: XXX/1000 -->` **OUTSIDE the code block** (below it) with the actual character count of the Style text (for verification only - do NOT copy this comment into Suno).
 
 ### Template Selection Logic
 

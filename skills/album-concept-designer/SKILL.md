@@ -29,9 +29,52 @@ Once the concept is approved, generate the following directory structure and fil
 `[Album_Name]/`
 - `concept_and_storyline.md`: A deep dive into the narrative, environment lore, and character profiles.
 - `musical_identity.md`: **The complete studio-grade musical identity from Phase 1**
+- `my_taste.md`: **Album-specific Suno taste profile** generated from the album concept. Copy this content into Suno's "My Taste" field to maintain consistency across all album tracks. **CRITICAL:** Generate this file by extracting taste-relevant elements from the Core Concept, World/Lore, Cast, Narrative Arc, and Musical Identity. Use the format below.
 - `tracklist_table.md`: A Markdown table with columns: `Track # | Title | Narrative Beat | Mood/Tempo | Musical Vibe | Core Instruments`.
 - `imagery/`
     - `prompts.md`: Detailed visual prompts for Midjourney/DALL-E to visualize the world, characters, and cover art.
+
+**my_taste.md Generation Rules:**
+When creating `my_taste.md`, extract and synthesize the following from Phase 1 answers:
+- **Core Sound:** From Musical Identity genres + overall album vibe
+- **Lyrics & Mood:** From Core Concept themes + Narrative Arc emotional journey
+- **Production:** From Musical Identity instrumentation (simplified for Suno taste)
+- **Vocal Style:** From Musical Identity vocal characteristics + Cast descriptions
+- **Tempo & Feel:** From Musical Identity BPM/tempo + Narrative Arc energy
+- **Suno Settings:** Default to My Taste: ON, Weirdness: 50-70%, Style Influence: Strong, Variety: Medium
+
+**my_taste.md Format Template:**
+```markdown
+# [Album Name] - My Taste Profile
+
+**Status:** ON (Copy this entire file content into Suno's "My Taste" field)
+
+## Core Sound
+[Derived from Musical Identity: e.g., "Glitchy electronic with melancholic undercurrent" or "Cinematic orchestral with dark atmosphere"]
+
+## Lyrics & Mood
+- **Themes:** [From Core Concept: e.g., "Urban alienation, insomnia, technological dread"]
+- **Emotional Arc:** [From Narrative Arc: e.g., "Descent into paranoia, moments of clarity, unresolved tension"]
+
+## Production
+**Preferred:** [From Musical Identity - simplified: e.g., "Glitch drums, modular synths, tape effects, vinyl grain"]
+**Avoid:** [Opposite of album sound: e.g., "Polished pop, clean minimal ambient, four-on-the-floor EDM"]
+
+## Vocal Style
+[From Musical Identity vocals + Cast: e.g., "Breathy female vocals, intimate delivery, occasional processed effects"]
+
+## Arrangement
+[From Musical Identity: e.g., "Modal harmonies, slow builds, sudden dynamic shifts"]
+
+## Tempo & Feel
+[From Musical Identity: e.g., "70-110 BPM, uneasy swing, frequent tempo variations"]
+
+## Suno Settings
+My Taste: ON
+Weirdness: [50-70% based on album experimental nature]
+Style Influence: Strong
+Variety: Medium
+```
 
 ### Phase 3: Track-by-Track Execution
 For each track on the tracklist, help the user design a detailed track specification file in `[Album_Name]/tracks/[XX-track-name].md`.
@@ -50,6 +93,11 @@ For each track on the tracklist, help the user design a detailed track specifica
 **Core Instruments from Album:** [Reference the specific instruments from musical_identity.md]
 **Track-Specific Variations:** [What changes for this track - e.g., "Replace clean guitars with distorted ones", "Add string section", "Remove synth pads"]
 **Production Notes:** [Any special recording or mixing approaches for this track]
+
+## Taste Integration
+**Base Taste Profile:** [Album_Name]/my_taste.md (Generated from album concept - copy to Suno)
+**Track-Specific Overrides:** [List any deviations from the generated taste profile for this track]
+**Consistency Check:** [Verify this track aligns with the album's my_taste.md profile]
 
 ## Suno AI Prompt
 
