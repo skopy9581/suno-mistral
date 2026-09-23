@@ -1,23 +1,26 @@
 ---
 name: suno-god
-version: 6.1
+version: 3.1
 description: Premier power-user Suno v6 prompt engineer. Designs Style prompts, lyric structures, section cues, vocal direction, arrangement targets, and v6 workflows without treating meta tags as a rigid command language. Optimized for Premier + Studio 2.0 with no artificial prompt ceilings. Use when the user wants a high-detail, producer-grade Suno v6 brief instead of a minimal one. **For albums created with album-concept-designer, this skill accepts and processes studio-grade instrumentation details from musical_identity.md and album-specific taste preferences from my_taste.md.**
 ---
 
 ## Version System
 
-**CURRENT VERSION:** 6.1
+**There are two independent version numbers. Do not confuse them:**
+
+1. **SKILL VERSION (this file's frontmatter):** `3.1` — the release version of the suno-god skill itself. It follows the skill lineage (2.1 legacy songwriter → 3.0 god-mode edition → 3.1) and is **completely independent of Suno model versions** (v6, v6-wild, v6-mini are Suno's model names, not skill versions).
+2. **RESEARCH FILE FORMAT VERSION:** `2.1` — the version stamped by `suno-music-researcher` in `<!-- SUNO_RESEARCH_VERSION: X.X -->` comments. Research file version checks compare against **2.1**, never against the skill version.
 
 When loading research files, check for `<!-- SUNO_RESEARCH_VERSION: X.X -->` comment.
-If version is missing or does not match CURRENT VERSION, warn the user.
+If version is missing or not 2.1, warn the user (see Research File System below).
 
 ## Version History
 
-- **6.1:** Style-box budget enforcement: target band lowered to 800–900 chars with a 990 hard ceiling, mandatory count-before-emit (never estimate), and a priority-ordered trim loop when over budget. Added human-realism & performance-character vocal tags (user-reported).
-- **6.0:** Suno v6 / v6-wild / v6-mini, Premier + Studio 2.0 power-user edition. No artificial caps on genres, instruments, modifiers, or prompt complexity. Natural-language producer briefs. New MODEL/STYLE PROMPT/LYRICS/SETTINGS output format. Studio 2.0 prompting layer. Equipment brand/model names allowed.
+- **3.1:** Style-box budget enforcement: target band lowered to 800–900 chars with a 990 hard ceiling, mandatory count-before-emit (never estimate), and a priority-ordered trim loop when over budget. Added human-realism & performance-character vocal tags (user-reported). Renumbered from the mistaken 6.x scheme to the skill lineage (v6 is a Suno model name, not a skill version).
+- **3.0:** God-mode edition targeting Suno v6 / v6-wild / v6-mini on Premier + Studio 2.0. No artificial caps on genres, instruments, modifiers, or prompt complexity. Natural-language producer briefs. New MODEL/STYLE PROMPT/LYRICS/SETTINGS output format. Studio 2.0 prompting layer. Equipment brand/model names allowed. (Previously mislabeled 6.0.)
 - **2.1:** (legacy songwriter) Equipment brand/model names allowed.
 
-# Suno-God (v6 God Mode)
+# Suno-God (God Mode for Suno v6)
 
 ## v6 Mental Model
 
@@ -49,7 +52,7 @@ Treat Suno as a creative model that **interprets a structured description**, not
 **0. Version Check:**
 - Look for: `<!-- SUNO_RESEARCH_VERSION: X.X -->` in the research file
 - If **missing**: Show warning: "This research file was created with an older version. Regenerate with `suno-music-researcher` for best results. Note: Old files may lack equipment brand/model names (e.g., Boss RC-505)."
-- If **mismatched** (not 2.1): Show warning: "This research file is from version X.X. Current version is 6.0. Regenerate with `suno-music-researcher` for compatibility."
+- If **mismatched** (not 2.1): Show warning: "This research file is from version X.X. Current research file format is 2.1. Regenerate with `suno-music-researcher` for compatibility."
 
 When the user requests a song "in the style of [Artist/Band]", you MUST:
 
