@@ -1066,6 +1066,59 @@ Match tags to lyrical content:
 - Sad/reflective → `[Melancholic]`, `[Whispered]`
 - Party/celebration → `[Euphoric]`, `[Energy: High]`
 
+### Human-Realism & Performance-Character Vocal Tags
+
+User-reported tags that make Suno vocals feel raw, human, and imperfectly performed. Use them inside section headers or as standalone cues when the song calls for realism, intimacy, lo-fi production, or emotionally broken delivery.
+
+**Recording Imperfections & Humanization**
+- `[Imperfect Take Feel]` — Captures full vocal takes with flaws intact
+- `[Dry Vocal Room]` — No reverb or FX; raw mic tone
+- `[Breath Sustain Variance]` — Inconsistent breath length for realism
+- `[Off-Mic Moment]` — Sudden vocal distance or proximity shifts
+- `[Vocal Wear Friction]` — Rasp, throat drag, or tonal fatigue
+- `[Compression Drift]` — Uneven volume control, emulating analog compression
+- `[Emotion Break Layer]` — Moments of crack, tear, or falter mid-phrase
+- `[Overdrive Spike Artifact]` — Slight clipping/distortion on vocal peaks
+- `[Mic Bump Detail]` — Accidental hand/stand contact, adds intimacy
+- `[Room Bleed Shadow]` — Slight audio spill from other sources, rawer feel
+- `[Phase Lag Slip]` — Minor vocal timing drift, intentional human error
+- `[Breath Inhalation Presence]` — Audibly sharp breaths between lines
+- `[Manual Fade Edges]` — Non-digital vocal fade-outs, more tactile
+- `[Analog Grain Texture]` — Adds subtle tape-like coarseness to the vocal
+- `[Lyrical Interrupt Artifact]` — Unfinished or cut-off words preserved
+
+**Delivery Character**
+- `[Spoken-Edge Delivery]` — Singing near speech; great for alt-rock, folk-punk
+- `[Detached Narration Flow]` — Emotionally cold or observational tone
+- `[Hushed Intonation Bloom]` — Soft, breathy, intimate vocals that swell mid-line
+- `[Overemphasized Consonants]` — Sharper word delivery, useful for post-punk or art rock
+- `[Wavering Intonation Drift]` — Slight pitch instability for dreamlike effect
+- `[Front-Throat Focus]` — Brighter timbre, forward vocal mix
+- `[Swallowed Phrase Ends]` — Cut-off or mumbled finishes
+- `[Semi-Falsetto Injection]` — Brief high-register transitions inside phrases
+
+**Recording + Mic Influence**
+- `[Lo-Fi Mic Bandwidth]` — Simulates low-grade or handheld mic tone
+- `[Room-Reflection Presence]` — Natural reverberation, small room feel
+- `[Tube Mic Emulation]` — Adds warmth and analog color
+- `[Mono Vocal Pull]` — Centered, less stereo spread; focused impact
+- `[Overdub Drift Layering]` — Subtle, misaligned vocal doubles
+- `[Filtered Phone-Like Entry]` — Narrow EQ intro or bridge effect
+
+**Performance Mood + Intent**
+- `[Pleading Vocal Layer]` — Desperate or urgent delivery
+- `[Sarcastic Edge Vocal]` — Subtle mockery or bitterness
+- `[Stubborn Monotone]` — Emotionally flat on purpose
+- `[Whisper-Scream Contrast]` — Juxtaposes quiet and loud passages
+- `[Intoxicated Voice Sim]` — Slurred, uneven timing or phrasing
+- `[Deadpan Sync Layer]` — Emotionless parallel vocal layer
+
+**Usage rules for these tags:**
+- Pick 2–3 complementary tags per song, not the whole catalog; stacking many at once blurs the effect.
+- Recording-imperfection tags (Imperfect Take Feel, Dry Vocal Room, Breath Sustain Variance, etc.) work best for lo-fi, folk, alt-rock, singer-songwriter, and any raw/demo aesthetic.
+- Do not combine contradictory pairs: `[Dry Vocal Room]` with `[Room-Reflection Presence]`, `[Tube Mic Emulation]`, or `[Room Bleed Shadow]`; `[Stubborn Monotone]` or `[Deadpan Sync Layer]` with `[Emotion Break Layer]` or `[Pleading Vocal Layer]` unless the contrast is the point (e.g., `[Whisper-Scream Contrast]` on purpose).
+- These can also be woven as natural language into the STYLE PROMPT (e.g., “dry close vocal with audible breaths and tape-like grain”) when the lyric box must stay sparse.
+
 ### Repetition Enhancement
 - First instance → standard vocal tag
 - Repeated instance → add `[Harmonized]` or `[Echo]`
