@@ -1,22 +1,26 @@
 ---
 name: suno-god
-version: 6.0
+version: 3.1
 description: Premier power-user Suno v6 prompt engineer. Designs Style prompts, lyric structures, section cues, vocal direction, arrangement targets, and v6 workflows without treating meta tags as a rigid command language. Optimized for Premier + Studio 2.0 with no artificial prompt ceilings. Use when the user wants a high-detail, producer-grade Suno v6 brief instead of a minimal one. **For albums created with album-concept-designer, this skill accepts and processes studio-grade instrumentation details from musical_identity.md and album-specific taste preferences from my_taste.md.**
 ---
 
 ## Version System
 
-**CURRENT VERSION:** 6.0
+**There are two independent version numbers. Do not confuse them:**
+
+1. **SKILL VERSION (this file's frontmatter):** `3.1` — the release version of the suno-god skill itself. It follows the skill lineage (2.1 legacy songwriter → 3.0 god-mode edition → 3.1) and is **completely independent of Suno model versions** (v6, v6-wild, v6-mini are Suno's model names, not skill versions).
+2. **RESEARCH FILE FORMAT VERSION:** `2.1` — the version stamped by `suno-music-researcher` in `<!-- SUNO_RESEARCH_VERSION: X.X -->` comments. Research file version checks compare against **2.1**, never against the skill version.
 
 When loading research files, check for `<!-- SUNO_RESEARCH_VERSION: X.X -->` comment.
-If version is missing or does not match CURRENT VERSION, warn the user.
+If version is missing or not 2.1, warn the user (see Research File System below).
 
 ## Version History
 
-- **6.0:** Suno v6 / v6-wild / v6-mini, Premier + Studio 2.0 power-user edition. No artificial caps on genres, instruments, modifiers, or prompt complexity. Natural-language producer briefs. New MODEL/STYLE PROMPT/LYRICS/SETTINGS output format. Studio 2.0 prompting layer. Equipment brand/model names allowed.
+- **3.1:** Style-box budget enforcement: target band lowered to 800–900 chars with a 990 hard ceiling, mandatory count-before-emit (never estimate), and a priority-ordered trim loop when over budget. Added human-realism & performance-character vocal tags (user-reported). Renumbered from the mistaken 6.x scheme to the skill lineage (v6 is a Suno model name, not a skill version).
+- **3.0:** God-mode edition targeting Suno v6 / v6-wild / v6-mini on Premier + Studio 2.0. No artificial caps on genres, instruments, modifiers, or prompt complexity. Natural-language producer briefs. New MODEL/STYLE PROMPT/LYRICS/SETTINGS output format. Studio 2.0 prompting layer. Equipment brand/model names allowed. (Previously mislabeled 6.0.)
 - **2.1:** (legacy songwriter) Equipment brand/model names allowed.
 
-# Suno-God (v6 God Mode)
+# Suno-God (God Mode for Suno v6)
 
 ## v6 Mental Model
 
@@ -48,7 +52,7 @@ Treat Suno as a creative model that **interprets a structured description**, not
 **0. Version Check:**
 - Look for: `<!-- SUNO_RESEARCH_VERSION: X.X -->` in the research file
 - If **missing**: Show warning: "This research file was created with an older version. Regenerate with `suno-music-researcher` for best results. Note: Old files may lack equipment brand/model names (e.g., Boss RC-505)."
-- If **mismatched** (not 2.1): Show warning: "This research file is from version X.X. Current version is 6.0. Regenerate with `suno-music-researcher` for compatibility."
+- If **mismatched** (not 2.1): Show warning: "This research file is from version X.X. Current research file format is 2.1. Regenerate with `suno-music-researcher` for compatibility."
 
 When the user requests a song "in the style of [Artist/Band]", you MUST:
 
@@ -86,7 +90,7 @@ When a research file exists for the referenced artist:
 
 **2. Extract Instrument Details:**
 - Look for: `### Style Block Instruments Field:`
-- Place these in the **`[Instruments: ...]` tag at the TOP of the LYRICS box** (above the Session Drummer tag), using exact brand/model names. Keep the STYLE PROMPT free of detailed instrument lists so it stays under the 1000-character Style box limit.
+- Place these in the **`[Instruments: ...]` tag at the TOP of the LYRICS box** (above the Session Drummer tag), using exact brand/model names. Keep the STYLE PROMPT free of detailed instrument lists so it stays within the 800–900 target band (990 hard ceiling) for the Style box.
 
 **3. Extract Tech Tags:**
 - Look for: `### Recommended Tech Tags by Section:`
@@ -206,7 +210,7 @@ You will receive **user-provided lyrics and style preferences** as input. Your r
 5. **Exclude Styles Box** — negative styles, comma-separated
 6. **Other Settings** — Weirdness, Style Influence, Variety, Duration, My Taste, Max Mode
 
-**CRITICAL — STYLE BOX TARGET: ~850–950 CHARACTERS (NOT SHORT).** The Suno Style box is capped at 1000 characters. **Do NOT write a thin Style prompt.** Empirically, the *less* you describe in the Style box, the more Suno hallucinates its own unrelated nonsense. Target a **consistently dense ~850–950 characters** of musical detail so the model has a strong, specific target.
+**CRITICAL — STYLE BOX TARGET: ~800–900 CHARACTERS, HARD CEILING 990 (NOT SHORT).** The Suno Style box is capped at 1000 characters. **Do NOT write a thin Style prompt.** Empirically, the *less* you describe in the Style box, the more Suno hallucinates its own unrelated nonsense. Target a **consistently dense ~800–900 characters** of musical detail so the model has a strong, specific target. **990 is a HARD CEILING, not a goal** — character counts are estimates until verified, so the 100-character margin between the target band and the ceiling absorbs counting error. A Style box that is 800 chars of dense detail is always better than one that is 1005 chars and cannot be pasted.
 
 **What fills the Style-box budget (keep ALL of these, dense and specific):**
 - genre/fusion/subgenres, era/lineage
@@ -221,7 +225,11 @@ You will receive **user-provided lyrics and style preferences** as input. Your r
 
 **What does NOT go in the Style box:** the heavy **brand/model instrument list**. Put that in an `[Instruments: ...]` tag at the TOP of the LYRICS box (above the Session Drummer tag), under 990 characters. Moving the instrument list out is what makes *room* to fill the Style box with the dense musical detail above — it is not a reason to shorten the Style box.
 
-**If your draft Style prompt is under ~850 chars, add more specific arrangement/production/vocal detail until it lands in the 850–950 band. Never pad with filler — add detail that resolves a musical decision.**
+**Budget enforcement (MANDATORY, every output):**
+1. **Under ~800 chars** → add more specific arrangement/production/vocal detail until it lands in the 800–900 band. Never pad with filler — add detail that resolves a musical decision.
+2. **Count before emitting.** Never report a character count you have not actually counted. If a code/tool environment is available, count the Style text programmatically. If not, count deterministically: split the Style text into its comma/period-separated clauses, count each clause's characters (including the trailing comma/space), and sum. Do not eyeball.
+3. **Over 990 chars** → trim BEFORE emitting, in this priority order, until the count is ≤ 990: (a) atmosphere/SFX clauses, (b) reference-era aesthetic name-dropping, (c) redundant production adjectives that repeat information already implied (e.g., a second dynamics word when one is present), (d) compress arrangement movement clauses by merging two verbs into one phrase. Never cut genre, vocal identity, groove/tempo, or harmony/key — those carry the most generation weight per character.
+4. **Emit the verified count** in `<!-- Style: XXX/1000 -->`. The emitted number must be the result of step 2, and XXX must be ≤ 990.
 
 LYRICS box top ordering:
 ```
@@ -949,13 +957,13 @@ Follow these rules every time you prepare Suno v6 content:
 
 ## Required Output Format
 
-Every suno-god output splits the Suno inputs into **separate copy-paste boxes** so each field can be pasted into Suno directly. Always emit a Style-box character-count comment so you can verify it sits in the dense 850–950 band.
+Every suno-god output splits the Suno inputs into **separate copy-paste boxes** so each field can be pasted into Suno directly. Always emit a Style-box character-count comment so you can verify it sits in the dense 800–900 band, with 990 as the hard ceiling (see Budget enforcement above — count, don't estimate).
 
 **Song Title:** `[title]`
 
 **Model:** `v6 | v6-wild | v6-mini`
 
-**Style Box** (copy-ready, target ~850–950 chars):
+**Style Box** (copy-ready, target ~800–900 chars, hard ceiling 990):
 ```
 [dense natural-language style brief: genre/fusion + era + emotional arc + vocal character + groove/tempo + arrangement movement + harmony/key + production character + atmosphere + sonic signatures — NOT thin. Detailed instrumentation goes in the [Instruments: ...] tag in LYRICS, not here]
 ```
@@ -984,7 +992,7 @@ My Taste: ON/OFF
 Max Mode: ON/OFF, when available
 ```
 
-**RULE:** Each Suno field must be in its **own fenced code block** so the user can copy one box at a time. Never merge Style, Lyrics, and Exclude Styles into a single block. Always append `<!-- Style: XXX/1000 -->` **OUTSIDE the code block** (below it) with the actual character count of the Style text (for verification only - do NOT copy this comment into Suno).
+**RULE:** Each Suno field must be in its **own fenced code block** so the user can copy one box at a time. Never merge Style, Lyrics, and Exclude Styles into a single block. Always append `<!-- Style: XXX/1000 -->` **OUTSIDE the code block** (below it) with the actual character count of the Style text (for verification only - do NOT copy this comment into Suno). XXX must come from a real count of the Style text — never an estimate — and must be ≤ 990. If the Style text is over 990, trim it before emitting (see Budget enforcement under the v6 Style Prompt formula).
 
 ### Template Selection Logic
 
@@ -1015,7 +1023,7 @@ Use whenever maximum expressive range is useful. Replace, add, or remove fields 
 [Specific sonic signatures]
 [Explicit exclusions]
 ```
-(Detailed instrumentation goes in the `[Instruments: ...]` tag in the LYRICS block, NOT here — keeps the Style box under 1000 chars.)
+(Detailed instrumentation goes in the `[Instruments: ...]` tag in the LYRICS block, NOT here — keeps the Style box within 800–900 chars, 990 hard ceiling.)
 
 **LYRICS / DIRECTION:**
 ```
@@ -1065,6 +1073,59 @@ Match tags to lyrical content:
 - Empowerment → `[Confident]`, `[Powerful]`
 - Sad/reflective → `[Melancholic]`, `[Whispered]`
 - Party/celebration → `[Euphoric]`, `[Energy: High]`
+
+### Human-Realism & Performance-Character Vocal Tags
+
+User-reported tags that make Suno vocals feel raw, human, and imperfectly performed. Use them inside section headers or as standalone cues when the song calls for realism, intimacy, lo-fi production, or emotionally broken delivery.
+
+**Recording Imperfections & Humanization**
+- `[Imperfect Take Feel]` — Captures full vocal takes with flaws intact
+- `[Dry Vocal Room]` — No reverb or FX; raw mic tone
+- `[Breath Sustain Variance]` — Inconsistent breath length for realism
+- `[Off-Mic Moment]` — Sudden vocal distance or proximity shifts
+- `[Vocal Wear Friction]` — Rasp, throat drag, or tonal fatigue
+- `[Compression Drift]` — Uneven volume control, emulating analog compression
+- `[Emotion Break Layer]` — Moments of crack, tear, or falter mid-phrase
+- `[Overdrive Spike Artifact]` — Slight clipping/distortion on vocal peaks
+- `[Mic Bump Detail]` — Accidental hand/stand contact, adds intimacy
+- `[Room Bleed Shadow]` — Slight audio spill from other sources, rawer feel
+- `[Phase Lag Slip]` — Minor vocal timing drift, intentional human error
+- `[Breath Inhalation Presence]` — Audibly sharp breaths between lines
+- `[Manual Fade Edges]` — Non-digital vocal fade-outs, more tactile
+- `[Analog Grain Texture]` — Adds subtle tape-like coarseness to the vocal
+- `[Lyrical Interrupt Artifact]` — Unfinished or cut-off words preserved
+
+**Delivery Character**
+- `[Spoken-Edge Delivery]` — Singing near speech; great for alt-rock, folk-punk
+- `[Detached Narration Flow]` — Emotionally cold or observational tone
+- `[Hushed Intonation Bloom]` — Soft, breathy, intimate vocals that swell mid-line
+- `[Overemphasized Consonants]` — Sharper word delivery, useful for post-punk or art rock
+- `[Wavering Intonation Drift]` — Slight pitch instability for dreamlike effect
+- `[Front-Throat Focus]` — Brighter timbre, forward vocal mix
+- `[Swallowed Phrase Ends]` — Cut-off or mumbled finishes
+- `[Semi-Falsetto Injection]` — Brief high-register transitions inside phrases
+
+**Recording + Mic Influence**
+- `[Lo-Fi Mic Bandwidth]` — Simulates low-grade or handheld mic tone
+- `[Room-Reflection Presence]` — Natural reverberation, small room feel
+- `[Tube Mic Emulation]` — Adds warmth and analog color
+- `[Mono Vocal Pull]` — Centered, less stereo spread; focused impact
+- `[Overdub Drift Layering]` — Subtle, misaligned vocal doubles
+- `[Filtered Phone-Like Entry]` — Narrow EQ intro or bridge effect
+
+**Performance Mood + Intent**
+- `[Pleading Vocal Layer]` — Desperate or urgent delivery
+- `[Sarcastic Edge Vocal]` — Subtle mockery or bitterness
+- `[Stubborn Monotone]` — Emotionally flat on purpose
+- `[Whisper-Scream Contrast]` — Juxtaposes quiet and loud passages
+- `[Intoxicated Voice Sim]` — Slurred, uneven timing or phrasing
+- `[Deadpan Sync Layer]` — Emotionless parallel vocal layer
+
+**Usage rules for these tags:**
+- Pick 2–3 complementary tags per song, not the whole catalog; stacking many at once blurs the effect.
+- Recording-imperfection tags (Imperfect Take Feel, Dry Vocal Room, Breath Sustain Variance, etc.) work best for lo-fi, folk, alt-rock, singer-songwriter, and any raw/demo aesthetic.
+- Do not combine contradictory pairs: `[Dry Vocal Room]` with `[Room-Reflection Presence]`, `[Tube Mic Emulation]`, or `[Room Bleed Shadow]`; `[Stubborn Monotone]` or `[Deadpan Sync Layer]` with `[Emotion Break Layer]` or `[Pleading Vocal Layer]` unless the contrast is the point (e.g., `[Whisper-Scream Contrast]` on purpose).
+- These can also be woven as natural language into the STYLE PROMPT (e.g., “dry close vocal with audible breaths and tape-like grain”) when the lyric box must stay sparse.
 
 ### Repetition Enhancement
 - First instance → standard vocal tag
@@ -1161,7 +1222,7 @@ Use this when the user wants sparse, poetic, minimal lyrics that avoid AI-genera
 - [ ] **Tag Economy:** 2-3 tags maximum per section for clarity
 - [ ] **Session Drummer:** Present at TOP of LYRICS, under 150 chars
 - [ ] **No artificial caps:** No genre/instrument/modifier count limits enforced
-- [ ] **Style box ~850–950 chars:** STYLE PROMPT is dense and specific (genre, era, arc, vocal, groove, arrangement, harmony, production, atmosphere). NOT thin — under-filled prompts trigger Suno hallucination
+- [ ] **Style box ~800–900 chars, ≤ 990 hard ceiling:** STYLE PROMPT is dense and specific (genre, era, arc, vocal, groove, arrangement, harmony, production, atmosphere). NOT thin — under-filled prompts trigger Suno hallucination. Count verified (not estimated), trimmed if over 990
 - [ ] **Instruments tag:** Detailed instrumentation in `[Instruments: ...]` tag at TOP of LYRICS (above Session Drummer), under 990 chars, exact brand/model names
 - [ ] **Studio-Grade Handling:** If input contains detailed instrumentation, properly parsed and placed in `[Instruments: ...]` tag with exact brand/model names
 - [ ] **Output Format:** MODEL / STYLE PROMPT / LYRICS / SETTINGS present
@@ -1242,10 +1303,10 @@ Indie pop, emotional, female vocals, 95 BPM, melancholic but hopeful
 
 **Model:** `v6`
 
-**Style Box** (999 chars):
+**Style Box** (900 chars, counted — inside the 800–900 band):
 ```
-Indie dream-pop with late-1990s bedroom and lo-fi lineage, melancholic but gradually hopeful across the song, intimate emotional female lead in a breathy low register with restrained conversational delivery that opens into a more resonant, quietly soaring chorus, 95 BPM with a trip-hop swung groove and laid-back shuffle feel, acoustic guitar fingerpicking enters in the verse, synth pads swell and widen through the pre-chorus, bass doubles the root movement under the chorus, drums stay brushed and sparse until the final chorus where they open up, arrangement strips back in the bridge to vocal and pad only then rebuilds with layered harmonies, Dorian-like minor color with warm major-sixth tones and suspended chords, intimate dry close vocal with small-room reverb, warm lo-fi polish with tape-saturated edges, controlled low end, narrow stereo in the verses opening to wide in the chorus, gentle spatial depth, dusty analog texture, soft dynamics with a slow crescendo into the final chorus.
-<!-- Style: 999/1000 -->
+Indie dream-pop with late-1990s bedroom and lo-fi lineage, melancholic but gradually hopeful across the song, intimate emotional female lead in a breathy low register with restrained conversational delivery that opens into a more resonant, quietly soaring chorus, 95 BPM with a trip-hop swung groove and laid-back shuffle feel, acoustic guitar fingerpicking enters in the verse, synth pads swell and widen through the pre-chorus, bass doubles the root movement under the chorus, drums stay brushed and sparse until the final chorus, arrangement strips back in the bridge to vocal and pad only then rebuilds with layered harmonies, Dorian-like minor color with warm major-sixth tones and suspended chords, intimate dry close vocal with small-room reverb, tape-saturated lo-fi polish, narrow stereo in the verses opening to wide in the chorus, soft dynamics with a slow crescendo into the final chorus.
+<!-- Style: 900/1000 -->
 ```
 
 **Lyrics Box**:
@@ -1306,10 +1367,10 @@ Tags: 120 BPM; building energy; epic; stadium rock feel; dramatic
 
 **Model:** `v6`
 
-**Style Box** (959 chars):
+**Style Box** (896 chars, counted — inside the 800–900 band):
 ```
-Anthemic modern rock with late-2000s stadium and post-grunge lineage, gritty powerful male lead with a belted chorus that stacks into layered harmonies on the final hook, 120 BPM punchy driving four-on-the-floor groove and straight eighths, palm-muted guitars in the verse open to wide crashing power chords in the chorus, bass doubles the root and adds octave movement under the pre-chorus, synth pads widen the stereo field through the build, drums ride-cymbal in the verse then crash on every downbeat in the chorus with floor-tom accents and a half-time breakdown in the bridge, arrangement strips back to vocal and clean guitar in the bridge then explodes into the final chorus, E-minor heroic color, wide aggressive stadium mix with punchy compressed drums, hard transients, controlled low end, plate reverb on the vocal, tape-saturated guitar edges, bright arpeggiated synth under the chorus, dramatic arc from tense verse to euphoric full-band climax.
-<!-- Style: 959/1000 -->
+Anthemic modern rock with late-2000s stadium and post-grunge lineage, gritty powerful male lead with a belted chorus that stacks into layered harmonies on the final hook, 120 BPM punchy driving four-on-the-floor groove and straight eighths, palm-muted guitars in the verse open to wide crashing power chords in the chorus, bass doubles the root and adds octave movement under the pre-chorus, synth pads widen the stereo field through the build, drums ride-cymbal in the verse then crash on every downbeat in the chorus with floor-tom accents and a half-time breakdown in the bridge, arrangement strips back to vocal and clean guitar in the bridge then explodes into the final chorus, E-minor heroic color, wide aggressive stadium mix with punchy compressed drums, hard transients, plate reverb on the vocal, tape-saturated guitar edges, dramatic arc from tense verse to euphoric full-band climax.
+<!-- Style: 896/1000 -->
 ```
 
 **Lyrics Box**:
@@ -1363,7 +1424,7 @@ My Taste: ON
 Max Mode: ON
 ```
 
-**Techniques Used:** Studio-grade instrumentation with exact brand/model names placed in the `[Instruments: ...]` tag at the TOP of the LYRICS box (Style box kept under 1000 chars); Session Drummer tag under 150 chars; ALL CAPS with `!` for powerful emphasis; vowel extensions (fre-e-e-e, no-o-o-ow, stre-e-ength); parentheses for ad-libs and background vocals; consolidated square brackets with pipe separators; dynamic control (Energy levels, Tech instructions, Crescendo/Decrescendo); energy progression from intimate to maximum; Max Mode ON for continuity across the longer, demanding arrangement.
+**Techniques Used:** Studio-grade instrumentation with exact brand/model names placed in the `[Instruments: ...]` tag at the TOP of the LYRICS box (Style box counted and kept at 896 chars, within the 800–900 target band, 990 hard ceiling); Session Drummer tag under 150 chars; ALL CAPS with `!` for powerful emphasis; vowel extensions (fre-e-e-e, no-o-o-ow, stre-e-ength); parentheses for ad-libs and background vocals; consolidated square brackets with pipe separators; dynamic control (Energy levels, Tech instructions, Crescendo/Decrescendo); energy progression from intimate to maximum; Max Mode ON for continuity across the longer, demanding arrangement.
 
 ## Final Operating Principle
 
