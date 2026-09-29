@@ -1,0 +1,185 @@
+---
+name: suno-cover-artist
+version: 1.0
+description: Cover-transformation specialist for Suno AI. Takes an existing song's Style box and Lyrics box and re-voices them into a target aesthetic (e.g. "cover to indie chamber-folk") while preserving the source's lyrical identity. Emits a clean Style prompt (prose, within budget), a plain comma-separated Exclude Styles list, and lyrics formatted with whitespace phrasing techniques. Use when the user wants to cover an existing Suno song into a different style, or wants their cover prompt checked for the classic cover-prompt failure modes (inlined negatives, self-negated descriptors, style-box overflow).
+---
+
+# Suno Cover Artist
+
+## Mission
+
+Transform a source song (Style box + Lyrics box, pasted by the user) into a cover brief for a *different* aesthetic, while preserving what makes the source song itself: its lyrics, its phrasing intent, its emotional arc.
+
+This skill exists because cover prompts fail in predictable ways. This document encodes both the craft and the failure forensics.
+
+## Input Contract
+
+The user provides:
+
+1. **Source Style box** (may be messy, spam-tagged, merged with negatives, or truncated — handle all states)
+2. **Source Lyrics box** (may contain irregular spacing, whitespace tricks, or nothing — empty lyrics box is valid if cover mode reuses source vocals)
+3. **Cover target** — a natural-language description, e.g.:
+   - "cover to indie chamber-folk"
+   - "cover to avant-garde sludge"
+   - "cover to dark ambient dream, same lyrics"
+   - "cover to musique concrète, no clear lyrics"
+4. **Lyrics policy** (optional, defaults to "same lyrics"):
+   - same: keep source lyrics, reformat phrasing
+   - new: write new lyrics in the source's voice/theme
+   - none: instrumental / vocal-texture only (no comprehensible words)
+
+If the user pastes a single merged blob (style text with `‑`-prefixed tokens interleaved), **decompose it first** (see Decomposition Protocol).
+
+## Output Format
+
+Always emit three clearly separated blocks, in this order:
+
+### 1. STYLE PROMPT
+A single freeform prose prompt in a code block. No field labels. No decorative punctuation. No negation syntax.
+
+```
+{target genres, 2-3 max}, {vocal character}, {mood/atmosphere}, {key instruments with tone}, {production character}, {performance/rhythm feel}, {aesthetic summary words}
+```
+
+### 2. EXCLUDE STYLES
+Plain comma-separated words in a code block. No dashes, no explanations, no multi-word entries beyond two words.
+
+```
+{banned genre}, {banned genre}, {banned texture}, ...
+```
+
+### 3. LYRICS
+The formatted lyrics box in a code block (or `EMPTY — cover mode reuses source vocals` / `INSTRUMENTAL` per lyrics policy).
+
+Then a brief verification footer:
+
+```
+Style: {n} chars / 1000 · Exclude: {n} entries · Lyrics: {n} chars / 5000 · Negatives: separate field ✓ · No self-negations ✓
+```
+
+## Hard Rules (learned from real failure cases)
+
+These five rules are non-negotiable. Every one of them traces to a documented failure mode in the wild.
+
+### Rule 1 — Style box is prose, never tag soup
+Suno reads descriptive natural language. It does not parse `{ }`, `[ [ [`, `::`, `+ + +`, `—`, `|`, or any bracket/emphasis grammar. Hyphenated invented compounds (`avant-garde-sludge`, `rubato-math`) are read loosely as their constituent words, at cost of readability.
+
+**Do:** `avant-garde sludge metal, dragging stumbling groove, growled vocals, dead dry tone, buzzing frets`
+**Don't:** `{ avant-garde-sludge } :: [ rubato-math ] * * *`
+
+### Rule 2 — Negatives NEVER touch the Style box
+Inlined `‑negation` (any dash character, including non-breaking hyphen U+2011) inside the Style box is read by Suno as the *positive* word. Writing `‑Trance` in the Style box **injects trance into the song**. Negation syntax belongs to other tools' cultures, not Suno's.
+
+The Exclude Styles field is a plain comma-separated word list, nothing else.
+
+### Rule 3 — Never exclude the song's own aesthetic
+Before emitting the Exclude list, cross-check every entry against the Style prompt. If a banned word is also a desired descriptor (e.g. style says `tape hiss`, exclude list says `tape hiss`), **the exclude entry must be removed**, not the style descriptor. This failure mode — an instruction like "use felt piano, but do not let it become a gimmick" being mechanically split into `‑felt piano` — has destroyed entire songs by making Suno strip out their beauty.
+
+Watch especially for negated *qualifier phrases*: "X, but not generic" → `‑X ... ‑generic`. The X negation is always wrong; keep the intent as positive prose ("X, worn and lived-in rather than polished") instead.
+
+### Rule 4 — Count characters before emitting. Never estimate.
+- Style box: ≤ 1000 characters including whitespace. Target band 600–900.
+- Lyrics box: ≤ 5000 characters including whitespace.
+- Exclude field: keep under ~500 characters; shorter lists are honored more reliably.
+
+If the Style prompt exceeds budget, trim in this priority order (drop first → last):
+1. Impossible micro-events ("soft crack on the 11th beat", "motif repeats twice then mutates")
+2. Impossible meters (33/32, 11/7 — keep at most one odd-meter *feel* word like `off-kilter 7/4 feel` or `dragging 5/4 lurch`)
+3. Redundant synonym descriptors (keep one of `fragile/brittle/delicate`)
+4. Third and further genre names
+5. Never drop: core genre, vocal character, the 2–4 signature instruments, the mood words
+
+Duplicated content (the same tag block pasted twice) must be collapsed to one copy *before* counting.
+
+### Rule 5 — Lyrics whitespace is notation
+The source lyrics' irregular spacing is (usually) deliberate phrasing notation, not damage. Preserve and extend it deliberately:
+
+- **Wide irregular gaps** between words → dragged, hesitant, rubato phrasing. Use on lines meant to lurch or hesitate.
+- **Narrowing gaps across repeated lines** (wide → single space) → a mantra settling into the grid; a tempo stabilizing.
+- **One word per line** → maximum fragmentation; each word its own event. For syllable-by-syllable delivery.
+- **Isolated single-word lines** (`Oh`, `no`, `Then`) → gasps, sudden stops, dramatic silence.
+- **Unbroken vowel strings** (`aaaaaaaaah`) → sustained hold/scream/melisma. Do not add spaces.
+- **Repetition (3–9x)** of a closing line → mantra-loop outro. 2–3x is a refrain; 6x+ risks Suno ending mid-loop — warn the user.
+- **Structure tags** (`[Verse]`, `[Chorus]`): optional. If the source used none, keep none — repetition and white space carry the structure. If the source used them, keep the source's tag scheme.
+
+## Decomposition Protocol (for messy source pastes)
+
+When the user's source Style box contains damage, process in this order:
+
+1. **De-duplicate:** if the text contains the same block twice (a known formatter artifact), keep the first copy only.
+2. **Extract inlined negatives:** strip every `‑`/`-`/`–`/`—`-prefixed token out of the style text. Collect the clean ones into the Exclude list; **discard any that negate the source's own descriptors** (Rule 3). Note in your response which genres were being accidentally injected.
+3. **Strip decorative punctuation:** `{ }`, `[ ]`, `( )`, `*`, `//`, `::`, `+`, `_`, `—`, `|` around style descriptors → commas or spaces.
+4. **Split hyphenated compounds** into readable phrases: `rhythmic-dislocation` → `rhythmic dislocation`, `heavy-slap-articulation` → `heavy slap articulation`.
+5. **Flag truncation:** if the text ends mid-word (e.g. `erratic-pulse * rhyth`), tell the user the original tail was lost and that anything after the cut never reached the model.
+6. **Translate intent, not tokens:** many invented tags are worth keeping as *prose* (`rubato-math` → `rubato, mathematically precise lurch`; `pristine_damaged` → `pristine yet damaged`). Keep the poetry; discard the notation.
+
+Then design the *cover* against the target aesthetic, not by patching the source text.
+
+## Cover Design Procedure
+
+Given source (S) and target aesthetic (T):
+
+1. **Identify what must survive from S:** the lyric text (unless policy = new/none), the phrasing notation, the emotional arc, and at most one "signature" sonic idea worth carrying over.
+2. **Write the target style in prose** using the prose construction pattern:
+   - Lead with 2–3 genres (the target's true genres, not mashups of everything)
+   - Then vocal character and delivery (fragile breathy close-mic / guttural growled / whispered layered — match the lyric's emotional register; a grief lyric under a heavy style is a *deliberate collision*, endorse it if the target asks for heavy)
+   - Then mood and dynamic arc
+   - Then 3–6 key instruments *with tone/character* (`detuned felt piano`, `dry melodic fret-buzz bass`)
+   - Then production/texture (`tape hiss, wow and flutter, room air` — or, for a pristine target, `clean modern recording, forensic clarity` and put lo-fi textures on the exclude list instead)
+   - Then rhythm/performance feel (`dragging behind the grid, sudden stops, silence gaps`)
+   - Close with 3–5 aesthetic summary words (`intimate, off-kilter, unresolved, strange and beautiful`)
+3. **Derive the Exclude list from the target's failure modes**, not from a generic block. For each entry, ask: "what will Suno *default to* given these lyrics and this style that would betray it?" Typical mappings:
+   - Mystical/devotional lyrics → exclude `religious, worship, Christian, Christmas, gospel`
+   - Off-grid/drag intent → exclude the grid genres: `trance, dancehall, phonk, bounce, swing, EDM, house`
+   - Fragile intimate vocal → exclude `power metal, screamo, breakcore, operatic`
+   - Narrative cinematic lyrics, no chorus → exclude `soundtrack, score`
+   - Mantra/repetition lyrics → exclude `protest, political, chant`
+   - Clean-resolution-avoidant targets → exclude `clean resolution, radio pop, four-chord`
+4. **Reformat lyrics per the whitespace notation** (Rule 5), applied to the *target's* performance feel. The gaps and isolations should serve the cover's phrasing intent, not be copied blindly if the target feel differs.
+5. **Count and verify** (Rule 4), emit the footer.
+6. **Offer the two-stage fallback:** if after 3–4 generations the source audio keeps winning (covers inherit source strongly — a piano song tends to stay piano), suggest: first cover with a *bridging* style halfway between source and target, then cover *that* output with the full target style.
+
+## Style Box Construction (target presets)
+
+Use these as starting points when the user names a target loosely. Each is under 1000 chars; extend with source-specific tags before use.
+
+**indie chamber-folk (dark, fragile):**
+```
+experimental art-pop chamber-folk lofi post-rock, dark uneasy harmony, minor tonality, lost 1992 basement demo tape, detuned felt piano, slow dragging rubato feel, downbeat pulled behind the grid, fragile breathy close-mic vocal entering late, near-breaking, bowed vibraphone, nylon guitar, melodic fret-buzz bass, cello drone, spectral strings, granular piano clouds, tape hiss, wow and flutter, silence gaps, sudden stops, ghost choir under the voice, no clean resolution, intimate, off-kilter, unresolved, strange and beautiful
+```
+Exclude: `rap, r&b, k-pop, reggaeton, trance, phonk, dancehall, swing, EDM, power metal, screamo, breakcore, soundtrack, religious, political, Christmas, polished mix, clean resolution, radio pop, 4/4`
+
+**avant-garde sludge (heavy, lurching):**
+```
+avant-garde sludge metal, heavy dragging stumbling groove, erratic off-kilter rhythm, disjointed phrasing pushing and pulling against the grid, guttural growled vocals, dead dry vocal tone, massive low strings, buzzing frets, experimental bass solo, atmospheric passages, awkward silences, brutalist texture, angular momentum, emotionally charged, poignant
+```
+Exclude: `trance, vocaloid, bounce, phonk, dancehall, swing, religious, Christian, holiday, pop, EDM, clean vocals, polished production`
+
+**ambient dream (submerged, whisper):**
+```
+indie chamber-folk ambient neo-classical intimate acoustic ballad, fragile atmosphere, disintegrating beauty, submerged texture, bowed vibraphone swells, soft felt piano, muffled heartbeat rhythm, nylon guitar picking, decaying tape loops, whisper vocals, ethereal layered vocals, breathy close-mic, reverse piano swells, cello drone, free-time flow, no grid, ambient room tone, vast stereo width, shimmer reverb, silence gaps, sudden stops
+```
+Exclude: `screamo, breakcore, political, protest, reggae, soundtrack, religious, Christmas, EDM, compressed drums, four-on-the-floor`
+
+**musique concrète (sound-object, non-lyrical):**
+```
+musique concrète, microtonal spectralism, electroacoustic free improvisation, prepared piano struck scraped muted bowed through metal resonance, field recordings cut into unstable rhythm, elevator motors, bowed glass, magnetic hum, broken machinery, inharmonic chords from overtone collisions, quarter-tone clusters swelling without cadence, contrabass clarinet and amplified cello entering late, percussion from doors stones springs loose wire, no stable meter, deep bass voice as raw phonemes, language almost forming then collapsing, silence used structurally, pristine modern recording, alien, intimate, physical, non-narrative, unresolved
+```
+Exclude: `generic, neoclassical arpeggios, cinematic dissonance, horror-score, jazz harmony, ambient drone, industrial beat, predictable crescendo, tonal resolution, 4/4, quantized rhythm, operatic singing, metal growls, clear lyrics, spoken-word, choir pads, lo-fi, tape hiss, vinyl crackle`
+
+## Verification Checklist (run before every emission)
+
+- [ ] Style box ≤ 1000 chars, counted, not estimated
+- [ ] Style box contains zero dash-prefixed tokens of any hyphen character
+- [ ] Style box contains no `{ } [ ] :: + * //` decoration
+- [ ] Exclude list contains no word that appears positively in the Style box
+- [ ] Exclude list contains no self-negated source descriptors
+- [ ] Lyrics whitespace serves the target's phrasing intent
+- [ ] Unbroken vowel strings preserved without inserted spaces
+- [ ] Footer emitted with counts
+
+## Interoperability
+
+- If the user references an artist research file (`research/{artist}.md` from suno-music-researcher), fold its instrumentation and production data into the target style prose.
+- If the cover is part of an album built with album-concept-designer, check `musical_identity.md` and `my_taste.md` for consistency constraints before designing the target.
+- Output format is compatible with suno-god's MODEL/STYLE/LYRICS/SETTINGS brief; if the user asks for that format, wrap these three blocks accordingly.
