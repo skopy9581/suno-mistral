@@ -1,6 +1,6 @@
 ---
 name: suno-cover-artist
-version: 1.2
+version: 1.3
 description: Cover-transformation specialist for Suno AI. Takes an existing song's Style box and Lyrics box and re-voices them into a target aesthetic (e.g. "cover to indie chamber-folk") while preserving the source's lyrical identity — or writing new lyrics in its House Lyric Style (mystical-folk catalogue-verses, refrains, and experimental endings) when the user requests fresh lyrics. Emits a clean Style prompt (prose, within budget), a plain comma-separated Exclude Styles list, and lyrics formatted with whitespace phrasing techniques. Use when the user wants to cover an existing Suno song into a different style, or wants their cover prompt checked for the classic cover-prompt failure modes (inlined negatives, self-negated descriptors, style-box overflow).
 ---
 
@@ -50,6 +50,20 @@ Plain comma-separated words in a code block. No dashes, no explanations, no mult
 
 ### 3. LYRICS
 The formatted lyrics box in a code block (or `EMPTY — cover mode reuses source vocals` / `INSTRUMENTAL` per lyrics policy).
+
+### 4. SETTINGS
+Recommended generation-control values, with a one-line reason each:
+
+```
+Model: {recommendation}
+Weirdness: {%} — {reason}
+Style Influence: {Loose/Low/Medium/Strong} — {reason}
+Audio Influence: {Low/Medium/High} — {reason, covers only}
+Variety: {Low/Medium/High} — {reason}
+Vocal Gender: {if applicable}
+```
+
+See Slider Doctrine below for how to derive the values.
 
 Then a brief verification footer:
 
@@ -215,6 +229,33 @@ musique concrète, microtonal spectralism, electroacoustic free improvisation, p
 ```
 Exclude: `generic, neoclassical arpeggios, cinematic dissonance, horror-score, jazz harmony, ambient drone, industrial beat, predictable crescendo, tonal resolution, 4/4, quantized rhythm, operatic singing, metal growls, clear lyrics, spoken-word, choir pads, lo-fi, tape hiss, vinyl crackle`
 
+## Slider Doctrine (generation controls)
+
+Suno's sliders are real, parseable control — unlike inlined text negation, these actually work. Use them as the fourth output block. Recommended interpretive model (consistent with suno-god's Advanced Mode guidance):
+
+- **Weirdness** (0–100%): deviation from conventional patterns. 50% = normal. High values risk artifacts; do not stack high weirdness ON TOP of an already-unusual style prompt — the style text is doing that work.
+- **Style Influence** (Loose→Strong): how tightly the model follows the Style box. Strong when the target aesthetic is the point; lower when you want the source's character to bleed through.
+- **Audio Influence** (covers only): how strongly the cover inherits the source recording. High = clone-adjacent; low = the style box leads. This is THE slider for the two-stage fallback problem — if the source audio keeps winning (piano song stays piano), lower Audio Influence before rewriting prompts.
+- **Variety:** low for focused production (you know the take you want), high for discovery runs.
+- **Vocal Gender:** set it in the UI rather than burning style-box characters on it.
+
+**Per-preset defaults:**
+
+| Preset | Weirdness | Style Influence | Audio Influence | Variety |
+|---|---|---|---|---|
+| indie chamber-folk | 40% | Strong | Low-Medium | Medium |
+| avant-garde sludge | 55% | Strong | Low | Medium |
+| ambient dream | 35% | Strong | Low | Medium |
+| prog / djent / alternative | 50% | Strong | Medium | Medium |
+| musique concrète | 75% | Strong | Low | High |
+
+**Reasoning rules:**
+1. Experimental targets (musique concrète) earn high weirdness because their conventions are already non-standard; conventional-experimental targets (sludge, prog) keep mid values — their genres have firm norms the model needs to stay inside.
+2. Fragile-intimate targets (chamber-folk, ambient dream) get LOW weirdness: high weirdness injects artifacts (warped vocals, abrupt genre swerves) that break fragility.
+3. Style Influence is Strong for ALL presets here — the entire point of a cover transformation is the target aesthetic. Drop it to Medium only when the user says "keep some of the original's character."
+4. Audio Influence is the first iteration lever for covers: source keeps winning → lower it. Cover too unrecognizable → raise it. Adjust this before touching the style text.
+5. Always state the reason next to each value so the user can adjust deliberately.
+
 ## Verification Checklist (run before every emission)
 
 - [ ] Style box ≤ 1000 chars, counted, not estimated
@@ -225,6 +266,8 @@ Exclude: `generic, neoclassical arpeggios, cinematic dissonance, horror-score, j
 - [ ] Lyrics whitespace serves the target's phrasing intent
 - [ ] Unbroken vowel strings preserved without inserted spaces
 - [ ] Footer emitted with counts
+- [ ] SETTINGS block emitted with reasons, per Slider Doctrine
+- [ ] Weirdness not stacked high on an already-unusual style prompt
 
 ## Interoperability
 
