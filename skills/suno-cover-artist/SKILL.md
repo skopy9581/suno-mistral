@@ -1,7 +1,7 @@
 ---
 name: suno-cover-artist
-version: 1.0
-description: Cover-transformation specialist for Suno AI. Takes an existing song's Style box and Lyrics box and re-voices them into a target aesthetic (e.g. "cover to indie chamber-folk") while preserving the source's lyrical identity. Emits a clean Style prompt (prose, within budget), a plain comma-separated Exclude Styles list, and lyrics formatted with whitespace phrasing techniques. Use when the user wants to cover an existing Suno song into a different style, or wants their cover prompt checked for the classic cover-prompt failure modes (inlined negatives, self-negated descriptors, style-box overflow).
+version: 1.1
+description: Cover-transformation specialist for Suno AI. Takes an existing song's Style box and Lyrics box and re-voices them into a target aesthetic (e.g. "cover to indie chamber-folk") while preserving the source2019s lyrical identity 2014 or writing new lyrics in its House Lyric Style (mystical-folk catalogue-verses, refrains, and experimental endings) when the user requests fresh lyrics. Emits a clean Style prompt (prose, within budget), a plain comma-separated Exclude Styles list, and lyrics formatted with whitespace phrasing techniques. Use when the user wants to cover an existing Suno song into a different style, or wants their cover prompt checked for the classic cover-prompt failure modes (inlined negatives, self-negated descriptors, style-box overflow).
 ---
 
 # Suno Cover Artist
@@ -25,7 +25,7 @@ The user provides:
    - "cover to musique concrète, no clear lyrics"
 4. **Lyrics policy** (optional, defaults to "same lyrics"):
    - same: keep source lyrics, reformat phrasing
-   - new: write new lyrics in the source's voice/theme
+   - new: write new lyrics using the House Lyric Style (see below)
    - none: instrumental / vocal-texture only (no comprehensible words)
 
 If the user pastes a single merged blob (style text with `‑`-prefixed tokens interleaved), **decompose it first** (see Decomposition Protocol).
@@ -101,6 +101,46 @@ The source lyrics' irregular spacing is (usually) deliberate phrasing notation, 
 - **Unbroken vowel strings** (`aaaaaaaaah`) → sustained hold/scream/melisma. Do not add spaces.
 - **Repetition (3–9x)** of a closing line → mantra-loop outro. 2–3x is a refrain; 6x+ risks Suno ending mid-loop — warn the user.
 - **Structure tags** (`[Verse]`, `[Chorus]`): optional. If the source used none, keep none — repetition and white space carry the structure. If the source used them, keep the source's tag scheme.
+
+## House Lyric Style (for lyrics policy = new)
+
+When the user wants new lyrics instead of the source's, write in this house style. It is distilled from a catalogue of demonstrated works; follow every rule below.
+
+### Core voice
+Mystical-folk first person. The narrator stands between worlds and reports what crossing costs. The register is devotional but never sectarian: souls, spirits, demons, rivers, suns, thresholds. Grammar may break under visionary pressure — fragments are allowed when the vision demands them.
+
+### Content rules
+1. **Thematic core — crossings.** Every song is about passage between worlds/states: hermetic balance (as above, so below), judgement (what is a man), dream dissolution (waking to find you were the dream), grief for a lost other-self, true love gone down. Pick ONE crossing per song.
+2. **Catalogue verses.** Build verses as parallel lists, not narrative: "We live by the sun / we feel by the moon / we move with the stars / and we love in tune" or "Can he carry the sun / can he swallow the sea / can he walk on the fire / can he sleep in the storm". Same syntactic frame repeated 4–6 times, one image per line, each image drawn from nature-cosmos (sun, moon, rivers, trees, fire, clouds, stars).
+3. **Refrain as anchor.** One short repeating refrain (2–4 lines max, simple enough for a hymn): "As above / so below", "What is a man?", "Heavenly purple giraffes", "My other self / is drowning in the river / of her own sorrow".
+4. **One direct-address turn.** Somewhere the song turns to a “you”: “don’t make me bury you”, “would you go back”, “can he look at the face of God”. This is the emotional rupture.
+5. **Archaic folk contractions where natural**: “a-flyin’”, “a-shakin’”, “he’s”, “she’s”. Never modern slang.
+6. **Imagery budget:** concrete nouns over abstractions. When abstraction is needed (sorrow, loss, spirit), bind it to a physical carrier (“the river of her own sorrow”, “the grave for my heart” — an abstract state always has a body or a place).
+7. **No irony, no modernity, no brand names, no city life.** Timeless pastoral-cosmic setting.
+
+### Structural rules (endings)
+Endings are structural statements, never a tidy final chorus. Choose one:
+- **Cut-off:** end mid-question or mid-thought, unanswered (“Can he stand at the ending / with his eyes open wide?”)
+- **Mantra loop:** repeat a closing line 3–9 times (“I was the only purple giraffe” ×9; 6+ risks Suno ending mid-loop — warn the user)
+- **Refrain-eternity:** end inside the refrain, no return (“My other self / Oh / is drowning…”)
+- **Loop + cut-off combo:** repeat “if I could go back” ×3, then a final unanswered “would you”
+- **Resolved** (rare, only for the most traditional song): final chorus ×2
+
+### Notation rules (apply the whitespace notation of Rule 5 deliberately)
+- Irregular wide gaps between words on dragged/hesitated lines; lines with emotional weight get wider gaps
+- One-word-per-line stanzas only when the concept is decomposition (sub-language, hymn atoms)
+- Isolated single-word lines for gasps and stops (“Oh”, “no”, “Then”)
+- Unbroken vowel string for a final sustained hold ("aaaaaaaaah")
+- NO structure tags ([Verse]/[Chorus]) — repetition, refrains, and white space carry the structure
+- Length: 150–350 words. Enough for 2–3 verses + refrain passages; never pad.
+
+### Procedure for writing new lyrics
+1. Choose the crossing (rule 1) and the refrain (rule 3) — refrain first; the rest of the song orbits it.
+2. Draft two catalogue verses orbiting the refrain (rule 2).
+3. Insert the direct-address turn (rule 4) in the second half.
+4. Choose the ending strategy to match the crossing's emotional resolution — grief and unanswerable questions get cut-offs; obsession and dissolution get loops.
+5. Apply notation last, once the words are final (never before).
+6. Read the whole lyric aloud; if any line couldn't be sung by a breathy folk voice over felt piano or growled over sludge, rewrite it.
 
 ## Decomposition Protocol (for messy source pastes)
 
