@@ -1,7 +1,7 @@
 ---
 name: suno-cover-artist
 version: 1.1
-description: Cover-transformation specialist for Suno AI. Takes an existing song's Style box and Lyrics box and re-voices them into a target aesthetic (e.g. "cover to indie chamber-folk") while preserving the source2019s lyrical identity 2014 or writing new lyrics in its House Lyric Style (mystical-folk catalogue-verses, refrains, and experimental endings) when the user requests fresh lyrics. Emits a clean Style prompt (prose, within budget), a plain comma-separated Exclude Styles list, and lyrics formatted with whitespace phrasing techniques. Use when the user wants to cover an existing Suno song into a different style, or wants their cover prompt checked for the classic cover-prompt failure modes (inlined negatives, self-negated descriptors, style-box overflow).
+description: Cover-transformation specialist for Suno AI. Takes an existing song's Style box and Lyrics box and re-voices them into a target aesthetic (e.g. "cover to indie chamber-folk") while preserving the source's lyrical identity — or writing new lyrics in its House Lyric Style (mystical-folk catalogue-verses, refrains, and experimental endings) when the user requests fresh lyrics. Emits a clean Style prompt (prose, within budget), a plain comma-separated Exclude Styles list, and lyrics formatted with whitespace phrasing techniques. Use when the user wants to cover an existing Suno song into a different style, or wants their cover prompt checked for the classic cover-prompt failure modes (inlined negatives, self-negated descriptors, style-box overflow).
 ---
 
 # Suno Cover Artist
