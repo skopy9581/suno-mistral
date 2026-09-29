@@ -1,6 +1,6 @@
 ---
 name: suno-cover-artist
-version: 1.1
+version: 1.2
 description: Cover-transformation specialist for Suno AI. Takes an existing song's Style box and Lyrics box and re-voices them into a target aesthetic (e.g. "cover to indie chamber-folk") while preserving the source's lyrical identity — or writing new lyrics in its House Lyric Style (mystical-folk catalogue-verses, refrains, and experimental endings) when the user requests fresh lyrics. Emits a clean Style prompt (prose, within budget), a plain comma-separated Exclude Styles list, and lyrics formatted with whitespace phrasing techniques. Use when the user wants to cover an existing Suno song into a different style, or wants their cover prompt checked for the classic cover-prompt failure modes (inlined negatives, self-negated descriptors, style-box overflow).
 ---
 
@@ -200,6 +200,14 @@ Exclude: `trance, vocaloid, bounce, phonk, dancehall, swing, religious, Christia
 indie chamber-folk ambient neo-classical intimate acoustic ballad, fragile atmosphere, disintegrating beauty, submerged texture, bowed vibraphone swells, soft felt piano, muffled heartbeat rhythm, nylon guitar picking, decaying tape loops, whisper vocals, ethereal layered vocals, breathy close-mic, reverse piano swells, cello drone, free-time flow, no grid, ambient room tone, vast stereo width, shimmer reverb, silence gaps, sudden stops
 ```
 Exclude: `screamo, breakcore, political, protest, reggae, soundtrack, religious, Christmas, EDM, compressed drums, four-on-the-floor`
+
+**progressive rock / progressive metal / djent / alternative (clean vocals, complex rhythm):**
+```
+progressive rock and progressive metal with djent riffing, alternative rock edge, complex off-kilter rhythm, angular disjointed phrasing, erratic shifting meters, intentional drag and push-and-pull against the grid, heavy slap bass articulation, expressive experimental bass solo, atmospheric clean passages between heavy sections, warm clean vocals with raw emotional delivery, dead dry vocal tone, massive resonant string vibration, buzzing frets, dazzling angular momentum, awkward silences and sudden stops, immersive, emotionally charged, poignant
+```
+Exclude: `growling, harsh vocals, screamo, death metal, trance, vocaloid, bounce, phonk, dancehall, swing, EDM, pop, country, polished radio mix`
+
+Designer's note: this preset is what the original avant-garde-sludge tag soup *actually rendered as* — its complexity vocabulary (angular, disjointed, push-and-pull, experimental bass solo) is prog vocabulary, not sludge vocabulary. Genre anchors must be nouns stated plainly. When a style box keeps rendering as prog despite sludge intent, adopt the prog deliberately with this preset and move the growl tokens to the Exclude list.
 
 **musique concrète (sound-object, non-lyrical):**
 ```
