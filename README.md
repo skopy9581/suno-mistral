@@ -12,6 +12,11 @@ Specialized in formatting and enriching lyrics with technical Suno AI tags (`[Ve
 A Premier power-user Suno v6 prompt engineer (v6 / v6-wild / v6-mini) optimized for Premier + Studio 2.0. It designs high-detail, producer-grade Style prompts, lyric structures, section cues, vocal direction, and arrangement targets with **no artificial prompt ceilings**. It emits a `MODEL / STYLE PROMPT / LYRICS / SETTINGS` brief and includes a Studio 2.0 prompting layer. It interoperates with `suno-music-researcher` (research files) and `album-concept-designer` (`musical_identity.md` instrumentation) just like Suno Songwriter.
 - **Location**: `skills/suno-god/SKILL.md`
 
+### 1c. Suno Cover Artist
+
+A cover-transformation specialist. Paste an existing song's Style box and Lyrics box, name a target aesthetic (e.g. "cover to indie chamber-folk"), and it emits a clean prose Style prompt, a plain comma-separated Exclude Styles list, and lyrics formatted with whitespace phrasing notation (gap-spacing, word isolation, vowel sustain, mantra loops). It also repairs the classic cover-prompt failure modes: inlined `‑negatives` that inject banned genres, self-negated style descriptors, tag-soup formatting, and character-budget overflow.
+- **Location**: `skills/suno-cover-artist/SKILL.md`
+
 ### 2. Album Concept Designer
 A creative director for building complex conceptual albums. It handles world-building, storyline, character profiles, and narrative tracklists. It generates an "Album Bible" and track specifications.
 - **Location**: `skills/album-concept-designer/SKILL.md`
