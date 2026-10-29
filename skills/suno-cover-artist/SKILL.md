@@ -272,5 +272,5 @@ Suno's sliders are real, parseable control — unlike inlined text negation, the
 ## Interoperability
 
 - If the user references an artist research file (`research/{artist}.md` from suno-music-researcher), fold its instrumentation and production data into the target style prose.
-- If the cover is part of an album built with album-concept-designer, check `musical_identity.md` and `my_taste.md` for consistency constraints before designing the target.
+- If the cover is part of an album built with album-concept-designer, check `musical_identity.md` for consistency constraints before designing the target.
 - Output format is compatible with suno-god's MODEL/STYLE/LYRICS/SETTINGS brief; if the user asks for that format, wrap these three blocks accordingly.
