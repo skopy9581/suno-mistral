@@ -1,6 +1,6 @@
 ---
 name: suno-god
-version: 3.2
+version: 3.4
 description: Premier power-user Suno v6 prompt engineer. Designs Style prompts, lyric structures, section cues, vocal direction, arrangement targets, and v6 workflows without treating meta tags as a rigid command language. Optimized for Premier + Studio 2.0 with no artificial prompt ceilings. Use when the user wants a high-detail, producer-grade Suno v6 brief instead of a minimal one. **For albums created with album-concept-designer, this skill accepts and processes studio-grade instrumentation details from musical_identity.md.**
 ---
 
@@ -8,7 +8,7 @@ description: Premier power-user Suno v6 prompt engineer. Designs Style prompts, 
 
 **There are two independent version numbers. Do not confuse them:**
 
-1. **SKILL VERSION (this file's frontmatter):** `3.2` — the release version of the suno-god skill itself. It follows the skill lineage (2.1 legacy songwriter → 3.0 god-mode edition → 3.1) and is **completely independent of Suno model versions** (v6, v6-wild, v6-mini are Suno's model names, not skill versions).
+1. **SKILL VERSION (this file's frontmatter):** `3.4` — the release version of the suno-god skill itself. It follows the skill lineage (2.1 legacy songwriter → 3.0 god-mode edition → 3.1) and is **completely independent of Suno model versions** (v6, v6-wild, v6-mini are Suno's model names, not skill versions).
 2. **RESEARCH FILE FORMAT VERSION:** `2.1` — the version stamped by `suno-music-researcher` in `<!-- SUNO_RESEARCH_VERSION: X.X -->` comments. Research file version checks compare against **2.1**, never against the skill version.
 
 When loading research files, check for `<!-- SUNO_RESEARCH_VERSION: X.X -->` comment.
@@ -16,6 +16,8 @@ If version is missing or not 2.1, warn the user (see Research File System below)
 
 ## Version History
 
+- **3.4:** Workspace taxonomy now sourced from upchart.ai: the genre category list is fetched from `https://upchart.ai/en/charts/all/live` (chart URLs follow `upchart.ai/en/charts/{genre-slug}/{live|activity|recent}`), workspace names are the upchart genre slugs, create-if-missing via `workspaces-create`. Projects/albums remain valid skill-defined workspace names alongside the chart categories.
+- **3.3:** Workspace taxonomy policy: workspaces are used as the skill's category layer (one workspace per genre/project/album category, create-if-missing via `workspaces-create`, name ≤100 chars). Since the MCP exposes no charts/trending API, the taxonomy is skill-defined, not pulled from Suno. A song is always filed in exactly one workspace; API-key/test_mode sign-ins cannot use `workspace_id` and are told so.
 - **3.2:** MCP create-call contract for `suno_44bb_audio-create`: `model` and `workspace_id` are now defined on EVERY send (never omitted to "use the default"); full field map added (title, style, lyrics, negative_style, description, instrumental, voice_id, vocal_gender, duration + duration_guidance/duration_strict, controls.weirdness/style_influence/audio_influence, idempotency_key) with per-field limits, modes, and grant/plan error behavior; output template, output list, and quality checklist updated to match.
 - **3.1:** Style-box budget enforcement: target band lowered to 800–900 chars with a 990 hard ceiling, mandatory count-before-emit (never estimate), and a priority-ordered trim loop when over budget. Added human-realism & performance-character vocal tags (user-reported). Renumbered from the mistaken 6.x scheme to the skill lineage (v6 is a Suno model name, not a skill version).
 - **3.0:** God-mode edition targeting Suno v6 / v6-wild / v6-mini on Premier + Studio 2.0. No artificial caps on genres, instruments, modifiers, or prompt complexity. Natural-language producer briefs. New MODEL/STYLE PROMPT/LYRICS/SETTINGS output format. Studio 2.0 prompting layer. Equipment brand/model names allowed. (Previously mislabeled 6.0.)
@@ -185,6 +187,12 @@ When a Suno MCP server is connected, the skill's output maps directly onto the `
 
 - `model`: always send one of the three models above (`v6`, `v6-wild`, `v6-mini`) per Template Selection Logic. Check `suno_44bb_account-usage` (`allowed_models`) first if the plan may not hold the label — an unknown label returns 400, a label the plan does not hold returns 403.
 - `workspace_id`: resolve with `suno_44bb_workspaces-list` and send the workspace the song belongs in. Only valid for a suno.com sign-in — an API key or `test_mode` returns 400, and a workspace the user may not add to returns 403.
+
+**Workspace policy (category-as-workspace):** the Suno MCP exposes no charts/trending API, so genre categories are pulled from the public website **upchart.ai** — fetch `https://upchart.ai/en/charts/all/live` and read the genre list from the "#1 BY GENRE" section / nav (Pop, Hip-Hop, Country, EDM, Electronic, Trip Hop, Rock, Metal, Punk, Funk, R&B/Soul, …); each genre's own chart lives at `upchart.ai/en/charts/{genre-slug}/live` (slug = lowercase name, spaces→hyphens, e.g. `hip-hop`, `r-b-soul`→`r-b-soul`, `singer-songwriter`). Use **one workspace per category**, named with the upchart genre slug (e.g. `rock`, `hip-hop`, `metalcore` sub-charts like `chicago-blues` work too), as the song's filing target. Projects/albums (e.g. `album-neon-tides`) remain valid skill-defined workspace names alongside chart categories. Resolve in this order:
+1. If the user names a workspace, `workspaces-list(query=...)` finds it by name (case-insensitive substring, ≤200 chars).
+2. Otherwise pick the upchart genre slug matching the brief's primary genre; if `workspaces-list` shows it does not exist, create it with `workspaces-create(name=..., description=...)` (name 1–100 chars — genre slugs fit; description ≤2000, e.g. "Songs in the upchart.ai {genre} chart category"; names pass suno.com's content check — 400 on disallowed text, 503 means retry later).
+3. A song is in **at most one** workspace, so the chosen workspace is the song's only home; `workspaces-update-clips` can re-file it later (check `skipped`, don't assume every id moved).
+4. If the sign-in is an API key or `test_mode`, `workspace_id` returns 400 — say so and leave the song unfiled rather than silently dropping the field.
 
 **Full field map (every field, every send):**
 
@@ -1175,7 +1183,7 @@ Use this when the user wants sparse, poetic, minimal lyrics that avoid AI-genera
 - [ ] **Output Format:** MODEL / STYLE PROMPT / LYRICS / SETTINGS present
 - [ ] **Separate copy boxes:** Style box, Lyrics box, and Exclude Styles box each in their **own** fenced code block (never merged)
 - [ ] **Style char-count:** `<!-- Style: XXX/1000 -->` appended at the end of the Style box with the real character count of the Style text
-- [ ] **MCP create-call fields (Suno MCP connected):** `model` explicitly defined on every send (v6 | v6-wild | v6-mini, checked against `account-usage` `allowed_models`); `workspace_id` explicitly defined on every send (resolved via `workspaces-list`); `title`/`style`/`lyrics`/`negative_style` within limits (256/1000/5000/1000); `duration` within 15–360 with `duration_guidance`/`duration_strict` only alongside it; `controls.*` sliders as 0–1 fractions only with the advanced-controls grant; `vocal_gender` only without a `voice_id`; `negative_style` only alongside caller-supplied `style`; mode mixing (`description` + `style`/`lyrics`) never sent
+- [ ] **MCP create-call fields (Suno MCP connected):** `model` explicitly defined on every send (v6 | v6-wild | v6-mini, checked against `account-usage` `allowed_models`); `workspace_id` explicitly defined on every send (upchart.ai genre-slug workspace resolved via `workspaces-list`, created via `workspaces-create` if missing; omitted only for API-key/test_mode sign-ins, with that stated); `title`/`style`/`lyrics`/`negative_style` within limits (256/1000/5000/1000); `duration` within 15–360 with `duration_guidance`/`duration_strict` only alongside it; `controls.*` sliders as 0–1 fractions only with the advanced-controls grant; `vocal_gender` only without a `voice_id`; `negative_style` only alongside caller-supplied `style`; mode mixing (`description` + `style`/`lyrics`) never sent
 
 ## Suno Sliders / Controls Integration
 
