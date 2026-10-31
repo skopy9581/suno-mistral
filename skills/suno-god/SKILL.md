@@ -1,6 +1,6 @@
 ---
 name: suno-god
-version: 3.1
+version: 3.2
 description: Premier power-user Suno v6 prompt engineer. Designs Style prompts, lyric structures, section cues, vocal direction, arrangement targets, and v6 workflows without treating meta tags as a rigid command language. Optimized for Premier + Studio 2.0 with no artificial prompt ceilings. Use when the user wants a high-detail, producer-grade Suno v6 brief instead of a minimal one. **For albums created with album-concept-designer, this skill accepts and processes studio-grade instrumentation details from musical_identity.md.**
 ---
 
@@ -8,7 +8,7 @@ description: Premier power-user Suno v6 prompt engineer. Designs Style prompts, 
 
 **There are two independent version numbers. Do not confuse them:**
 
-1. **SKILL VERSION (this file's frontmatter):** `3.1` — the release version of the suno-god skill itself. It follows the skill lineage (2.1 legacy songwriter → 3.0 god-mode edition → 3.1) and is **completely independent of Suno model versions** (v6, v6-wild, v6-mini are Suno's model names, not skill versions).
+1. **SKILL VERSION (this file's frontmatter):** `3.2` — the release version of the suno-god skill itself. It follows the skill lineage (2.1 legacy songwriter → 3.0 god-mode edition → 3.1) and is **completely independent of Suno model versions** (v6, v6-wild, v6-mini are Suno's model names, not skill versions).
 2. **RESEARCH FILE FORMAT VERSION:** `2.1` — the version stamped by `suno-music-researcher` in `<!-- SUNO_RESEARCH_VERSION: X.X -->` comments. Research file version checks compare against **2.1**, never against the skill version.
 
 When loading research files, check for `<!-- SUNO_RESEARCH_VERSION: X.X -->` comment.
@@ -16,6 +16,7 @@ If version is missing or not 2.1, warn the user (see Research File System below)
 
 ## Version History
 
+- **3.2:** MCP create-call contract for `suno_44bb_audio-create`: `model` and `workspace_id` are now defined on EVERY send (never omitted to "use the default"); full field map added (title, style, lyrics, negative_style, description, instrumental, voice_id, vocal_gender, duration + duration_guidance/duration_strict, controls.weirdness/style_influence/audio_influence, idempotency_key) with per-field limits, modes, and grant/plan error behavior; output template, output list, and quality checklist updated to match.
 - **3.1:** Style-box budget enforcement: target band lowered to 800–900 chars with a 990 hard ceiling, mandatory count-before-emit (never estimate), and a priority-ordered trim loop when over budget. Added human-realism & performance-character vocal tags (user-reported). Renumbered from the mistaken 6.x scheme to the skill lineage (v6 is a Suno model name, not a skill version).
 - **3.0:** God-mode edition targeting Suno v6 / v6-wild / v6-mini on Premier + Studio 2.0. No artificial caps on genres, instruments, modifiers, or prompt complexity. Natural-language producer briefs. New MODEL/STYLE PROMPT/LYRICS/SETTINGS output format. Studio 2.0 prompting layer. Equipment brand/model names allowed. (Previously mislabeled 6.0.)
 - **2.1:** (legacy songwriter) Equipment brand/model names allowed.
@@ -178,6 +179,37 @@ The v6 launch expands Suno beyond simple text-to-song generation. Text, audio, i
 
 **CONFIDENCE LABEL:** Suno officially confirms the three v6 models and the broader creative/editing capabilities. Some exact Advanced Mode labels/behavior (especially Variety and Max Mode) are launch-day product reporting and user observations, so treat their fine-grained behavior as version-sensitive UI knowledge.
 
+### MCP Create-Call Contract (`suno_44bb_audio-create`)
+
+When a Suno MCP server is connected, the skill's output maps directly onto the `audio-create` tool. **Define `model` and `workspace_id` on EVERY send — never omit them to "use the default".** Omitting `model` silently falls back to the plan default and omitting `workspace_id` leaves the song unfiled; both are explicit decisions, so make them explicit in the call. Resolve them as follows:
+
+- `model`: always send one of the three models above (`v6`, `v6-wild`, `v6-mini`) per Template Selection Logic. Check `suno_44bb_account-usage` (`allowed_models`) first if the plan may not hold the label — an unknown label returns 400, a label the plan does not hold returns 403.
+- `workspace_id`: resolve with `suno_44bb_workspaces-list` and send the workspace the song belongs in. Only valid for a suno.com sign-in — an API key or `test_mode` returns 400, and a workspace the user may not add to returns 403.
+
+**Full field map (every field, every send):**
+
+| **`audio-create` field** | **Maps from** | **Rules** |
+|--------------------------|---------------|-----------|
+| `title` | Song Title | max 256 chars |
+| `style` | Style Box | max 1000 chars (this skill enforces 800–900 target, 990 hard ceiling). Not valid with `description` |
+| `lyrics` | Lyrics Box | max 5000 chars. Custom mode; not valid with `description` unless `instrumental: true` |
+| `negative_style` | Exclude Styles Box | max 1000 chars. Only valid alongside caller-supplied `style` — with `description` it returns 400. Requires the advanced-controls grant, else 403 |
+| `description` | Simple mode (no hand-written style/lyrics) | max 3000 chars. Simple mode takes NO `style`, and no `lyrics` unless `instrumental: true`; mixing modes returns 400 |
+| `instrumental` | true when the brief is instrumental | default false; a `voice_id` always sings and overrides it |
+| `model` | Model line | **Always send.** See above |
+| `workspace_id` | resolved workspace | **Always send.** See above |
+| `duration` | Other Settings → Duration | 15–360 seconds; outside the range returns 400. Omit only when the model should choose — but prefer defining it, per the "every send" rule above |
+| `duration_guidance` | true when sizing AI lyrics to `duration` | only meaningful with `duration`; alone returns 400. Default on when `duration` is set |
+| `duration_strict` | true to hard-cap the clip at `duration` | only meaningful with `duration`; alone returns 400. Default on when `duration` is set; set false for a soft target |
+| `voice_id` | Voices input / persona | from `suno_44bb_voices-list`; must be the user's own and `ready` (unknown → 404, processing → 400). Overrides `instrumental` |
+| `vocal_gender` | Other Settings → Vocal Gender | `male` | `female`. Conflicts with `voice_id` (a named voice has a gender) → 400. Requires advanced-controls grant, else 403 |
+| `controls.weirdness` | Other Settings → Weirdness | 0–1 fraction (UI shows 0–100%). Omit to leave the model default — `0` is a real setting, not "unset". Advanced-controls grant required, else 403; outside 0–1 → 400 |
+| `controls.style_influence` | Other Settings → Style Influence | 0–1. Same grant/validation rules as `weirdness` |
+| `controls.audio_influence` | covers/voices only | 0–1. Only valid alongside `voice_id` — a generation conditioning on no audio returns 400. Use cover/mashup/extension endpoints to influence a source clip |
+| `idempotency_key` | safe retries | 1–255 non-whitespace bytes, scoped to the account across creation ops, retained ≥ 24 h. Same key + same params replays the original (header `Idempotency-Replayed: true`); same key + different input → 409 |
+
+**After every create call:** poll with `suno_44bb_audio-retrieve` (or `suno_44bb_audio-wait`) until `status` is `streaming`, then share the `song_url`. A 402 means out of credits → `suno_44bb_account-upgrade`.
+
 ## Premier Power-User Mode: No Artificial Prompt Limits
 
 This skill is optimized for a Premier subscriber with access to Suno Studio 2.0. Do **not** impose legacy prompt ceilings simply because older Suno versions were easier to handle with short tag stacks. There is **no artificial maximum** for genres, instruments, modifiers, technical detail, or prompt complexity.
@@ -208,6 +240,8 @@ You will receive **user-provided lyrics and style preferences** as input. Your r
 4. **Lyrics Box** — section tags + optional local performance/arrangement cues + lyric text + Session Drummer tag at TOP
 5. **Exclude Styles Box** — negative styles, comma-separated
 6. **Other Settings** — Weirdness, Style Influence, Variety, Duration, Max Mode
+
+When the Suno MCP is connected, this output maps 1:1 onto `suno_44bb_audio-create`: Title→`title`, Style Box→`style`, Lyrics Box→`lyrics`, Exclude Styles Box→`negative_style`, Model→`model` (always sent), Other Settings→`duration` + `controls.{weirdness,style_influence}` + `vocal_gender`, and the song's home workspace→`workspace_id` (always sent, resolved via `workspaces-list`). See the MCP Create-Call Contract above for every field.
 
 **CRITICAL — STYLE BOX TARGET: ~800–900 CHARACTERS, HARD CEILING 990 (NOT SHORT).** The Suno Style box is capped at 1000 characters. **Do NOT write a thin Style prompt.** Empirically, the *less* you describe in the Style box, the more Suno hallucinates its own unrelated nonsense. Target a **consistently dense ~800–900 characters** of musical detail so the model has a strong, specific target. **990 is a HARD CEILING, not a goal** — character counts are estimates until verified, so the 100-character margin between the target band and the ceiling absorbs counting error. A Style box that is 800 chars of dense detail is always better than one that is 1005 chars and cannot be pasted.
 
@@ -886,6 +920,23 @@ Style Influence: [choice]
 Variety: [choice]
 Duration: [choice]
 Max Mode: ON/OFF, when available
+Vocal Gender: [male | female | omit]
+```
+
+**MCP create call** (when the Suno MCP is connected — define every field, never omit `model` or `workspace_id`):
+```
+suno_44bb_audio-create(
+  title="[title]",
+  model="v6 | v6-wild | v6-mini",
+  style="[Style Box, ≤990 chars]",
+  lyrics="[Lyrics Box]",
+  negative_style="[Exclude Styles Box]",
+  duration=[15–360 seconds],
+  vocal_gender="male | female | omit",
+  workspace_id="[from workspaces-list]",
+  controls={ weirdness: [0–1], style_influence: [0–1] },
+  idempotency_key="[unique per retry]"
+)
 ```
 
 **RULE:** Each Suno field must be in its **own fenced code block** so the user can copy one box at a time. Never merge Style, Lyrics, and Exclude Styles into a single block. Always append `<!-- Style: XXX/1000 -->` **OUTSIDE the code block** (below it) with the actual character count of the Style text (for verification only - do NOT copy this comment into Suno). XXX must come from a real count of the Style text — never an estimate — and must be ≤ 990. If the Style text is over 990, trim it before emitting (see Budget enforcement under the v6 Style Prompt formula).
@@ -1124,6 +1175,7 @@ Use this when the user wants sparse, poetic, minimal lyrics that avoid AI-genera
 - [ ] **Output Format:** MODEL / STYLE PROMPT / LYRICS / SETTINGS present
 - [ ] **Separate copy boxes:** Style box, Lyrics box, and Exclude Styles box each in their **own** fenced code block (never merged)
 - [ ] **Style char-count:** `<!-- Style: XXX/1000 -->` appended at the end of the Style box with the real character count of the Style text
+- [ ] **MCP create-call fields (Suno MCP connected):** `model` explicitly defined on every send (v6 | v6-wild | v6-mini, checked against `account-usage` `allowed_models`); `workspace_id` explicitly defined on every send (resolved via `workspaces-list`); `title`/`style`/`lyrics`/`negative_style` within limits (256/1000/5000/1000); `duration` within 15–360 with `duration_guidance`/`duration_strict` only alongside it; `controls.*` sliders as 0–1 fractions only with the advanced-controls grant; `vocal_gender` only without a `voice_id`; `negative_style` only alongside caller-supplied `style`; mode mixing (`description` + `style`/`lyrics`) never sent
 
 ## Suno Sliders / Controls Integration
 
