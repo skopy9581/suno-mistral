@@ -1,23 +1,28 @@
 ---
 name: suno-cover-artist
-version: 1.3
-description: Cover-transformation specialist for Suno AI. Takes an existing song's Style box and Lyrics box and re-voices them into a target aesthetic (e.g. "cover to indie chamber-folk") while preserving the source's lyrical identity — or writing new lyrics in its House Lyric Style (mystical-folk catalogue-verses, refrains, and experimental endings) when the user requests fresh lyrics. Emits a clean Style prompt (prose, within budget), a plain comma-separated Exclude Styles list, and lyrics formatted with whitespace phrasing techniques. Use when the user wants to cover an existing Suno song into a different style, or wants their cover prompt checked for the classic cover-prompt failure modes (inlined negatives, self-negated descriptors, style-box overflow).
+version: 1.4
+description: Cover-transformation specialist for Suno AI. Takes an existing song's Style box and Lyrics box and re-voices them into a target aesthetic (e.g. "cover to indie chamber-folk") while preserving the source's lyrical identity — or writing new lyrics in its House Lyric Style (mystical-folk catalogue-verses, refrains, and experimental endings) when the user requests fresh lyrics. Emits a clean Style prompt (prose, within budget), a plain comma-separated Exclude Styles list, and lyrics formatted with whitespace phrasing techniques. When the Suno MCP connector is connected, it can also read a pasted suno.com song link (title, style, lyrics, analysis) instead of a pasted Style/Lyrics box. Use when the user wants to cover an existing Suno song into a different style, or wants their cover prompt checked for the classic cover-prompt failure modes (inlined negatives, self-negated descriptors, style-box overflow).
 ---
 
 # Suno Cover Artist
 
 ## Mission
 
-Transform a source song (Style box + Lyrics box, pasted by the user) into a cover brief for a *different* aesthetic, while preserving what makes the source song itself: its lyrics, its phrasing intent, its emotional arc.
+Transform a source song (Style box + Lyrics box pasted by the user, or read from a pasted suno.com song link via the Suno MCP connector) into a cover brief for a *different* aesthetic, while preserving what makes the source song itself: its lyrics, its phrasing intent, its emotional arc.
 
 This skill exists because cover prompts fail in predictable ways. This document encodes both the craft and the failure forensics.
 
 ## Input Contract
 
-The user provides:
+The user provides a source song in ONE of two forms, plus the cover target:
+
+**Form A — pasted boxes (always works, no connector needed):**
 
 1. **Source Style box** (may be messy, spam-tagged, merged with negatives, or truncated — handle all states)
 2. **Source Lyrics box** (may contain irregular spacing, whitespace tricks, or nothing — empty lyrics box is valid if cover mode reuses source vocals)
+
+**Form B — suno.com song link (requires the Suno MCP connector `suno_44bb` to be connected and the user signed in with suno.com):** the user pastes a `https://suno.com/song/{id}` (or `/song/{uuid}`) link. Resolve it with the Link Intake Protocol below and treat the fetched fields as the Source Style box / Source Lyrics box. If the connector is not connected or the sign-in is an API key, say so and fall back to Form A (ask the user to paste the Style and Lyrics boxes from the song page).
+
 3. **Cover target** — a natural-language description, e.g.:
    - "cover to indie chamber-folk"
    - "cover to avant-garde sludge"
@@ -29,6 +34,17 @@ The user provides:
    - none: instrumental / vocal-texture only (no comprehensible words)
 
 If the user pastes a single merged blob (style text with `‑`-prefixed tokens interleaved), **decompose it first** (see Decomposition Protocol).
+
+## Link Intake Protocol (Form B: pasted suno.com song link)
+
+When the user pastes a suno.com song link and the `suno_44bb` connector is connected:
+
+1. **Extract the clip id** from the URL path (`/song/{id}`; the id is the path segment after `song`). Ignore query strings and trailing slashes. If the link is a profile/playlist/page link instead of a `/song/` link, tell the user to paste the individual song's link.
+2. **Fetch the source:** call `suno_44bb_audio-retrieve(id)` — it returns the clip's `title`, `style` (the original Style box), `lyrics` (the original Lyrics box, with its whitespace notation intact), `status`, `song_url`, and creator info. A `404` means the song is not visible to the signed-in user (private or deleted) — tell the user that and ask for a public link or a pasted box. A `503`/still-finishing clip means wait and retry via `suno_44bb_audio-wait(id)` until `complete` before covering (covers require a `complete` source).
+3. **Fetch the sonic read:** call `suno_44bb_audio-analysis(id)` and poll until `status` leaves `processing` (typically within a minute). Its `terms`/`labels` describe what the clip *actually sounds like* (genre, mood, instruments, vocal character, mix polish) as heard by a tagging model, and its timing map gives `bpm`, `time_signature`, `key`, and structural sections. Use this to ground the cover design: if the prompt said "folk" but the analysis says "dance-pop", trust the analysis for what must survive, and note the discrepancy to the user. Poll `suno_44bb_audio-lyrics-alignment(id)` only if you need word-level timing; for cover purposes the plain `lyrics` field from audio-retrieve is enough.
+4. **Treat fetched fields as the source boxes:** `style` → Source Style box (run it through the Decomposition Protocol if messy), `lyrics` → Source Lyrics box (preserve its whitespace notation per Rule 5). `title` is the cover's title too — a cover always takes its source's title.
+5. **Keep the id:** when the user later confirms the cover, create it with `suno_44bb_audio-covers-create(id=<source id>, style=..., negative_style=..., lyrics=..., controls.{weirdness,style_influence,audio_influence}, model=..., workspace_id=...)` — signed in with suno.com, any song the user can open by link may be covered (`404` if not visible, `403` if not remixable, `503` while still finishing). Map the SETTINGS block onto `controls` (0–1 fractions; UI shows 0–100%): Weirdness→`weirdness`, Style Influence→`style_influence`, Audio Influence→`audio_influence`, and send `lyrics` explicitly (a cover does not carry the source's lyrics over on its own — omit it and the cover goes instrumental unless a `voice_id` is set). Resolve `workspace_id` via `suno_44bb_workspaces-list` and send it on every cover, per the same every-send rule as suno-god. Requires the advanced-controls grant for `controls`/`negative_style` (else 403). After the call, poll `suno_44bb_audio-retrieve`/`audio-wait` until `streaming`, then share the new `song_url`. A 402 means out of credits → `suno_44bb_account-upgrade`.
+6. **Link without connector:** if no `suno_44bb` connector is connected, do not guess the song's contents — ask the user to paste the Style and Lyrics boxes (Form A), or connect the Suno connector and re-paste the link.
 
 ## Output Format
 
@@ -271,6 +287,7 @@ Suno's sliders are real, parseable control — unlike inlined text negation, the
 
 ## Interoperability
 
+- When the Suno MCP connector (`suno_44bb`) is connected, a pasted suno.com song link is a first-class source input — see Link Intake Protocol — and the finished brief maps onto `suno_44bb_audio-covers-create` field-for-field (Style→`style`, Exclude→`negative_style`, Lyrics→`lyrics`, SETTINGS→`controls`, source id→`id`, workspace→`workspace_id`).
 - If the user references an artist research file (`research/{artist}.md` from suno-music-researcher), fold its instrumentation and production data into the target style prose.
 - If the cover is part of an album built with album-concept-designer, check `musical_identity.md` for consistency constraints before designing the target.
 - Output format is compatible with suno-god's MODEL/STYLE/LYRICS/SETTINGS brief; if the user asks for that format, wrap these three blocks accordingly.
