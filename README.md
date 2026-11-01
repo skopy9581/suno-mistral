@@ -14,7 +14,7 @@ A Premier power-user Suno v6 prompt engineer (v6 / v6-wild / v6-mini) optimized 
 
 ### 1c. Suno Cover Artist
 
-A cover-transformation specialist. Paste an existing song's Style box and Lyrics box, name a target aesthetic (e.g. "cover to indie chamber-folk"), and it emits a clean prose Style prompt, a plain comma-separated Exclude Styles list, and lyrics formatted with whitespace phrasing notation (gap-spacing, word isolation, vowel sustain, mantra loops). It also repairs the classic cover-prompt failure modes: inlined `‑negatives` that inject banned genres, self-negated style descriptors, tag-soup formatting, and character-budget overflow.
+A cover-transformation specialist. Paste an existing song's Style box and Lyrics box — or, when the Suno MCP connector is connected, a suno.com song link, which the skill reads for title, style, lyrics, and audio analysis — name a target aesthetic (e.g. "cover to indie chamber-folk"), and it emits a clean prose Style prompt, a plain comma-separated Exclude Styles list, and lyrics formatted with whitespace phrasing notation (gap-spacing, word isolation, vowel sustain, mantra loops). It also repairs the classic cover-prompt failure modes: inlined `‑negatives` that inject banned genres, self-negated style descriptors, tag-soup formatting, and character-budget overflow.
 - **Location**: `skills/suno-cover-artist/SKILL.md`
 
 ### 2. Album Concept Designer
