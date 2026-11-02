@@ -70,6 +70,8 @@ Tags: [From album identity + track-specific mood/tempo tags, separated by semico
 [From album identity, or track-specific additions], drum machine, electronic drums, synthetic percussion, plastic drums
 ```
 
+**Suno MCP connector send:** when the `suno_44bb` connector is connected, each track is sent with `suno_44bb_audio-create` — Style→`style`, Raw Lyrics→`lyrics`, and this Negative Styles box→`negative_style` on EVERY send. Negatives are a separate field, never inlined in `style` (a dash-prefixed token is read as the positive word); `negative_style` returns 400 in simple/`description` mode and 403 without the advanced-controls grant. Define `model` and `workspace_id` on every send too (see suno-god's MCP Create-Call Contract).
+
 ### Raw Lyrics
 `[The raw lyrics you generate based on the narrative context]`
 ```
