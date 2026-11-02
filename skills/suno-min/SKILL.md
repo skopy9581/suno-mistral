@@ -775,6 +775,8 @@ Alternative rock with post-rock architecture, driving electronic-infused indie g
 {CONFLICTING_GENRES}, drum machine, electronic drums, synthetic percussion, plastic drums
 ```
 
+**Suno MCP connector send:** when the `suno_44bb` connector is connected, send with `suno_44bb_audio-create` — Style Block→`style`, Enriched Lyrics→`lyrics`, and this Negative Styles box→`negative_style` on EVERY send. Negatives are a separate field, never inlined in `style` (a dash-prefixed token is read as the positive word); `negative_style` returns 400 in simple/`description` mode and 403 without the advanced-controls grant. Define `model` and `workspace_id` on every send too (see suno-god's MCP Create-Call Contract).
+
 ### When Processing Studio-Grade Input:
 Use the **instrumentation parsing rules** from the previous section to convert detailed descriptions into Suno-compatible descriptors, then **fold them into the prose Style prompt** alongside genre, vocal, mood, and production. Do NOT emit separate `[Instruments: ...]` or `[Vocal Profile: ...]` tags.
 

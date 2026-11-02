@@ -107,3 +107,12 @@ After updating any skill that references file paths:
 2. Test that the dependent skill can find the file
 3. Ensure no absolute paths remain in the code
 
+### Connector Contract Tests
+Run the Suno MCP connector send-contract tests (Python 3 stdlib only) from the repo root:
+
+```
+python3 testing/test_connector_negatives.py
+```
+
+They verify that negatives (Exclude Styles / Negative Styles) are always sent as the separate `negative_style` field on `suno_44bb` create calls — never dropped, never inlined in the Style box. See `testing/README.md`.
+

@@ -976,9 +976,8 @@ Use whenever maximum expressive range is useful. Replace, add, or remove fields 
 [Arrangement arc: intro → verse → build → chorus → contrast → climax → outro]
 [Production aesthetic: room / stereo field / saturation / dynamics / brightness / depth]
 [Specific sonic signatures]
-[Explicit exclusions]
 ```
-(Detailed instrumentation goes in the `[Instruments: ...]` tag in the LYRICS block, NOT here — keeps the Style box within 800–900 chars, 990 hard ceiling.)
+(Exclusions never go in the Style box — they go in the Exclude Styles Box, which is sent as `negative_style` on every connector call; a dash-prefixed token in the Style box is read as the positive word. Detailed instrumentation goes in the `[Instruments: ...]` tag in the LYRICS block, NOT here — keeps the Style box within 800–900 chars, 990 hard ceiling.)
 
 **LYRICS / DIRECTION:**
 ```

@@ -640,6 +640,8 @@ Tags: [descriptive tags including BPM, separated by semicolons, max 990 chars to
 [conflicting genres, max 3-4], drum machine, electronic drums, synthetic percussion, plastic drums
 ```
 
+**Suno MCP connector send:** this template feeds the songwriter skills; when the `suno_44bb` connector is connected, the Negative Styles box is sent as `negative_style` on `suno_44bb_audio-create` — never inlined in the Style block (a dash-prefixed token is read as the positive word).
+
 **Example:**
 ```
 Genre: alternative rock, art rock, experimental electronic

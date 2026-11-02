@@ -753,6 +753,8 @@ Tags: "{USER_BPM} BPM; {USER_MOOD}; {VOCAL_CHARACTER}; {ERA_STYLE}; {ATMOSPHERE}
 {CONFLICTING_GENRES}, drum machine, electronic drums, synthetic percussion, plastic drums
 ```
 
+**Suno MCP connector send:** when the `suno_44bb` connector is connected, send with `suno_44bb_audio-create` — Style Block→`style`, Enriched Lyrics→`lyrics`, and this Negative Styles box→`negative_style` on EVERY send. Negatives are a separate field, never inlined in `style` (a dash-prefixed token is read as the positive word); `negative_style` returns 400 in simple/`description` mode and 403 without the advanced-controls grant. Define `model` and `workspace_id` on every send too (see suno-god's MCP Create-Call Contract).
+
 **CRITICAL:** Instruments field MUST contain **exact brand/model names** (e.g., "Fender Stratocaster with whammy", "Ludwig acoustic drum kit 22k/14s"). Vocal information (singer-related) is in the Style block as a separate field.
 
 ### When Processing Studio-Grade Input:

@@ -193,6 +193,8 @@ The Session Drummer tag MUST include:
 | Pop | Death Metal, Black Metal, Noise, extreme distortion |
 | Classical | Trap, EDM, Dubstep, autotune, 808 bass |
 
+**Suno MCP connector send:** when the `suno_44bb` connector is connected, send with `suno_44bb_audio-create` — Hierarchical Style Box→`style`, Lyrics Box→`lyrics`, and the Negative Styles block→`negative_style` on EVERY send. Negatives are a separate field, never inlined in `style` (a dash-prefixed token is read as the positive word); `negative_style` returns 400 in simple/`description` mode and 403 without the advanced-controls grant. Define `model` and `workspace_id` on every send too (see suno-god's MCP Create-Call Contract).
+
 ---
 
 ## Complete Output Examples
